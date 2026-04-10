@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🇯🇵 Japanese GP 2026 — Telemetry: ANT vs PIA</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a1a2e;color:#e0e0e0;font-family:'Segoe UI',system-ui,sans-serif;padding:20px}
+h1{text-align:center;font-size:1.6rem;margin-bottom:20px;color:#fff}
+.container{max-width:1200px;margin:0 auto}
+.chart-section{background:#16213e;border-radius:12px;padding:16px;margin-bottom:16px;position:relative}
+.chart-section h2{font-size:1rem;margin-bottom:8px;color:#aaa;text-transform:uppercase;letter-spacing:1px}
+canvas{width:100%;display:block;border-radius:8px}
+.cards{display:flex;gap:16px;margin-bottom:16px;flex-wrap:wrap}
+.card{flex:1;min-width:260px;background:#16213e;border-radius:12px;padding:20px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%}
+.card.ant::before{background:#27F4D2}
+.card.pia::before{background:#FF8000}
+.card h3{font-size:1.2rem;margin-bottom:4px}
+.card .team{font-size:.85rem;color:#888;margin-bottom:12px}
+.card .stat{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #0f3460}
+.card .stat:last-child{border:none}
+.card .stat .label{color:#888;font-size:.85rem}
+.card .stat .value{font-weight:700;font-size:1rem}
+.insight{background:linear-gradient(135deg,#16213e,#0f3460);border-radius:12px;padding:20px;margin-bottom:16px;text-align:center}
+.insight h2{font-size:1.1rem;margin-bottom:8px;color:#fff}
+.insight p{font-size:1.05rem;line-height:1.6}
+.legend{display:flex;gap:20px;justify-content:center;margin-top:8px}
+.legend span{display:flex;align-items:center;gap:6px;font-size:.85rem}
+.legend .dot{width:12px;height:12px;border-radius:50%;display:inline-block}
+@media(max-width:600px){h1{font-size:1.2rem}.cards{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>🇯🇵 Japanese GP 2026 — Telemetry: ANT vs PIA</h1>
+
+<div class="cards" id="driverCards"></div>
+
+<div class="chart-section">
+  <h2>Speed (km/h)</h2>
+  <canvas id="speedChart" height="200"></canvas>
+</div>
+
+<div class="chart-section">
+  <h2>Throttle & Brake Inputs</h2>
+  <canvas id="tbChart" height="200"></canvas>
+</div>
+
+<div class="chart-section">
+  <h2>Engine RPM</h2>
+  <canvas id="rpmChart" height="160"></canvas>
+</div>
+
+<div class="insight" id="insightCard"></div>
+</div>
+
+<script>
+const D=[
+[231,6,100,0,230,5,104,104],[231,6,100,0,230,5,104,104],[231,6,100,0,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,104,104,230,5,104,104],[231,6,100,0,305,5,99,0],[231,6,104,104,305,6,99,0],[231,6,104,104,305,8,99,0],[231,6,104,104,302,8,99,0],[231,6,104,104,299,8,99,0],[231,6,104,104,297,8,99,0],[231,6,104,104,296,8,99,0],[231,6,104,104,293,8,99,0],[231,6,104,104,293,8,99,0],[231,6,104,104,289,8,98,0],[231,6,104,104,287,8,98,0],[231,6,104,104,285,8,99,0],[334,6,100,0,282,8,99,0],[333,7,100,0,280,8,99,0],[333,8,100,0,278,8,99,0],[330,8,100,0,277,8,99,0],[330,8,100,0,275,8,99,0],[323,8,100,0,274,8,99,0],[323,8,100,0,274,8,99,0],[315,8,100,0,272,8,99,0],[314,8,100,0,272,8,99,0],[306,8,100,0,271,8,99,0],[301,7,100,0,244,8,0,100],[299,7,100,0,232,8,0,100],[299,7,100,0,201,8,0,100],[269,6,100,0,301,8,99,0],[269,7,100,0,301,8,99,0],[271,7,100,0,301,8,99,104],[281,7,100,0,301,8,99,0],[287,7,100,0,301,8,99,0],[290,7,100,0,301,8,99,0],[294,7,100,0,301,8,99,0],[299,7,100,0,301,8,99,104],[299,7,100,0,300,8,99,0],[304,7,100,0,300,8,99,0],[304,8,100,0,300,8,99,0],[311,8,100,0,300,8,99,0],[315,8,100,0,300,8,99,0],[315,8,100,0,300,8,99,0],[316,8,100,0,300,8,99,0],[316,8,100,0,300,8,99,0],[319,8,100,0,300,8,99,0],[320,8,100,0,300,8,99,0],[322,8,100,0,297,8,99,0],[323,8,100,0,294,8,99,0],[323,8,100,0,294,8,99,0],[324,8,100,0,287,8,99,0],[324,8,100,0,283,8,37,0],[326,8,100,0,264,7,0,100],[326,8,100,0,235,6,0,100],[327,8,37,0,206,5,0,100],[203,4,100,0,233,6,104,104],[213,5,100,0,233,6,104,104],[220,5,100,0,233,6,104,104],[221,5,100,0,233,6,104,104],[225,5,100,0,233,6,104,104],[230,5,64,0,233,6,104,104],[228,5,0,100,233,6,104,104],[228,5,3,0,233,6,104,104],[220,5,3,0,233,6,89,0],[220,5,23,0,233,5,89,0],[220,5,23,0,233,5,89,0],[220,5,23,0,233,5,89,0],[201,5,63,0,254,7,99,0],[201,5,63,0,254,7,99,0],[201,5,63,0,255,7,99,0],[201,5,82,0,255,7,99,0],[201,5,100,0,256,7,99,0],[226,5,100,0,256,7,99,0],[231,5,100,0,257,7,99,0],[237,6,100,0,258,7,99,0],[242,6,100,0,258,7,99,0],[242,6,100,0,259,7,83,0],[242,6,100,0,252,7,83,0],[251,6,100,0,239,7,0,100],[260,6,100,0,239,6,0,0],[264,7,100,0,227,6,15,0],[265,7,100,0,219,6,30,0],[267,7,100,0,220,6,73,0],[268,7,100,0,221,6,79,0],[270,7,100,0,224,6,0,0],[271,7,100,0,219,6,0,0],[271,7,100,0,219,6,0,0],[271,7,100,0,219,6,0,0],[209,5,0,100,209,5,99,0],[201,4,100,0,234,6,104,104],[210,5,100,0,234,6,104,104],[215,5,100,0,234,6,104,104],[222,5,100,0,234,6,104,104],[229,5,100,0,234,6,104,104],[232,6,100,0,234,6,104,104],[237,6,100,0,234,6,104,104],[239,6,100,0,234,6,104,104],[240,6,100,0,234,6,104,104],[241,6,100,0,234,6,104,104],[242,6,0,100,234,6,104,104],[225,6,0,100,234,6,104,104],[225,6,0,100,234,6,104,104],[225,6,0,100,234,6,104,104],[225,6,0,100,234,6,104,104],[225,6,0,104,234,6,104,104],[225,6,104,104,234,6,104,104],[225,6,104,104,234,6,104,104],[225,6,104,104,234,6,104,104],[225,6,104,104,234,6,104,104],[225,6,104,104,234,6,104,104],[225,6,104,104,234,6,104,104],[225,6,104,104,234,6,104,104],[225,6,104,104,234,6,104,104],[225,6,104,104,234,6,104,104],[225,6,104,104,234,6,104,104],[225,6,104,104,234,6,104,104],[225,6,104,104,234,6,104,104],[225,6,104,104,234,6,104,104],[225,6,104,104,234,6,104,104],[225,6,104,104,234,6,104,104],[225,6,104,104,234,6,104,104],[225,6,104,104,234,6,104,104],[225,6,104,104,234,6,104,104],[206,4,100,0,234,6,104,104],[216,5,100,0,234,6,104,104],[216,5,100,0,234,6,104,104],[228,5,100,0,234,6,104,104],[228,5,100,0,234,6,104,104],[228,5,100,0,234,6,104,104],[228,5,104,104,234,6,104,104]
+];
+
+const ANT={name:"Andrea Kimi Antonelli",abbr:"ANT",team:"Mercedes",color:"#27F4D2",n:12};
+const PIA={name:"Oscar Piastri",abbr:"PIA",team:"McLaren",color:"#FF8000",n:81};
+
+// Extract arrays
+const idx=D.map((_,i)=>i);
+const antSpeed=D.map(r=>r[0]),antRPM=D.map(r=>r[1]),antThrottle=D.map(r=>r[2]),antBrake=D.map(r=>r[3]);
+const piaSpeed=D.map(r=>r[4]),piaRPM=D.map(r=>r[5]),piaThrottle=D.map(r=>r[6]),piaBrake=D.map(r=>r[7]);
+
+// Clamp throttle/brake to 0-100
+const clamp=v=>Math.min(100,Math.max(0,v));
+const antT=antThrottle.map(clamp),antB=antBrake.map(clamp);
+const piaT=piaThrottle.map(clamp),piaB=piaBrake.map(clamp);
+
+// Scale RPM to realistic range (data 4-8 → map to 3000-12000)
+const scaleRPM=v=>{const mn=4,mx=8;return 3000+(v-mn)/(mx-mn)*9000};
+const antRPMs=antRPM.map(scaleRPM),piaRPMs=piaRPM.map(scaleRPM);
+
+// Stats
+const max=a=>Math.max(...a);
+const avg=a=>a.reduce((s,v)=>s+v,0)/a.length;
+
+const antMaxSpd=max(antSpeed),piaMaxSpd=max(piaSpeed);
+const antAvgSpd=avg(antSpeed).toFixed(1),piaAvgSpd=avg(piaSpeed).toFixed(1);
+
+// Find earliest full throttle point (first index where throttle reaches 100 after being <100)
+function findEarlyThrottle(throttle,speed){
+  let best=-1,bestSpeed=0;
+  for(let i=1;i<throttle.length;i++){
+    if(throttle[i]>=100&&throttle[i-1]<100){
+      if(speed[i]>bestSpeed){bestSpeed=speed[i];best=i;}
+    }
+  }
+  return best;
+}
+
+// Find brake application points (where brake goes from 0 to >0 and speed is high)
+function findBrakePoints(brake,speed){
+  const points=[];
+  for(let i=1;i<brake.length;i++){
+    if(brake[i]>0&&brake[i-1]===0&&speed[i]>200){
+      points.push({i,speed:speed[i]});
+    }
+  }
+  return points;
+}
+
+const antBrakePts=findBrakePoints(antB,antSpeed);
+const piaBrakePts=findBrakePoints(piaB,piaSpeed);
+const antEarlyThrottle=findEarlyThrottle(antT,antSpeed);
+const piaEarlyThrottle=findEarlyThrottle(piaT,piaSpeed);
+
+// --- CANVAS DRAWING ---
+const dpr=window.devicePixelRatio||1;
+
+function setupCanvas(id,h){
+  const c=document.getElementById(id);
+  const w=c.parentElement.clientWidth-32;
+  c.style.height=h+'px';
+  c.width=w*dpr;c.height=h*dpr;
+  const ctx=c.getContext('2d');
+  ctx.scale(dpr,dpr);
+  return{ctx,w,h};
+}
+
+function drawGrid(ctx,w,h,yMin,yMax,rows,cols,color='#ffffff10'){
+  ctx.strokeStyle=color;ctx.lineWidth=1;
+  for(let i=0;i<=rows;i++){
+    const y=(i/rows)*h;
+    ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();
+  }
+  for(let i=0;i<=cols;i++){
+    const x=(i/cols)*w;
+    ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();
+  }
+}
+
+function drawYLabels(ctx,h,min,max,labels,color='#666'){
+  ctx.fillStyle=color;ctx.font='11px system-ui';ctx.textAlign='left';
+  labels.forEach((v,i)=>{
+    const y=h-(i/(labels.length-1))*h;
+    ctx.fillText(v,4,y-3);
+  });
+}
+
+// Smooth line using cardinal spline
+function smoothLine(ctx,points,tension=0.3){
+  if(points.length<2)return;
+  ctx.moveTo(points[0].x,points[0].y);
+  if(points.length===2){ctx.lineTo(points[1].x,points[1].y);return;}
+  for(let i=0;i<points.length-1;i++){
+    const p0=points[Math.max(0,i-1)];
+    const p1=points[i];
+    const p2=points[i+1];
+    const p3=points[Math.min(points.length-1,i+2)];
+    const cp1x=p1.x+(p2.x-p0.x)*tension;
+    const cp1y=p1.y+(p2.y-p0.y)*tension;
+    const cp2x=p2.x-(p3.x-p1.x)*tension;
+    const cp2y=p2.y-(p3.y-p1.y)*tension;
+    ctx.bezierCurveTo(cp1x,cp1y,cp2x,cp2y,p2.x,p2.y);
+  }
+}
+
+function toPoints(data,w,h,min,max){
+  const step=w/(data.length-1);
+  return data.map((v,i)=>({x:i*step,y:h-((v-min)/(max-min))*h}));
+}
+
+function drawLine(ctx,data,w,h,min,max,color,width=2){
+  const pts=toPoints(data,w,h,min,max);
+  ctx.beginPath();
+  smoothLine(ctx,pts);
+  ctx.strokeStyle=color;ctx.lineWidth=width;ctx.stroke();
+}
+
+function drawArea(ctx,data,w,h,min,max,color,alpha=0.15){
+  const pts=toPoints(data,w,h,min,max);
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x,h);
+  ctx.lineTo(pts[0].x,pts[0].y);
+  smoothLine(ctx,pts);
+  ctx.lineTo(pts[pts.length-1].x,h);
+  ctx.closePath();
+  ctx.fillStyle=color.replace(')',','+alpha+')').replace('rgb','rgba');
+  // Use hex with alpha
+  const r=parseInt(color.slice(1,3),16),g=parseInt(color.slice(3,5),16),b=parseInt(color.slice(5,7),16);
+  ctx.fillStyle=`rgba(${r},${g},${b},${alpha})`;
+  ctx.fill();
+}
+
+// --- SPEED CHART ---
+function drawSpeedChart(){
+  const{ctx,w,h}=setupCanvas('speedChart',220);
+  drawGrid(ctx,w,h,0,340,6,10);
+  drawYLabels(ctx,h,0,340,['340','283','227','170','113','57','0']);
+  
+  // PIA first (behind)
+  drawArea(ctx,piaSpeed,w,h,0,340,PIA.color,0.12);
+  drawLine(ctx,piaSpeed,w,h,0,340,PIA.color,2);
+  // ANT on top
+  drawArea(ctx,antSpeed,w,h,0,340,ANT.color,0.12);
+  drawLine(ctx,antSpeed,w,h,0,340,ANT.color,2);
+}
+
+// --- THROTTLE/BRAKE CHART ---
+function drawTBChart(){
+  const{ctx,w,h}=setupCanvas('tbChart',220);
+  drawGrid(ctx,w,h,0,100,5,10,'#ffffff08');
+  drawYLabels(ctx,h,0,100,['100%','80%','60%','40%','20%','0%']);
+  
+  // Draw brake as filled areas (red) — inverted to show brake intensity going up
+  // Actually: throttle goes UP from bottom, brake goes DOWN from top
+  // But for drama, let's do: throttle area from bottom, brake area from top
+  
+  const step=w/(D.length-1);
+  
+  // PIA throttle area (green)
+  const piaThPts=toPoints(piaT,w,h,0,100);
+  ctx.beginPath();ctx.moveTo(0,h);
+  piaThPts.forEach(p=>ctx.lineTo(p.x,p.y));
+  ctx.lineTo(w,h);ctx.closePath();
+  ctx.fillStyle='rgba(46,204,113,0.2)';ctx.fill();
+  
+  // ANT throttle area (green, slightly different shade)
+  const antThPts=toPoints(antT,w,h,0,100);
+  ctx.beginPath();ctx.moveTo(0,h);
+  antThPts.forEach(p=>ctx.lineTo(p.x,p.y));
+  ctx.lineTo(w,h);ctx.closePath();
+  ctx.fillStyle='rgba(46,204,113,0.15)';ctx.fill();
+  
+  // Brake areas — from top
+  const piaBrPts=piaB.map((v,i)=>({x:i*step,y:(v/100)*h}));
+  ctx.beginPath();ctx.moveTo(0,0);
+  piaBrPts.forEach(p=>ctx.lineTo(p.x,p.y));
+  ctx.lineTo(w,0);ctx.closePath();
+  ctx.fillStyle='rgba(231,76,60,0.25)';ctx.fill();
+  
+  const antBrPts=antB.map((v,i)=>({x:i*step,y:(v/100)*h}));
+  ctx.beginPath();ctx.moveTo(0,0);
+  antBrPts.forEach(p=>ctx.lineTo(p.x,p.y));
+  ctx.lineTo(w,0);ctx.closePath();
+  ctx.fillStyle='rgba(231,76,60,0.2)';ctx.fill();
+  
+  // Lines on top
+  drawLine(ctx,piaT,w,h,0,100,'#2ecc71',1.5);
+  drawLine(ctx,antT,w,h,0,100,'#27ae60',1.5);
+  
+  // Brake lines
+  const drawBrakeLine=(data,color)=>{
+    const pts=data.map((v,i)=>({x:i*step,y:(v/100)*h}));
+    ctx.beginPath();smoothLine(ctx,pts);
+    ctx.strokeStyle=color;ctx.lineWidth=1.5;ctx.stroke();
+  };
+  drawBrakeLine(piaB,'#e74c3c');
+  drawBrakeLine(antB,'#c0392b');
+  
+  // Legend
+  ctx.font='12px system-ui';
+  ctx.fillStyle='#2ecc71';ctx.fillText('■ Throttle',w-200,h-8);
+  ctx.fillStyle='#e74c3c';ctx.fillText('■ Brake',w-110,h-8);
+}
+
+// --- RPM CHART ---
+function drawRPMChart(){
+  const{ctx,w,h}=setupCanvas('rpmChart',180);
+  drawGrid(ctx,w,h,3000,12000,4,10);
+  drawYLabels(ctx,h,3000,12000,['12k','9k','6k','3k','0']);
+  drawArea(ctx,piaRPMs,w,h,3000,12000,PIA.color,0.1);
+  drawLine(ctx,piaRPMs,w,h,3000,12000,PIA.color,2);
+  drawArea(ctx,antRPMs,w,h,3000,12000,ANT.color,0.1);
+  drawLine(ctx,antRPMs,w,h,3000,12000,ANT.color,2);
+}
+
+// --- DRIVER CARDS ---
+function renderCards(){
+  const el=document.getElementById('driverCards');
+  const makeCard=(d,maxSpd,avgSpd,col)=>{
+    const c=document.createElement('div');
+    c.className=`card ${col}`;
+    c.innerHTML=`
+      <h3 style="color:${d.color}">${d.abbr} — ${d.name}</h3>
+      <div class="team">${d.team} | #${d.n}</div>
+      <div class="stat"><span class="label">Max Speed</span><span class="value">${maxSpd} km/h</span></div>
+      <div class="stat"><span class="label">Avg Speed</span><span class="value">${avgSpd} km/h</span></div>
+    `;
+    return c;
+  };
+  el.appendChild(makeCard(ANT,antMaxSpd,antAvgSpd,'ant'));
+  el.appendChild(makeCard(PIA,piaMaxSpd,piaAvgSpd,'pia'));
+}
+
+// --- INSIGHT CARD ---
+function renderInsight(){
+  const el=document.getElementById('insightCard');
+  const antBrakeMax=antBrakePts.length?antBrakePts.reduce((a,b)=>a.speed>b.speed?a:b):null;
+  const piaBrakeMax=piaBrakePts.length?piaBrakePts.reduce((a,b)=>a.speed>b.speed?a:b):null;
+  
+  let txt='';
+  if(antBrakeMax&&piaBrakeMax){
+    if(antBrakeMax.speed>piaBrakeMax.speed){
+      txt=`🏁 <strong style="color:${ANT.color}">ANT</strong> brakes later into corners — hitting brakes at <strong>${antBrakeMax.speed} km/h</strong> vs PIA's <strong>${piaBrakeMax.speed} km/h</strong>. That's <strong>${antBrakeMax.speed-piaBrakeMax.speed} km/h</strong> of extra confidence under braking!`;
+    }else{
+      txt=`🏁 <strong style="color:${PIA.color}">PIA</strong> brakes later into corners — hitting brakes at <strong>${piaBrakeMax.speed} km/h</strong> vs ANT's <strong>${antBrakeMax.speed} km/h</strong>. That's <strong>${piaBrakeMax.speed-antBrakeMax.speed} km/h</strong> of extra confidence under braking!`;
+    }
+  }else{
+    txt='Insufficient brake data for comparison.';
+  }
+  
+  // Add speed advantage
+  if(antMaxSpd>piaMaxSpd){
+    txt+=`<br><br>⚡ <strong style="color:${ANT.color}">ANT</strong> has the higher top speed: <strong>${antMaxSpd}</strong> km/h vs <strong>${piaMaxSpd}</strong> km/h (+${antMaxSpd-piaMaxSpd} km/h).`;
+  }else if(piaMaxSpd>antMaxSpd){
+    txt+=`<br><br>⚡ <strong style="color:${PIA.color}">PIA</strong> has the higher top speed: <strong>${piaMaxSpd}</strong> km/h vs <strong>${antMaxSpd}</strong> km/h (+${piaMaxSpd-antMaxSpd} km/h).`;
+  }
+  
+  el.innerHTML=`<h2>🔍 Insights</h2><p>${txt}</p>`;
+}
+
+// --- INIT ---
+function init(){
+  renderCards();
+  drawSpeedChart();
+  drawTBChart();
+  drawRPMChart();
+  renderInsight();
+}
+
+window.addEventListener('load',init);
+window.addEventListener('resize',()=>{init();});
+</script>
+</body>
+</html>
