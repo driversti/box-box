@@ -1,0 +1,47 @@
+00:08:10.581{"Messages":[{"Utc":"2026-03-29T04:18:28","Lap":1,"Category":"Other","Message":"FORMATION LAP WILL START AT 14:10"}]}
+00:13:45.100{"Messages":{"1":{"Utc":"2026-03-29T04:24:02","Lap":1,"Category":"Flag","Flag":"CLEAR","Scope":"Sector","Sector":18,"Message":"CLEAR IN TRACK SECTOR 18"}}}
+00:13:46.661{"Messages":{"2":{"Utc":"2026-03-29T04:24:04","Lap":1,"Category":"Flag","Flag":"CLEAR","Scope":"Sector","Sector":24,"Message":"CLEAR IN TRACK SECTOR 24"}}}
+00:13:48.526{"Messages":{"3":{"Utc":"2026-03-29T04:24:06","Lap":1,"Category":"Flag","Flag":"CLEAR","Scope":"Sector","Sector":19,"Message":"CLEAR IN TRACK SECTOR 19"}}}
+00:19:43.590{"Messages":{"4":{"Utc":"2026-03-29T04:30:01","Lap":1,"Category":"Flag","Flag":"GREEN","Scope":"Track","Message":"GREEN LIGHT - PIT EXIT OPEN"}}}
+00:29:43.581{"Messages":{"5":{"Utc":"2026-03-29T04:40:01","Lap":1,"Category":"Other","Message":"PIT EXIT CLOSED"}}}
+00:41:22.770{"Messages":{"6":{"Utc":"2026-03-29T04:51:40","Lap":1,"Category":"Other","Message":"RISK OF RAIN FOR THE F1 RACE IS 0%"}}}
+00:56:48.388{"Messages":{"7":{"Utc":"2026-03-29T05:07:05","Lap":1,"Category":"Other","Message":"OVERTAKE DISABLED"}}}
+01:03:45.022{"Messages":{"8":{"Utc":"2026-03-29T05:14:02","Lap":1,"Category":"Flag","Flag":"GREEN","Scope":"Track","Message":"GREEN LIGHT - PIT EXIT OPEN"}}}
+01:05:08.802{"Messages":{"9":{"Utc":"2026-03-29T05:15:26","Lap":1,"Category":"Other","Message":"OVERTAKE ENABLED"}}}
+01:09:45.030{"Messages":{"10":{"Utc":"2026-03-29T05:20:02","Lap":4,"Category":"Other","Message":"CAR 18 (STR) LAP DELETED - TRACK LIMITS AT TURN 13 LAP 1 14:15:19"}}}
+01:21:54.348{"Messages":{"11":{"Utc":"2026-03-29T05:32:11","Lap":12,"Category":"Other","Message":"CAR 87 (BEA) TIME 1:37.790 DELETED - TRACK LIMITS AT TURN 13 LAP 11 14:31:24"}}}
+01:26:52.335{"Messages":{"12":{"Utc":"2026-03-29T05:37:09","Lap":15,"Category":"Flag","Flag":"BLACK AND WHITE","Scope":"Driver","RacingNumber":"41","Message":"BLACK AND WHITE FLAG FOR CAR 41 (LIN) - MOVING UNDER BRAKING"}}}
+01:36:44.348{"Messages":{"13":{"Utc":"2026-03-29T05:47:01","Lap":21,"Category":"Other","Message":"CAR 11 (PER) TIME 1:38.735 DELETED - TRACK LIMITS AT TURN 13 LAP 20 14:46:19"}}}
+01:37:36.856{"Messages":{"14":{"Utc":"2026-03-29T05:47:54","Lap":22,"Category":"Flag","Flag":"YELLOW","Scope":"Sector","Sector":21,"Message":"YELLOW IN TRACK SECTOR 21"}}}
+01:37:41.663{"Messages":{"15":{"Utc":"2026-03-29T05:47:59","Lap":22,"Category":"Flag","Flag":"YELLOW","Scope":"Sector","Sector":20,"Message":"YELLOW IN TRACK SECTOR 20"}}}
+01:37:54.127{"Messages":{"16":{"Utc":"2026-03-29T05:48:11","Lap":22,"Category":"SafetyCar","Status":"DEPLOYED","Mode":"SAFETY CAR","Message":"SAFETY CAR DEPLOYED"}}}
+01:38:05.856{"Messages":{"17":{"Utc":"2026-03-29T05:48:23","Lap":22,"Category":"Other","Message":"MEDICAL CAR DEPLOYED"}}}
+01:39:12.378{"Messages":{"18":{"Utc":"2026-03-29T05:49:29","Lap":23,"Category":"Flag","Flag":"DOUBLE YELLOW","Scope":"Sector","Sector":21,"Message":"DOUBLE YELLOW IN TRACK SECTOR 21"}}}
+01:39:40.909{"Messages":{"19":{"Utc":"2026-03-29T05:49:58","Lap":23,"Category":"Flag","Flag":"DOUBLE YELLOW","Scope":"Sector","Sector":20,"Message":"DOUBLE YELLOW IN TRACK SECTOR 20"}}}
+01:39:58.097{"Messages":{"20":{"Utc":"2026-03-29T05:50:15","Lap":23,"Category":"Other","Message":"RECOVERY VEHICLE ON TRACK AT TURN 13"}}}
+01:47:14.528{"Messages":{"21":{"Utc":"2026-03-29T05:57:32","Lap":26,"Category":"Other","Message":"LAPPED CARS MAY NOW OVERTAKE THE SAFETY CAR: 77"}}}
+01:47:30.633{"Messages":{"22":{"Utc":"2026-03-29T05:57:48","Lap":26,"Category":"Flag","Flag":"CLEAR","Scope":"Sector","Sector":20,"Message":"CLEAR IN TRACK SECTOR 20"}}}
+01:47:32.559{"Messages":{"23":{"Utc":"2026-03-29T05:57:50","Lap":26,"Category":"Flag","Flag":"CLEAR","Scope":"Sector","Sector":21,"Message":"CLEAR IN TRACK SECTOR 21"}}}
+01:49:48.611{"Messages":{"24":{"Utc":"2026-03-29T06:00:06","Lap":27,"Category":"SafetyCar","Status":"IN THIS LAP","Mode":"SAFETY CAR","Message":"SAFETY CAR IN THIS LAP"}}}
+01:51:07.377{"Messages":{"25":{"Utc":"2026-03-29T06:01:24","Lap":27,"Category":"Flag","Flag":"CLEAR","Scope":"Track","Message":"TRACK CLEAR"}}}
+01:51:54.423{"Messages":{"26":{"Utc":"2026-03-29T06:02:11","Lap":28,"Category":"Other","Message":"OVERTAKE ENABLED"}}}
+01:55:42.913{"Messages":{"27":{"Utc":"2026-03-29T06:06:00","Lap":30,"Category":"Other","Message":"TURN 13 INCIDENT INVOLVING CARS 43 (COL) AND 87 (BEA) NOTED"}}}
+01:56:22.593{"Messages":{"28":{"Utc":"2026-03-29T06:06:40","Lap":31,"Category":"Other","Message":"FIA STEWARDS: TURN 13 INCIDENT INVOLVING CARS 43 (COL) AND 87 (BEA) REVIEWED NO FURTHER INVESTIGATION"}}}
+01:57:30.433{"Messages":{"29":{"Utc":"2026-03-29T06:07:47","Lap":31,"Category":"Other","Message":"CAR 41 (LIN) TIME 1:35.724 DELETED - TRACK LIMITS AT TURN 17 LAP 30 15:06:35"}}}
+01:58:03.309{"Messages":{"30":{"Utc":"2026-03-29T06:08:20","Lap":32,"Category":"Other","Message":"CAR 43 (COL) TIME 1:43.165 DELETED - TRACK LIMITS AT TURN 13 LAP 21 14:47:52"}}}
+02:19:10.138{"Messages":{"31":{"Utc":"2026-03-29T06:29:27","Lap":45,"Category":"Other","Message":"TURN 16 INCIDENT INVOLVING CAR 44 (HAM) NOTED - LEAVING THE TRACK AND GAINING AN ADVANTAGE"}}}
+02:19:17.602{"Messages":{"32":{"Utc":"2026-03-29T06:29:35","Lap":45,"Category":"Flag","Flag":"BLUE","Scope":"Driver","RacingNumber":"77","Message":"WAVED BLUE FLAG FOR CAR 77 (BOT) TIMED AT 15:29:34"}}}
+02:20:05.856{"Messages":{"33":{"Utc":"2026-03-29T06:30:23","Lap":46,"Category":"Other","Message":"CAR 44 (HAM) TIME 1:33.636 DELETED - TRACK LIMITS AT TURN 17 LAP 44 15:28:16"}}}
+02:21:53.773{"Messages":{"34":{"Utc":"2026-03-29T06:32:11","Lap":47,"Category":"Flag","Flag":"BLUE","Scope":"Driver","RacingNumber":"14","Message":"WAVED BLUE FLAG FOR CAR 14 (ALO) TIMED AT 15:32:10"}}}
+02:22:42.423{"Messages":{"35":{"Utc":"2026-03-29T06:32:59","Lap":48,"Category":"Other","Message":"FIA STEWARDS: TURN 16 INCIDENT INVOLVING CAR 44 (HAM) REVIEWED NO FURTHER INVESTIGATION - LEAVING THE TRACK AND GAINING AN ADVANTAGE"}}}
+02:23:24.251{"Messages":{"36":{"Utc":"2026-03-29T06:33:41","Lap":48,"Category":"Flag","Flag":"BLUE","Scope":"Driver","RacingNumber":"77","Message":"WAVED BLUE FLAG FOR CAR 77 (BOT) TIMED AT 15:33:41"}}}
+02:23:40.187{"Messages":{"37":{"Utc":"2026-03-29T06:33:57","Lap":48,"Category":"Flag","Flag":"BLUE","Scope":"Driver","RacingNumber":"77","Message":"WAVED BLUE FLAG FOR CAR 77 (BOT) TIMED AT 15:33:57"}}}
+02:23:56.365{"Messages":{"38":{"Utc":"2026-03-29T06:34:13","Lap":48,"Category":"Flag","Flag":"BLUE","Scope":"Driver","RacingNumber":"77","Message":"WAVED BLUE FLAG FOR CAR 77 (BOT) TIMED AT 15:34:13"}}}
+02:27:09.112{"Messages":{"39":{"Utc":"2026-03-29T06:37:26","Lap":51,"Category":"Flag","Flag":"BLUE","Scope":"Driver","RacingNumber":"77","Message":"WAVED BLUE FLAG FOR CAR 77 (BOT) TIMED AT 15:37:26"}}}
+02:27:35.226{"Messages":{"40":{"Utc":"2026-03-29T06:37:52","Lap":51,"Category":"Flag","Flag":"BLUE","Scope":"Driver","RacingNumber":"14","Message":"WAVED BLUE FLAG FOR CAR 14 (ALO) TIMED AT 15:37:52"}}}
+02:28:17.831{"Messages":{"41":{"Utc":"2026-03-29T06:38:35","Lap":51,"Category":"Other","Message":"CAR 14 (ALO) TIME 1:37.112 DELETED - TRACK LIMITS AT TURN 17 LAP 49 15:37:30"}}}
+02:28:22.641{"Messages":{"42":{"Utc":"2026-03-29T06:38:40","Lap":51,"Category":"Flag","Flag":"BLUE","Scope":"Driver","RacingNumber":"14","Message":"WAVED BLUE FLAG FOR CAR 14 (ALO) TIMED AT 15:38:39"}}}
+02:31:04.606{"Messages":{"43":{"Utc":"2026-03-29T06:41:22","Lap":53,"Category":"Flag","Flag":"BLUE","Scope":"Driver","RacingNumber":"14","Message":"WAVED BLUE FLAG FOR CAR 14 (ALO) TIMED AT 15:41:21"}}}
+02:31:31.053{"Messages":{"44":{"Utc":"2026-03-29T06:41:48","Lap":53,"Category":"Flag","Flag":"BLUE","Scope":"Driver","RacingNumber":"14","Message":"WAVED BLUE FLAG FOR CAR 14 (ALO) TIMED AT 15:41:48"}}}
+02:31:48.253{"Messages":{"45":{"Utc":"2026-03-29T06:42:05","Lap":53,"Category":"Flag","Flag":"CHEQUERED","Scope":"Track","Message":"CHEQUERED FLAG"}}}
+02:33:46.619{"Messages":{"46":{"Utc":"2026-03-29T06:44:04","Lap":53,"Category":"Other","Message":"ALL PASS HOLDERS MAY ACCESS THE PIT LANE"}}}

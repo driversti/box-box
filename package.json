@@ -4,7 +4,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "start": "bun run src/client.ts"
+    "start": "bun run src/client.ts",
+    "fetch": "bun run src/fetcher.ts",
+    "live": "bun run src/client.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",
