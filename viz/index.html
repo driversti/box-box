@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏎️ Box-Box — Japanese Grand Prix 2026 Dashboard</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#1a1a2e;color:#e0e0e0;min-height:100vh}
+header{text-align:center;padding:2.5rem 1rem 1rem}
+header .logo{font-size:3rem}
+header h1{font-size:2rem;background:linear-gradient(135deg,#00d4ff,#7b2ff7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:.3rem 0}
+header p{color:#888;font-size:1rem;letter-spacing:.1em;text-transform:uppercase}
+.race-info{text-align:center;padding:1.5rem;margin:1rem auto;max-width:600px;background:#16213e;border-radius:12px;border:1px solid #2a2a4a}
+.race-info h2{color:#00d4ff;font-size:1.3rem;margin-bottom:.5rem}
+.race-info p{color:#aaa;font-size:.9rem;line-height:1.6}
+.grid{display:grid;grid-template-columns:1fr;gap:1.5rem;padding:2rem 1.5rem;max-width:1100px;margin:0 auto}
+@media(min-width:600px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:960px){.grid{grid-template-columns:repeat(3,1fr)}}
+.card{background:#16213e;border-radius:12px;padding:2rem 1.5rem;text-decoration:none;color:inherit;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;border:2px solid transparent;transition:transform .25s,box-shadow .25s,border-color .25s}
+.card::before{content:'';position:absolute;inset:-2px;border-radius:14px;background:linear-gradient(135deg,#00d4ff,#7b2ff7);z-index:-1;opacity:0;transition:opacity .25s}
+.card:hover{transform:translateY(-6px);box-shadow:0 8px 32px rgba(0,212,255,.15)}
+.card:hover::before{opacity:1}
+.card .icon{font-size:2.8rem;margin-bottom:.8rem}
+.card h3{font-size:1.15rem;margin-bottom:.4rem;color:#f0f0f0}
+.card .desc{color:#888;font-size:.85rem;margin-bottom:1rem}
+.card .link{color:#00d4ff;font-size:.9rem;font-weight:600;letter-spacing:.05em}
+footer{text-align:center;padding:2rem 1rem;color:#555;font-size:.8rem;border-top:1px solid #2a2a4a;margin-top:2rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🏎️</div>
+  <h1>Box-Box</h1>
+  <p>F1 Data Analytics</p>
+</header>
+<div class="race-info">
+  <h2>🇯🇵 Japanese Grand Prix 2026</h2>
+  <p>Suzuka Circuit · March 29, 2026<br>Winner: ANT (Kimi Antonelli, Mercedes)</p>
+</div>
+<div class="grid">
+  <a class="card" href="/viz/pitstops.html">
+    <div class="icon">🏎️</div>
+    <h3>Pit Stop Analysis</h3>
+    <p class="desc">Stop times and strategies for every driver</p>
+    <span class="link">View →</span>
+  </a>
+  <a class="card" href="/viz/tyre-strategy.html">
+    <div class="icon">🛞</div>
+    <h3>Tyre Strategy</h3>
+    <p class="desc">Compound usage and stint breakdown</p>
+    <span class="link">View →</span>
+  </a>
+  <a class="card" href="/viz/weather.html">
+    <div class="icon">🌤️</div>
+    <h3>Weather Conditions</h3>
+    <p class="desc">Track temperature, wind, and rain data</p>
+    <span class="link">View →</span>
+  </a>
+  <a class="card" href="/viz/positions.html">
+    <div class="icon">🐍</div>
+    <h3>Position Changes</h3>
+    <p class="desc">Snake chart of position progression</p>
+    <span class="link">View →</span>
+  </a>
+  <a class="card" href="/viz/laptimes.html">
+    <div class="icon">⏱️</div>
+    <h3>Lap Times Progression</h3>
+    <p class="desc">Lap-by-lap pace comparison across drivers</p>
+    <span class="link">View →</span>
+  </a>
+  <a class="card" href="/viz/race-control.html">
+    <div class="icon">🏴</div>
+    <h3>Race Control Messages</h3>
+    <p class="desc">Flags, penalties, and race director notes</p>
+    <span class="link">View →</span>
+  </a>
+</div>
+<footer>Powered by Box-Box · Data from Formula 1 Live Timing API · Built with Bun + TypeScript</footer>
+</body>
+</html>

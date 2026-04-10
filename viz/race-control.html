@@ -109,10 +109,10 @@ const RAW = `00:08:10.581{"Messages":[{"Utc":"2026-03-29T04:18:28","Lap":1,"Cate
 // Parse
 const msgs = [];
 RAW.trim().split('\n').forEach(line => {
-  const idx = line.indexOf('}{');
-  if (idx < 0) return;
-  const ts = line.slice(1, line.indexOf('}'));
-  const json = JSON.parse(line.slice(idx + 1));
+  const braceIdx = line.indexOf('{');
+  if (braceIdx < 0) return;
+  const ts = line.slice(0, braceIdx).trim();
+  const json = JSON.parse(line.slice(braceIdx));
   const m = json.Messages;
   if (Array.isArray(m)) {
     m.forEach((v, i) => msgs.push({id: String(i), ...v, _ts: ts}));
