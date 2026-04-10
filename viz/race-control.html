@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🇯🇵 Japanese Grand Prix 2026 — Race Control</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a1a2e;color:#e0e0e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;padding:16px;max-width:1200px;margin:0 auto}
+h1{text-align:center;font-size:1.6em;margin-bottom:20px;color:#fff}
+h2{font-size:1.1em;margin:20px 0 10px;color:#ccc;border-bottom:1px solid #333;padding-bottom:4px}
+.stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.stat{background:#16213e;border-radius:8px;padding:12px 18px;flex:1;min-width:120px;text-align:center}
+.stat .num{font-size:1.8em;font-weight:700;color:#fff}
+.stat .label{font-size:.75em;color:#888;margin-top:2px}
+.timeline-wrap{overflow-x:auto;margin-bottom:20px;background:#16213e;border-radius:8px;padding:16px}
+.timeline{position:relative;height:180px;min-width:800px}
+.timeline .lap-labels{display:flex;justify-content:space-between;font-size:.65em;color:#666;padding-top:4px}
+.timeline .lane{position:relative;height:28px;margin:2px 0;border-bottom:1px solid #222}
+.timeline .lane-label{position:absolute;left:0;top:2px;font-size:.6em;color:#888;width:70px}
+.timeline .marker{position:absolute;width:10px;height:10px;border-radius:50%;top:9px;cursor:pointer;transition:transform .15s}
+.timeline .marker:hover{transform:scale(2);z-index:10}
+.timeline .marker.green{background:#4caf50}
+.timeline .marker.yellow{background:#ffc107}
+.timeline .marker.red{background:#f44336}
+.timeline .marker.blue{background:#2196f3}
+.timeline .marker.penalty{background:#9c27b0}
+.timeline .marker.other{background:#888}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.filters button{background:#16213e;border:1px solid #333;color:#aaa;padding:6px 14px;border-radius:16px;cursor:pointer;font-size:.8em;transition:all .15s}
+.filters button.active{background:#0f3460;color:#fff;border-color:#0f3460}
+.filters button:hover{background:#0f3460}
+.feed{max-height:500px;overflow-y:auto;background:#16213e;border-radius:8px}
+.msg{padding:10px 14px;border-bottom:1px solid #1a1a2e;display:flex;gap:10px;align-items:flex-start}
+.msg:hover{background:#1a2744}
+.msg .meta{min-width:130px;font-size:.75em;color:#888;flex-shrink:0}
+.msg .badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.7em;font-weight:600;color:#fff;margin-right:4px;white-space:nowrap}
+.msg .driver{font-weight:700;color:#fff;margin-right:4px;font-size:.85em}
+.msg .text{font-size:.85em;color:#ccc;flex:1}
+.badge.flag{background:#4caf50}.badge.penalty{background:#9c27b0}.badge.safetycar{background:#ffc107;color:#000}.badge.drs{background:#2196f3}.badge.other{background:#555}
+.penalties{background:#16213e;border-radius:8px;padding:14px;margin-top:10px}
+.penalties .item{padding:8px 0;border-bottom:1px solid #222;font-size:.85em}
+.penalties .item:last-child{border:none}
+.penalties .item .pdriver{font-weight:700;color:#fff}
+.tooltip{display:none;position:fixed;background:#0d1b3e;border:1px solid #333;padding:8px 12px;border-radius:6px;font-size:.75em;z-index:100;max-width:300px;pointer-events:none;color:#ccc}
+@media(max-width:600px){.stat{min-width:90px;padding:8px}.stat .num{font-size:1.3em}.msg{flex-direction:column;gap:4px}.msg .meta{min-width:auto}}
+</style>
+</head>
+<body>
+<h1>🇯🇵 Japanese Grand Prix 2026 — Race Control</h1>
+<div id="stats" class="stats"></div>
+<h2>📅 Race Timeline</h2>
+<div class="timeline-wrap"><div id="timeline" class="timeline"></div><div id="lap-labels" class="lap-labels"></div></div>
+<div id="tooltip" class="tooltip"></div>
+<h2>📋 Messages</h2>
+<div id="filters" class="filters"></div>
+<div id="feed" class="feed"></div>
+<h2>🏁 Penalties &amp; Investigations</h2>
+<div id="penalties" class="penalties"></div>
+<script>
+const RAW = `00:08:10.581{"Messages":[{"Utc":"2026-03-29T04:18:28","Lap":1,"Category":"Other","Message":"FORMATION LAP WILL START AT 14:10"}]}
+00:13:45.100{"Messages":{"1":{"Utc":"2026-03-29T04:24:02","Lap":1,"Category":"Flag","Flag":"CLEAR","Scope":"Sector","Sector":18,"Message":"CLEAR IN TRACK SECTOR 18"}}}
+00:13:46.661{"Messages":{"2":{"Utc":"2026-03-29T04:24:04","Lap":1,"Category":"Flag","Flag":"CLEAR","Scope":"Sector","Sector":24,"Message":"CLEAR IN TRACK SECTOR 24"}}}
+00:13:48.526{"Messages":{"3":{"Utc":"2026-03-29T04:24:06","Lap":1,"Category":"Flag","Flag":"CLEAR","Scope":"Sector","Sector":19,"Message":"CLEAR IN TRACK SECTOR 19"}}}
+00:19:43.590{"Messages":{"4":{"Utc":"2026-03-29T04:30:01","Lap":1,"Category":"Flag","Flag":"GREEN","Scope":"Track","Message":"GREEN LIGHT - PIT EXIT OPEN"}}}
+00:29:43.581{"Messages":{"5":{"Utc":"2026-03-29T04:40:01","Lap":1,"Category":"Other","Message":"PIT EXIT CLOSED"}}}
+00:41:22.770{"Messages":{"6":{"Utc":"2026-03-29T04:51:40","Lap":1,"Category":"Other","Message":"RISK OF RAIN FOR THE F1 RACE IS 0%"}}}
+00:56:48.388{"Messages":{"7":{"Utc":"2026-03-29T05:07:05","Lap":1,"Category":"Other","Message":"OVERTAKE DISABLED"}}}
+01:03:45.022{"Messages":{"8":{"Utc":"2026-03-29T05:14:02","Lap":1,"Category":"Flag","Flag":"GREEN","Scope":"Track","Message":"GREEN LIGHT - PIT EXIT OPEN"}}}
+01:05:08.802{"Messages":{"9":{"Utc":"2026-03-29T05:15:26","Lap":1,"Category":"Other","Message":"OVERTAKE ENABLED"}}}
+01:09:45.030{"Messages":{"10":{"Utc":"2026-03-29T05:20:02","Lap":4,"Category":"Other","Message":"CAR 18 (STR) LAP DELETED - TRACK LIMITS AT TURN 13 LAP 1 14:15:19"}}}
+01:21:54.348{"Messages":{"11":{"Utc":"2026-03-29T05:32:11","Lap":12,"Category":"Other","Message":"CAR 87 (BEA) TIME 1:37.790 DELETED - TRACK LIMITS AT TURN 13 LAP 11 14:31:24"}}}
+01:26:52.335{"Messages":{"12":{"Utc":"2026-03-29T05:37:09","Lap":15,"Category":"Flag","Flag":"BLACK AND WHITE","Scope":"Driver","RacingNumber":"41","Message":"BLACK AND WHITE FLAG FOR CAR 41 (LIN) - MOVING UNDER BRAKING"}}}
+01:36:44.348{"Messages":{"13":{"Utc":"2026-03-29T05:47:01","Lap":21,"Category":"Other","Message":"CAR 11 (PER) TIME 1:38.735 DELETED - TRACK LIMITS AT TURN 13 LAP 20 14:46:19"}}}
+01:37:36.856{"Messages":{"14":{"Utc":"2026-03-29T05:47:54","Lap":22,"Category":"Flag","Flag":"YELLOW","Scope":"Sector","Sector":21,"Message":"YELLOW IN TRACK SECTOR 21"}}}
+01:37:41.663{"Messages":{"15":{"Utc":"2026-03-29T05:47:59","Lap":22,"Category":"Flag","Flag":"YELLOW","Scope":"Sector","Sector":20,"Message":"YELLOW IN TRACK SECTOR 20"}}}
+01:37:54.127{"Messages":{"16":{"Utc":"2026-03-29T05:48:11","Lap":22,"Category":"SafetyCar","Status":"DEPLOYED","Mode":"SAFETY CAR","Message":"SAFETY CAR DEPLOYED"}}}
+01:38:05.856{"Messages":{"17":{"Utc":"2026-03-29T05:48:23","Lap":22,"Category":"Other","Message":"MEDICAL CAR DEPLOYED"}}}
+01:39:12.378{"Messages":{"18":{"Utc":"2026-03-29T05:49:29","Lap":23,"Category":"Flag","Flag":"DOUBLE YELLOW","Scope":"Sector","Sector":21,"Message":"DOUBLE YELLOW IN TRACK SECTOR 21"}}}
+01:39:40.909{"Messages":{"19":{"Utc":"2026-03-29T05:49:58","Lap":23,"Category":"Flag","Flag":"DOUBLE YELLOW","Scope":"Sector","Sector":20,"Message":"DOUBLE YELLOW IN TRACK SECTOR 20"}}}
+01:39:58.097{"Messages":{"20":{"Utc":"2026-03-29T05:50:15","Lap":23,"Category":"Other","Message":"RECOVERY VEHICLE ON TRACK AT TURN 13"}}}
+01:47:14.528{"Messages":{"21":{"Utc":"2026-03-29T05:57:32","Lap":26,"Category":"Other","Message":"LAPPED CARS MAY NOW OVERTAKE THE SAFETY CAR: 77"}}}
+01:47:30.633{"Messages":{"22":{"Utc":"2026-03-29T05:57:48","Lap":26,"Category":"Flag","Flag":"CLEAR","Scope":"Sector","Sector":20,"Message":"CLEAR IN TRACK SECTOR 20"}}}
+01:47:32.559{"Messages":{"23":{"Utc":"2026-03-29T05:57:50","Lap":26,"Category":"Flag","Flag":"CLEAR","Scope":"Sector","Sector":21,"Message":"CLEAR IN TRACK SECTOR 21"}}}
+01:49:48.611{"Messages":{"24":{"Utc":"2026-03-29T06:00:06","Lap":27,"Category":"SafetyCar","Status":"IN THIS LAP","Mode":"SAFETY CAR","Message":"SAFETY CAR IN THIS LAP"}}}
+01:51:07.377{"Messages":{"25":{"Utc":"2026-03-29T06:01:24","Lap":27,"Category":"Flag","Flag":"CLEAR","Scope":"Track","Message":"TRACK CLEAR"}}}
+01:51:54.423{"Messages":{"26":{"Utc":"2026-03-29T06:02:11","Lap":28,"Category":"Other","Message":"OVERTAKE ENABLED"}}}
+01:55:42.913{"Messages":{"27":{"Utc":"2026-03-29T06:06:00","Lap":30,"Category":"Other","Message":"TURN 13 INCIDENT INVOLVING CARS 43 (COL) AND 87 (BEA) NOTED"}}}
+01:56:22.593{"Messages":{"28":{"Utc":"2026-03-29T06:06:40","Lap":31,"Category":"Other","Message":"FIA STEWARDS: TURN 13 INCIDENT INVOLVING CARS 43 (COL) AND 87 (BEA) REVIEWED NO FURTHER INVESTIGATION"}}}
+01:57:30.433{"Messages":{"29":{"Utc":"2026-03-29T06:07:47","Lap":31,"Category":"Other","Message":"CAR 41 (LIN) TIME 1:35.724 DELETED - TRACK LIMITS AT TURN 17 LAP 30 15:06:35"}}}
+01:58:03.309{"Messages":{"30":{"Utc":"2026-03-29T06:08:20","Lap":32,"Category":"Other","Message":"CAR 43 (COL) TIME 1:43.165 DELETED - TRACK LIMITS AT TURN 13 LAP 21 14:47:52"}}}
+02:19:10.138{"Messages":{"31":{"Utc":"2026-03-29T06:29:27","Lap":45,"Category":"Other","Message":"TURN 16 INCIDENT INVOLVING CAR 44 (HAM) NOTED - LEAVING THE TRACK AND GAINING AN ADVANTAGE"}}}
+02:19:17.602{"Messages":{"32":{"Utc":"2026-03-29T06:29:35","Lap":45,"Category":"Flag","Flag":"BLUE","Scope":"Driver","RacingNumber":"77","Message":"WAVED BLUE FLAG FOR CAR 77 (BOT) TIMED AT 15:29:34"}}}
+02:20:05.856{"Messages":{"33":{"Utc":"2026-03-29T06:30:23","Lap":46,"Category":"Other","Message":"CAR 44 (HAM) TIME 1:33.636 DELETED - TRACK LIMITS AT TURN 17 LAP 44 15:28:16"}}}
+02:21:53.773{"Messages":{"34":{"Utc":"2026-03-29T06:32:11","Lap":47,"Category":"Flag","Flag":"BLUE","Scope":"Driver","RacingNumber":"14","Message":"WAVED BLUE FLAG FOR CAR 14 (ALO) TIMED AT 15:32:10"}}}
+02:22:42.423{"Messages":{"35":{"Utc":"2026-03-29T06:32:59","Lap":48,"Category":"Other","Message":"FIA STEWARDS: TURN 16 INCIDENT INVOLVING CAR 44 (HAM) REVIEWED NO FURTHER INVESTIGATION - LEAVING THE TRACK AND GAINING AN ADVANTAGE"}}}
+02:23:24.251{"Messages":{"36":{"Utc":"2026-03-29T06:33:41","Lap":48,"Category":"Flag","Flag":"BLUE","Scope":"Driver","RacingNumber":"77","Message":"WAVED BLUE FLAG FOR CAR 77 (BOT) TIMED AT 15:33:41"}}}
+02:23:40.187{"Messages":{"37":{"Utc":"2026-03-29T06:33:57","Lap":48,"Category":"Flag","Flag":"BLUE","Scope":"Driver","RacingNumber":"77","Message":"WAVED BLUE FLAG FOR CAR 77 (BOT) TIMED AT 15:33:57"}}}
+02:23:56.365{"Messages":{"38":{"Utc":"2026-03-29T06:34:13","Lap":48,"Category":"Flag","Flag":"BLUE","Scope":"Driver","RacingNumber":"77","Message":"WAVED BLUE FLAG FOR CAR 77 (BOT) TIMED AT 15:34:13"}}}
+02:27:09.112{"Messages":{"39":{"Utc":"2026-03-29T06:37:26","Lap":51,"Category":"Flag","Flag":"BLUE","Scope":"Driver","RacingNumber":"77","Message":"WAVED BLUE FLAG FOR CAR 77 (BOT) TIMED AT 15:37:26"}}}
+02:27:35.226{"Messages":{"40":{"Utc":"2026-03-29T06:37:52","Lap":51,"Category":"Flag","Flag":"BLUE","Scope":"Driver","RacingNumber":"14","Message":"WAVED BLUE FLAG FOR CAR 14 (ALO) TIMED AT 15:37:52"}}}
+02:28:17.831{"Messages":{"41":{"Utc":"2026-03-29T06:38:35","Lap":51,"Category":"Other","Message":"CAR 14 (ALO) TIME 1:37.112 DELETED - TRACK LIMITS AT TURN 17 LAP 49 15:37:30"}}}
+02:28:22.641{"Messages":{"42":{"Utc":"2026-03-29T06:38:40","Lap":51,"Category":"Flag","Flag":"BLUE","Scope":"Driver","RacingNumber":"14","Message":"WAVED BLUE FLAG FOR CAR 14 (ALO) TIMED AT 15:38:39"}}}
+02:31:04.606{"Messages":{"43":{"Utc":"2026-03-29T06:41:22","Lap":53,"Category":"Flag","Flag":"BLUE","Scope":"Driver","RacingNumber":"14","Message":"WAVED BLUE FLAG FOR CAR 14 (ALO) TIMED AT 15:41:21"}}}
+02:31:31.053{"Messages":{"44":{"Utc":"2026-03-29T06:41:48","Lap":53,"Category":"Flag","Flag":"BLUE","Scope":"Driver","RacingNumber":"14","Message":"WAVED BLUE FLAG FOR CAR 14 (ALO) TIMED AT 15:41:48"}}}
+02:31:48.253{"Messages":{"45":{"Utc":"2026-03-29T06:42:05","Lap":53,"Category":"Flag","Flag":"CHEQUERED","Scope":"Track","Message":"CHEQUERED FLAG"}}}
+02:33:46.619{"Messages":{"46":{"Utc":"2026-03-29T06:44:04","Lap":53,"Category":"Other","Message":"ALL PASS HOLDERS MAY ACCESS THE PIT LANE"}}}`;
+
+// Parse
+const msgs = [];
+RAW.trim().split('\n').forEach(line => {
+  const idx = line.indexOf('}{');
+  if (idx < 0) return;
+  const ts = line.slice(1, line.indexOf('}'));
+  const json = JSON.parse(line.slice(idx + 1));
+  const m = json.Messages;
+  if (Array.isArray(m)) {
+    m.forEach((v, i) => msgs.push({id: String(i), ...v, _ts: ts}));
+  } else {
+    Object.entries(m).forEach(([k, v]) => msgs.push({id: k, ...v, _ts: ts}));
+  }
+});
+msgs.sort((a, b) => a.id - b.id);
+
+const extractDriver = s => { const m = s.match(/\b([A-Z]{2,4})\b/g); return m ? m[m.length - 1] : null; };
+
+const categories = ['Flag','SafetyCar','Penalty','DRS','Other'];
+const catColor = m => {
+  if (m.Category === 'SafetyCar') return 'yellow';
+  if (m.Flag === 'YELLOW' || m.Flag === 'DOUBLE YELLOW') return 'yellow';
+  if (m.Flag === 'RED') return 'red';
+  if (m.Flag === 'GREEN' || m.Flag === 'CLEAR' || m.Flag === 'CHEQUERED') return 'green';
+  if (m.Flag === 'BLUE') return 'blue';
+  if (m.Category === 'Penalty') return 'penalty';
+  return 'other';
+};
+const catClass = c => c.toLowerCase().replace(' ','');
+
+// Stats
+const total = msgs.length;
+const yellowCount = msgs.filter(m => m.Flag === 'YELLOW' || m.Flag === 'DOUBLE YELLOW' || m.Category === 'SafetyCar').length;
+const scDeploy = msgs.filter(m => m.Category === 'SafetyCar' && m.Status === 'DEPLOYED').length;
+const penaltyCount = msgs.filter(m => m.Category === 'Penalty').length;
+const drsCount = msgs.filter(m => m.Category === 'DRS').length;
+
+document.getElementById('stats').innerHTML = `
+<div class="stat"><div class="num">${total}</div><div class="label">Total Messages</div></div>
+<div class="stat"><div class="num" style="color:#ffc107">${yellowCount}</div><div class="label">Yellow / SC Events</div></div>
+<div class="stat"><div class="num" style="color:#ffc107">${scDeploy}</div><div class="label">Safety Car</div></div>
+<div class="stat"><div class="num" style="color:#9c27b0">${penaltyCount}</div><div class="label">Penalties</div></div>
+<div class="stat"><div class="num" style="color:#2196f3">${drsCount}</div><div class="label">DRS Toggles</div></div>`;
+
+// Timeline
+const maxLap = Math.max(...msgs.map(m => m.Lap || 1));
+const lanes = ['Flag','SafetyCar','Other'];
+const tl = document.getElementById('timeline');
+lanes.forEach((lane, li) => {
+  const div = document.createElement('div');
+  div.className = 'lane';
+  div.innerHTML = `<span class="lane-label">${lane === 'SafetyCar' ? 'SC' : lane}</span>`;
+  msgs.filter(m => m.Category === lane).forEach(m => {
+    const lap = m.Lap || 1;
+    const pct = ((lap - 1) / maxLap) * 100;
+    const c = catColor(m);
+    const dot = document.createElement('span');
+    dot.className = `marker ${c}`;
+    dot.style.left = `calc(75px + ${pct * 0.85}%)`;
+    dot.title = `L${lap}: ${m.Message}`;
+    div.appendChild(dot);
+  });
+  tl.appendChild(div);
+});
+
+// Lap labels
+const labels = document.getElementById('lap-labels');
+labels.style.marginLeft = '75px';
+for (let i = 1; i <= maxLap; i += Math.ceil(maxLap / 15)) {
+  const sp = document.createElement('span');
+  sp.textContent = `L${i}`;
+  labels.appendChild(sp);
+}
+
+// Filters
+const activeFilter = {cat: 'All'};
+const filtersDiv = document.getElementById('filters');
+['All',...categories].forEach(c => {
+  const btn = document.createElement('button');
+  btn.textContent = c;
+  if (c === 'All') btn.classList.add('active');
+  btn.onclick = () => {
+    filtersDiv.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter.cat = c;
+    renderFeed();
+  };
+  filtersDiv.appendChild(btn);
+});
+
+function renderFeed() {
+  const feed = document.getElementById('feed');
+  const filtered = activeFilter.cat === 'All' ? msgs : msgs.filter(m => m.Category === activeFilter.cat);
+  feed.innerHTML = filtered.map(m => {
+    const driver = m.RacingNumber ? extractDriver(m.Message) || m.RacingNumber : extractDriver(m.Message);
+    const utc = m.Utc ? m.Utc.split('T')[1] : '';
+    return `<div class="msg">
+      <div class="meta">L${m.Lap || '?'} · ${utc}</div>
+      <span class="badge ${catClass(m.Category)}">${m.Category}${m.Flag ? ' · ' + m.Flag : ''}</span>
+      ${driver ? `<span class="driver">${driver}</span>` : ''}
+      <span class="text">${m.Message}</span>
+    </div>`;
+  }).join('');
+}
+renderFeed();
+
+// Penalties
+const penalties = msgs.filter(m => m.Category === 'Penalty' || m.Message.includes('DELETED') || m.Message.includes('FLAG FOR') || m.Message.includes('NOTED') || m.Message.includes('STEWARDS'));
+const penDiv = document.getElementById('penalties');
+penDiv.innerHTML = penalties.length ? penalties.map(m => {
+  const driver = extractDriver(m.Message) || m.RacingNumber || '—';
+  return `<div class="item"><span class="pdriver">${driver}</span> <span style="color:#888">L${m.Lap}:</span> ${m.Message}</div>`;
+}).join('') : '<div class="item" style="color:#666">No penalties recorded in this race.</div>';
+</script>
+</body>
+</html>

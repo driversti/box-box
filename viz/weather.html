@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🇯🇵 Japanese Grand Prix 2026 — Weather</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a1a2e;color:#e0e0e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;padding:20px}
+h1{text-align:center;font-size:1.6em;padding:20px 0 10px;color:#fff}
+.subtitle{text-align:center;color:#888;margin-bottom:24px;font-size:.9em}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:1200px;margin:0 auto}
+.card{background:#16213e;border-radius:12px;padding:20px;position:relative;overflow:hidden}
+.card h2{font-size:1em;color:#aaa;margin-bottom:12px;font-weight:600}
+.card canvas{width:100%!important;height:200px!important}
+.stats-row{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.stat-card{background:#16213e;border-radius:12px;padding:16px;text-align:center}
+.stat-card .label{font-size:.75em;color:#888;text-transform:uppercase;letter-spacing:1px}
+.stat-card .value{font-size:1.4em;color:#fff;margin-top:6px;font-weight:700}
+.stat-card .range{font-size:.85em;color:#aaa}
+.rain-banner{grid-column:1/-1;text-align:center;padding:16px;border-radius:12px;font-size:1.1em;font-weight:600}
+.rain-no{background:#1b3a2a;color:#4ade80;border:1px solid #22543d}
+.rain-yes{background:#3a1b2a;color:#f87171;border:1px solid #54223a}
+.compass-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px}
+.compass{width:140px;height:140px;border-radius:50%;border:2px solid #334;position:relative;background:radial-gradient(circle,#1a2744 0%,#16213e 100%)}
+.compass-label{position:absolute;font-size:.65em;color:#666;font-weight:700}
+.compass-label.n{top:6px;left:50%;transform:translateX(-50%)}
+.compass-label.s{bottom:6px;left:50%;transform:translateX(-50%)}
+.compass-label.e{right:8px;top:50%;transform:translateY(-50%)}
+.compass-label.w{left:8px;top:50%;transform:translateY(-50%)}
+.arrow{position:absolute;top:50%;left:50%;width:4px;height:50px;background:linear-gradient(to top,#e74c3c 0%,#e74c3c 50%,#3498db 50%,#3498db 100%);transform-origin:bottom center;border-radius:2px;transform:translate(-50%,-100%) rotate(0deg);transition:transform .5s ease}
+.arrow::after{content:'';position:absolute;top:-4px;left:50%;transform:translateX(-50%);border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:10px solid #e74c3c}
+.compass-info{text-align:center;margin-top:12px}
+.compass-info .dir{font-size:1.1em;color:#fff}
+.compass-info .spd{font-size:.85em;color:#aaa}
+.full{grid-column:1/-1}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.stats-row{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<h1>🇯🇵 Japanese Grand Prix 2026 — Weather Conditions</h1>
+<p class="subtitle">Suzuka International Racing Course · March 29, 2026</p>
+
+<div class="stats-row" id="stats"></div>
+<div class="rain-banner rain-no" id="rain">☀️ No Rainfall During Race — Dry Session</div>
+
+<div class="grid">
+<div class="card full"><h2>🌡️ Temperature (°C)</h2><canvas id="tempChart"></canvas></div>
+<div class="card"><h2>💧 Humidity (%)</h2><canvas id="humChart"></canvas></div>
+<div class="card"><h2>🌬️ Wind Direction & Speed</h2><div class="compass-wrap"><div class="compass"><span class="compass-label n">N</span><span class="compass-label s">S</span><span class="compass-label e">E</span><span class="compass-label w">W</span><div class="arrow" id="arrow"></div></div><div class="compass-info"><div class="dir" id="windDir">—</div><div class="spd" id="windSpd">—</div></div></div></div>
+<div class="card full"><h2>📊 Atmospheric Pressure (hPa)</h2><canvas id="pressChart"></canvas></div>
+</div>
+
+<script>
+const DATA=[{time:"00:00:46.894",airTemp:19.4,trackTemp:37.0,humidity:46.1,pressure:1012.1,rainfall:0,windDir:115,windSpeed:3.1},{time:"00:01:46.896",airTemp:19.4,trackTemp:38.0,humidity:45.7,pressure:1012.1,rainfall:0,windDir:140,windSpeed:1.9},{time:"00:02:46.898",airTemp:19.4,trackTemp:37.3,humidity:44.7,pressure:1012.0,rainfall:0,windDir:124,windSpeed:3.3},{time:"00:03:46.897",airTemp:19.5,trackTemp:37.7,humidity:45.0,pressure:1012.1,rainfall:0,windDir:126,windSpeed:2.3},{time:"00:04:46.899",airTemp:19.5,trackTemp:37.4,humidity:45.0,pressure:1012.1,rainfall:0,windDir:118,windSpeed:2.5},{time:"00:05:46.899",airTemp:19.5,trackTemp:38.1,humidity:45.4,pressure:1012.1,rainfall:0,windDir:125,windSpeed:2.7},{time:"00:06:46.901",airTemp:19.4,trackTemp:37.8,humidity:46.0,pressure:1012.0,rainfall:0,windDir:121,windSpeed:2.9},{time:"00:07:46.895",airTemp:19.5,trackTemp:38.2,humidity:46.0,pressure:1012.0,rainfall:0,windDir:144,windSpeed:2.4},{time:"00:08:46.909",airTemp:19.5,trackTemp:38.2,humidity:46.3,pressure:1012.1,rainfall:0,windDir:135,windSpeed:2.7},{time:"00:09:46.901",airTemp:19.4,trackTemp:37.8,humidity:48.9,pressure:1012.0,rainfall:0,windDir:128,windSpeed:3.5},{time:"00:10:46.901",airTemp:19.3,trackTemp:38.3,humidity:49.8,pressure:1012.0,rainfall:0,windDir:116,windSpeed:2.4},{time:"00:11:46.901",airTemp:19.3,trackTemp:37.9,humidity:51.6,pressure:1012.0,rainfall:0,windDir:133,windSpeed:3.4},{time:"00:12:46.904",airTemp:19.2,trackTemp:37.5,humidity:50.3,pressure:1012.0,rainfall:0,windDir:127,windSpeed:3.4},{time:"00:13:46.903",airTemp:19.1,trackTemp:37.8,humidity:51.0,pressure:1012.1,rainfall:0,windDir:132,windSpeed:2.1},{time:"00:14:46.905",airTemp:18.9,trackTemp:37.7,humidity:52.0,pressure:1012.1,rainfall:0,windDir:129,windSpeed:2.4},{time:"00:15:46.904",airTemp:18.8,trackTemp:37.3,humidity:51.9,pressure:1012.0,rainfall:0,windDir:128,windSpeed:2.5},{time:"00:16:46.906",airTemp:18.8,trackTemp:36.8,humidity:52.3,pressure:1012.0,rainfall:0,windDir:117,windSpeed:1.0},{time:"00:17:46.913",airTemp:18.7,trackTemp:37.0,humidity:52.9,pressure:1012.1,rainfall:0,windDir:133,windSpeed:2.2},{time:"00:18:46.909",airTemp:18.6,trackTemp:37.1,humidity:52.1,pressure:1012.0,rainfall:0,windDir:122,windSpeed:2.3},{time:"00:19:46.910",airTemp:18.4,trackTemp:36.8,humidity:51.8,pressure:1012.0,rainfall:0,windDir:125,windSpeed:3.7},{time:"00:20:46.909",airTemp:18.5,trackTemp:37.2,humidity:52.4,pressure:1012.0,rainfall:0,windDir:134,windSpeed:2.5},{time:"00:21:46.909",airTemp:18.4,trackTemp:36.8,humidity:53.7,pressure:1012.0,rainfall:0,windDir:124,windSpeed:3.0},{time:"00:22:46.912",airTemp:18.4,trackTemp:37.2,humidity:52.5,pressure:1012.1,rainfall:0,windDir:142,windSpeed:1.9},{time:"00:23:46.913",airTemp:18.5,trackTemp:36.6,humidity:53.2,pressure:1012.0,rainfall:0,windDir:120,windSpeed:2.7},{time:"00:24:46.914",airTemp:18.6,trackTemp:36.2,humidity:53.9,pressure:1012.0,rainfall:0,windDir:119,windSpeed:2.8},{time:"00:25:46.911",airTemp:18.5,trackTemp:36.3,humidity:52.9,pressure:1012.0,rainfall:0,windDir:129,windSpeed:1.4},{time:"00:26:46.913",airTemp:18.5,trackTemp:36.2,humidity:53.2,pressure:1012.0,rainfall:0,windDir:133,windSpeed:1.6},{time:"00:27:46.917",airTemp:18.5,trackTemp:35.6,humidity:52.2,pressure:1011.9,rainfall:0,windDir:110,windSpeed:2.7},{time:"00:28:46.918",airTemp:18.5,trackTemp:35.4,humidity:52.8,pressure:1011.9,rainfall:0,windDir:110,windSpeed:2.6},{time:"00:29:46.946",airTemp:18.5,trackTemp:36.0,humidity:53.0,pressure:1011.9,rainfall:0,windDir:122,windSpeed:2.9},{time:"00:30:46.918",airTemp:18.5,trackTemp:36.0,humidity:52.5,pressure:1011.9,rainfall:0,windDir:133,windSpeed:2.6},{time:"00:31:46.915",airTemp:18.5,trackTemp:36.1,humidity:52.8,pressure:1011.9,rainfall:0,windDir:118,windSpeed:1.8},{time:"00:32:46.917",airTemp:18.4,trackTemp:36.4,humidity:53.9,pressure:1012.0,rainfall:0,windDir:155,windSpeed:2.1},{time:"00:33:46.919",airTemp:18.4,trackTemp:35.8,humidity:53.4,pressure:1011.9,rainfall:0,windDir:125,windSpeed:2.4},{time:"00:34:46.916",airTemp:18.6,trackTemp:36.2,humidity:53.7,pressure:1011.9,rainfall:0,windDir:148,windSpeed:1.8},{time:"00:35:46.918",airTemp:18.4,trackTemp:35.5,humidity:53.7,pressure:1011.9,rainfall:0,windDir:117,windSpeed:2.7},{time:"00:36:46.925",airTemp:18.5,trackTemp:36.2,humidity:52.9,pressure:1011.9,rainfall:0,windDir:144,windSpeed:2.9},{time:"00:37:46.925",airTemp:18.5,trackTemp:36.3,humidity:52.5,pressure:1012.0,rainfall:0,windDir:136,windSpeed:2.6},{time:"00:38:46.922",airTemp:18.5,trackTemp:36.3,humidity:53.1,pressure:1011.9,rainfall:0,windDir:113,windSpeed:2.2},{time:"00:39:46.922",airTemp:18.4,trackTemp:36.3,humidity:53.2,pressure:1011.8,rainfall:0,windDir:135,windSpeed:2.6},{time:"00:40:46.927",airTemp:18.5,trackTemp:35.8,humidity:52.8,pressure:1011.8,rainfall:0,windDir:129,windSpeed:3.0},{time:"00:41:46.925",airTemp:18.4,trackTemp:35.4,humidity:51.6,pressure:1011.8,rainfall:0,windDir:118,windSpeed:2.4},{time:"00:42:46.924",airTemp:18.4,trackTemp:35.3,humidity:53.3,pressure:1011.8,rainfall:0,windDir:121,windSpeed:2.9},{time:"00:43:46.925",airTemp:18.5,trackTemp:35.8,humidity:53.0,pressure:1011.8,rainfall:0,windDir:130,windSpeed:3.4},{time:"00:44:46.924",airTemp:18.6,trackTemp:36.5,humidity:51.6,pressure:1011.7,rainfall:0,windDir:121,windSpeed:2.8},{time:"00:45:46.926",airTemp:18.6,trackTemp:36.3,humidity:52.3,pressure:1011.8,rainfall:0,windDir:133,windSpeed:2.1},{time:"00:46:46.929",airTemp:18.6,trackTemp:36.1,humidity:51.9,pressure:1011.7,rainfall:0,windDir:119,windSpeed:1.9},{time:"00:47:46.928",airTemp:18.6,trackTemp:35.7,humidity:53.6,pressure:1011.8,rainfall:0,windDir:105,windSpeed:1.8},{time:"00:48:46.929",airTemp:18.7,trackTemp:36.6,humidity:53.6,pressure:1011.8,rainfall:0,windDir:121,windSpeed:2.0},{time:"00:49:46.934",airTemp:18.8,trackTemp:36.7,humidity:51.0,pressure:1011.8,rainfall:0,windDir:147,windSpeed:3.0},{time:"00:50:46.931",airTemp:18.8,trackTemp:35.9,humidity:52.2,pressure:1011.7,rainfall:0,windDir:104,windSpeed:2.0},{time:"00:51:46.934",airTemp:18.8,trackTemp:36.9,humidity:53.0,pressure:1011.8,rainfall:0,windDir:120,windSpeed:3.1},{time:"00:52:46.932",airTemp:18.8,trackTemp:36.7,humidity:53.5,pressure:1011.8,rainfall:0,windDir:130,windSpeed:1.5},{time:"00:53:46.935",airTemp:18.8,trackTemp:36.6,humidity:52.5,pressure:1011.8,rainfall:0,windDir:121,windSpeed:2.0},{time:"00:54:46.934",airTemp:18.8,trackTemp:36.2,humidity:52.6,pressure:1011.8,rainfall:0,windDir:113,windSpeed:3.0},{time:"00:55:46.934",airTemp:18.9,trackTemp:36.8,humidity:53.3,pressure:1011.7,rainfall:0,windDir:150,windSpeed:3.2},{time:"00:56:46.936",airTemp:18.8,trackTemp:36.4,humidity:53.1,pressure:1011.8,rainfall:0,windDir:121,windSpeed:2.5},{time:"00:57:46.937",airTemp:18.7,trackTemp:36.6,humidity:53.5,pressure:1011.8,rainfall:0,windDir:118,windSpeed:1.8},{time:"00:58:46.936",airTemp:18.8,trackTemp:36.7,humidity:53.8,pressure:1011.8,rainfall:0,windDir:119,windSpeed:2.8},{time:"00:59:46.935",airTemp:18.8,trackTemp:36.6,humidity:53.7,pressure:1011.9,rainfall:0,windDir:131,windSpeed:2.3},{time:"01:00:46.939",airTemp:18.9,trackTemp:36.7,humidity:53.4,pressure:1011.8,rainfall:0,windDir:122,windSpeed:2.4},{time:"01:01:46.940",airTemp:19.0,trackTemp:36.6,humidity:54.1,pressure:1011.9,rainfall:0,windDir:151,windSpeed:2.3},{time:"01:02:46.938",airTemp:18.9,trackTemp:36.4,humidity:53.9,pressure:1011.7,rainfall:0,windDir:122,windSpeed:2.0},{time:"01:03:46.937",airTemp:18.8,trackTemp:36.7,humidity:55.5,pressure:1011.7,rainfall:0,windDir:124,windSpeed:2.1},{time:"01:04:46.944",airTemp:18.9,trackTemp:36.8,humidity:55.3,pressure:1011.8,rainfall:0,windDir:111,windSpeed:1.8},{time:"01:05:46.939",airTemp:18.9,trackTemp:36.7,humidity:54.3,pressure:1011.7,rainfall:0,windDir:143,windSpeed:1.5},{time:"01:06:46.943",airTemp:18.9,trackTemp:36.3,humidity:53.9,pressure:1011.8,rainfall:0,windDir:120,windSpeed:1.7},{time:"01:07:46.945",airTemp:18.9,trackTemp:36.0,humidity:54.5,pressure:1011.7,rainfall:0,windDir:112,windSpeed:2.1},{time:"01:08:46.951",airTemp:19.0,trackTemp:36.5,humidity:54.0,pressure:1011.8,rainfall:0,windDir:104,windSpeed:0.4},{time:"01:09:46.945",airTemp:19.1,trackTemp:36.4,humidity:54.4,pressure:1011.8,rainfall:0,windDir:135,windSpeed:2.9},{time:"01:10:46.946",airTemp:19.1,trackTemp:36.4,humidity:53.2,pressure:1011.8,rainfall:0,windDir:128,windSpeed:2.3},{time:"01:11:46.945",airTemp:19.2,trackTemp:36.0,humidity:52.0,pressure:1011.8,rainfall:0,windDir:95,windSpeed:1.4},{time:"01:12:46.947",airTemp:19.3,trackTemp:35.7,humidity:52.1,pressure:1011.8,rainfall:0,windDir:120,windSpeed:2.6},{time:"01:13:46.948",airTemp:19.1,trackTemp:35.7,humidity:51.3,pressure:1011.8,rainfall:0,windDir:130,windSpeed:1.3},{time:"01:14:46.950",airTemp:19.0,trackTemp:35.4,humidity:51.5,pressure:1011.8,rainfall:0,windDir:104,windSpeed:1.2},{time:"01:15:46.949",airTemp:19.0,trackTemp:35.3,humidity:51.7,pressure:1011.8,rainfall:0,windDir:144,windSpeed:2.7},{time:"01:16:46.955",airTemp:19.1,trackTemp:34.6,humidity:51.2,pressure:1011.7,rainfall:0,windDir:120,windSpeed:2.3},{time:"01:17:46.956",airTemp:19.1,trackTemp:34.3,humidity:50.8,pressure:1011.8,rainfall:0,windDir:120,windSpeed:2.5},{time:"01:18:46.950",airTemp:19.0,trackTemp:34.6,humidity:51.2,pressure:1011.8,rainfall:0,windDir:126,windSpeed:2.0},{time:"01:19:46.951",airTemp:19.1,trackTemp:34.0,humidity:50.7,pressure:1011.7,rainfall:0,windDir:142,windSpeed:1.5},{time:"01:20:46.954",airTemp:19.0,trackTemp:34.0,humidity:51.0,pressure:1011.7,rainfall:0,windDir:127,windSpeed:2.5},{time:"01:21:46.957",airTemp:19.1,trackTemp:33.7,humidity:50.5,pressure:1011.9,rainfall:0,windDir:82,windSpeed:1.3},{time:"01:22:46.959",airTemp:19.0,trackTemp:34.1,humidity:49.6,pressure:1011.9,rainfall:0,windDir:117,windSpeed:0.6},{time:"01:23:46.956",airTemp:19.0,trackTemp:33.8,humidity:50.6,pressure:1011.8,rainfall:0,windDir:151,windSpeed:2.0},{time:"01:24:46.955",airTemp:19.0,trackTemp:33.6,humidity:50.6,pressure:1011.8,rainfall:0,windDir:56,windSpeed:1.2},{time:"01:25:46.957",airTemp:18.9,trackTemp:33.3,humidity:50.7,pressure:1011.7,rainfall:0,windDir:133,windSpeed:1.2},{time:"01:26:46.955",airTemp:18.8,trackTemp:33.2,humidity:51.4,pressure:1011.6,rainfall:0,windDir:98,windSpeed:1.2},{time:"01:27:46.957",airTemp:18.8,trackTemp:33.4,humidity:50.8,pressure:1011.8,rainfall:0,windDir:44,windSpeed:0.7},{time:"01:28:46.962",airTemp:18.8,trackTemp:33.4,humidity:49.7,pressure:1011.7,rainfall:0,windDir:135,windSpeed:2.1},{time:"01:29:46.956",airTemp:18.9,trackTemp:32.9,humidity:47.8,pressure:1011.8,rainfall:0,windDir:133,windSpeed:2.6},{time:"01:30:46.965",airTemp:18.8,trackTemp:32.5,humidity:48.1,pressure:1011.7,rainfall:0,windDir:126,windSpeed:2.3},{time:"01:31:46.960",airTemp:18.8,trackTemp:32.8,humidity:48.7,pressure:1011.7,rainfall:0,windDir:100,windSpeed:1.3},{time:"01:32:46.954",airTemp:18.8,trackTemp:32.2,humidity:48.5,pressure:1011.7,rainfall:0,windDir:24,windSpeed:1.7},{time:"01:33:46.959",airTemp:18.7,trackTemp:32.5,humidity:48.8,pressure:1011.7,rainfall:0,windDir:78,windSpeed:1.2},{time:"01:34:46.962",airTemp:18.7,trackTemp:32.7,humidity:49.2,pressure:1011.7,rainfall:0,windDir:131,windSpeed:2.2},{time:"01:35:46.964",airTemp:18.6,trackTemp:32.2,humidity:49.2,pressure:1011.7,rainfall:0,windDir:58,windSpeed:1.8},{time:"01:36:46.966",airTemp:18.6,trackTemp:32.6,humidity:49.9,pressure:1011.7,rainfall:0,windDir:116,windSpeed:0.9},{time:"01:37:46.963",airTemp:18.6,trackTemp:32.9,humidity:50.4,pressure:1011.6,rainfall:0,windDir:163,windSpeed:0.7},{time:"01:38:46.963",airTemp:18.6,trackTemp:32.7,humidity:49.7,pressure:1011.7,rainfall:0,windDir:165,windSpeed:1.6},{time:"01:39:46.965",airTemp:18.5,trackTemp:32.7,humidity:51.5,pressure:1011.7,rainfall:0,windDir:107,windSpeed:0.4},{time:"01:40:46.954",airTemp:18.6,trackTemp:32.7,humidity:51.9,pressure:1011.6,rainfall:0,windDir:124,windSpeed:1.5},{time:"01:41:46.969",airTemp:18.5,trackTemp:32.7,humidity:51.1,pressure:1011.6,rainfall:0,windDir:152,windSpeed:2.1},{time:"01:42:46.968",airTemp:18.5,trackTemp:32.9,humidity:51.1,pressure:1011.7,rainfall:0,windDir:121,windSpeed:1.3},{time:"01:43:46.969",airTemp:18.4,trackTemp:32.9,humidity:52.5,pressure:1011.7,rainfall:0,windDir:182,windSpeed:0.7},{time:"01:44:46.968",airTemp:18.5,trackTemp:32.8,humidity:51.8,pressure:1011.7,rainfall:0,windDir:120,windSpeed:1.5},{time:"01:45:46.971",airTemp:18.4,trackTemp:32.7,humidity:49.8,pressure:1011.7,rainfall:0,windDir:154,windSpeed:2.4},{time:"01:46:46.972",airTemp:18.5,trackTemp:32.3,humidity:50.7,pressure:1011.7,rainfall:0,windDir:106,windSpeed:2.0},{time:"01:47:46.974",airTemp:18.4,trackTemp:32.6,humidity:50.4,pressure:1011.7,rainfall:0,windDir:137,windSpeed:2.3},{time:"01:48:46.974",airTemp:18.4,trackTemp:32.3,humidity:49.5,pressure:1011.7,rainfall:0,windDir:144,windSpeed:3.1},{time:"01:49:46.973",airTemp:18.3,trackTemp:32.2,humidity:50.5,pressure:1011.7,rainfall:0,windDir:136,windSpeed:2.5},{time:"01:50:47.144",airTemp:18.4,trackTemp:32.6,humidity:48.2,pressure:1011.7,rainfall:0,windDir:148,windSpeed:2.6},{time:"01:51:46.975",airTemp:18.3,trackTemp:32.3,humidity:47.7,pressure:1011.7,rainfall:0,windDir:122,windSpeed:2.3},{time:"01:52:46.977",airTemp:18.3,trackTemp:32.4,humidity:47.8,pressure:1011.7,rainfall:0,windDir:126,windSpeed:2.2},{time:"01:53:46.974",airTemp:18.4,trackTemp:32.4,humidity:48.2,pressure:1011.7,rainfall:0,windDir:132,windSpeed:2.6},{time:"01:54:46.976",airTemp:18.4,trackTemp:32.1,humidity:47.6,pressure:1011.7,rainfall:0,windDir:135,windSpeed:0.8},{time:"01:55:46.978",airTemp:18.4,trackTemp:31.9,humidity:48.4,pressure:1011.7,rainfall:0,windDir:125,windSpeed:3.5},{time:"01:56:46.979",airTemp:18.4,trackTemp:32.0,humidity:49.7,pressure:1011.7,rainfall:0,windDir:129,windSpeed:1.9},{time:"01:57:46.984",airTemp:18.5,trackTemp:31.7,humidity:49.6,pressure:1011.7,rainfall:0,windDir:344,windSpeed:1.4},{time:"01:58:46.981",airTemp:18.5,trackTemp:32.0,humidity:50.7,pressure:1011.6,rainfall:0,windDir:133,windSpeed:2.0},{time:"01:59:46.981",airTemp:18.5,trackTemp:31.5,humidity:50.0,pressure:1011.7,rainfall:0,windDir:140,windSpeed:1.1},{time:"02:00:46.983",airTemp:18.5,trackTemp:31.5,humidity:50.2,pressure:1011.7,rainfall:0,windDir:188,windSpeed:0.6},{time:"02:01:46.992",airTemp:18.5,trackTemp:31.4,humidity:51.0,pressure:1011.6,rainfall:0,windDir:113,windSpeed:1.2},{time:"02:02:46.980",airTemp:18.3,trackTemp:31.4,humidity:51.1,pressure:1011.6,rainfall:0,windDir:154,windSpeed:2.4},{time:"02:03:46.981",airTemp:18.2,trackTemp:31.3,humidity:51.7,pressure:1011.7,rainfall:0,windDir:135,windSpeed:2.2},{time:"02:04:46.983",airTemp:18.1,trackTemp:31.1,humidity:52.4,pressure:1011.7,rainfall:0,windDir:170,windSpeed:0.8},{time:"02:05:46.988",airTemp:18.0,trackTemp:31.0,humidity:53.7,pressure:1011.6,rainfall:0,windDir:138,windSpeed:1.5},{time:"02:06:46.985",airTemp:17.9,trackTemp:30.9,humidity:54.3,pressure:1011.6,rainfall:0,windDir:116,windSpeed:1.0},{time:"02:07:46.984",airTemp:17.9,trackTemp:30.7,humidity:55.6,pressure:1011.6,rainfall:0,windDir:88,windSpeed:0.8},{time:"02:08:46.986",airTemp:17.9,trackTemp:31.1,humidity:55.8,pressure:1011.7,rainfall:0,windDir:119,windSpeed:1.8},{time:"02:09:46.985",airTemp:17.9,trackTemp:30.9,humidity:54.7,pressure:1011.5,rainfall:0,windDir:131,windSpeed:1.4},{time:"02:10:46.990",airTemp:17.8,trackTemp:31.0,humidity:55.5,pressure:1011.6,rainfall:0,windDir:167,windSpeed:1.0},{time:"02:11:46.999",airTemp:17.8,trackTemp:30.5,humidity:55.9,pressure:1011.6,rainfall:0,windDir:87,windSpeed:1.3},{time:"02:12:46.994",airTemp:17.8,trackTemp:30.7,humidity:55.7,pressure:1011.6,rainfall:0,windDir:140,windSpeed:0.6},{time:"02:13:46.998",airTemp:18.1,trackTemp:30.6,humidity:55.4,pressure:1011.6,rainfall:0,windDir:153,windSpeed:2.5},{time:"02:14:46.992",airTemp:17.8,trackTemp:30.0,humidity:55.6,pressure:1011.7,rainfall:0,windDir:100,windSpeed:1.5},{time:"02:15:46.993",airTemp:17.9,trackTemp:30.4,humidity:57.1,pressure:1011.7,rainfall:0,windDir:140,windSpeed:0.9},{time:"02:16:47.003",airTemp:17.9,trackTemp:30.5,humidity:57.3,pressure:1011.7,rainfall:0,windDir:9,windSpeed:0.5},{time:"02:17:46.992",airTemp:18.0,trackTemp:30.8,humidity:57.2,pressure:1011.7,rainfall:0,windDir:133,windSpeed:0.9},{time:"02:18:46.995",airTemp:18.0,trackTemp:30.9,humidity:56.5,pressure:1011.7,rainfall:0,windDir:129,windSpeed:1.1},{time:"02:19:46.994",airTemp:18.0,trackTemp:29.6,humidity:56.6,pressure:1011.7,rainfall:0,windDir:83,windSpeed:2.0},{time:"02:20:46.992",airTemp:18.0,trackTemp:30.2,humidity:56.6,pressure:1011.8,rainfall:0,windDir:104,windSpeed:0.9},{time:"02:21:47.001",airTemp:17.9,trackTemp:30.8,humidity:57.4,pressure:1011.8,rainfall:0,windDir:91,windSpeed:0.8},{time:"02:22:46.995",airTemp:17.9,trackTemp:30.5,humidity:56.8,pressure:1011.7,rainfall:0,windDir:38,windSpeed:0.9},{time:"02:23:47.007",airTemp:17.9,trackTemp:30.2,humidity:57.3,pressure:1011.8,rainfall:0,windDir:81,windSpeed:1.3},{time:"02:24:47.017",airTemp:17.9,trackTemp:30.9,humidity:57.8,pressure:1011.7,rainfall:0,windDir:110,windSpeed:0.9},{time:"02:25:47.031",airTemp:18.0,trackTemp:30.5,humidity:57.6,pressure:1011.8,rainfall:0,windDir:146,windSpeed:1.4},{time:"02:26:47.046",airTemp:18.0,trackTemp:30.6,humidity:57.9,pressure:1011.7,rainfall:0,windDir:128,windSpeed:1.5},{time:"02:27:47.045",airTemp:17.8,trackTemp:30.2,humidity:59.2,pressure:1011.8,rainfall:0,windDir:113,windSpeed:1.9},{time:"02:28:47.064",airTemp:17.7,trackTemp:30.3,humidity:59.7,pressure:1011.7,rainfall:0,windDir:134,windSpeed:2.8},{time:"02:29:47.049",airTemp:17.6,trackTemp:30.0,humidity:59.8,pressure:1011.8,rainfall:0,windDir:107,windSpeed:1.5},{time:"02:30:47.054",airTemp:17.4,trackTemp:29.9,humidity:61.3,pressure:1011.8,rainfall:0,windDir:122,windSpeed:1.8},{time:"02:31:47.051",airTemp:17.4,trackTemp:30.0,humidity:61.5,pressure:1011.8,rainfall:0,windDir:133,windSpeed:0.9},{time:"02:32:47.052",airTemp:17.3,trackTemp:29.8,humidity:62.5,pressure:1011.8,rainfall:0,windDir:57,windSpeed:0.3},{time:"02:33:47.058",airTemp:17.3,trackTemp:30.0,humidity:62.8,pressure:1011.8,rainfall:0,windDir:0,windSpeed:0.0},{time:"02:34:47.055",airTemp:17.3,trackTemp:29.7,humidity:61.8,pressure:1011.8,rainfall:0,windDir:136,windSpeed:1.9},{time:"02:35:47.050",airTemp:17.3,trackTemp:29.2,humidity:60.9,pressure:1011.8,rainfall:0,windDir:100,windSpeed:1.2}];
+
+// Computed stats
+const airTemps=DATA.map(d=>d.airTemp), trackTemps=DATA.map(d=>d.trackTemp);
+const humidities=DATA.map(d=>d.humidity), pressures=DATA.map(d=>d.pressure);
+const windSpeeds=DATA.map(d=>d.windSpeed), windDirs=DATA.map(d=>d.windDir);
+const hasRain=DATA.some(d=>d.rainfall===1);
+
+const min=a=>Math.min(...a), max=a=>Math.max(...a), avg=a=>a.reduce((s,v)=>s+v,0)/a.length;
+const fmt=v=>v.toFixed(1);
+
+// Stats cards
+document.getElementById('stats').innerHTML=`
+<div class="stat-card"><div class="label">Air Temp</div><div class="range">${fmt(min(airTemps))}°C → ${fmt(max(airTemps))}°C</div><div class="value">avg ${fmt(avg(airTemps))}°C</div></div>
+<div class="stat-card"><div class="label">Track Temp</div><div class="range">${fmt(min(trackTemps))}°C → ${fmt(max(trackTemps))}°C</div><div class="value">avg ${fmt(avg(trackTemps))}°C</div></div>
+<div class="stat-card"><div class="label">Max Wind Speed</div><div class="value">${fmt(max(windSpeeds))} m/s</div><div class="range">avg ${fmt(avg(windSpeeds))} m/s</div></div>
+<div class="stat-card"><div class="label">Rainfall</div><div class="value">${hasRain?'🌧️ Yes':'☀️ None'}</div><div class="range">Dry session</div></div>`;
+
+// Compass
+const avgDir=avg(windDirs);
+const dirName=d=>{const n=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];return n[Math.round(((d%360+360)%360)/22.5)%16]};
+document.getElementById('arrow').style.transform=`translate(-50%,-100%) rotate(${avgDir}deg)`;
+document.getElementById('windDir').textContent=`${dirName(avgDir)} (${Math.round(avgDir)}°)`;
+document.getElementById('windSpd').textContent=`Avg ${fmt(avg(windSpeeds))} m/s · Max ${fmt(max(windSpeeds))} m/s`;
+
+// Labels
+const labels=DATA.map(d=>{const p=d.time.split(':');return p[0]+':'+p[1]});
+
+function drawLine(id,datasets,yMin,yMax,unit){
+  const c=document.getElementById(id),ctx=c.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  const rect=c.getBoundingClientRect();
+  c.width=rect.width*dpr;c.height=rect.height*dpr;
+  ctx.scale(dpr,dpr);
+  const W=rect.width,H=rect.height,pad={t:20,r:60,b:30,l:45};
+  const cw=W-pad.l-pad.r,ch=H-pad.t-pad.b;
+
+  // Grid
+  ctx.strokeStyle='#2a2a4a';ctx.lineWidth=1;
+  const steps=5;
+  for(let i=0;i<=steps;i++){
+    const y=pad.t+ch*(i/steps);
+    ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();
+    ctx.fillStyle='#666';ctx.font='11px sans-serif';ctx.textAlign='right';
+    const val=yMax-(yMax-yMin)*(i/steps);
+    ctx.fillText(val.toFixed(1)+unit,W-pad.r+50,y+4);
+  }
+  // X labels (every 15 min)
+  ctx.fillStyle='#666';ctx.textAlign='center';ctx.font='10px sans-serif';
+  for(let i=0;i<DATA.length;i+=15){
+    const x=pad.l+cw*(i/(DATA.length-1));
+    ctx.fillText(labels[i],x,H-5);
+  }
+
+  datasets.forEach(ds=>{
+    const pts=ds.data.map((v,i)=>({
+      x:pad.l+cw*(i/(DATA.length-1)),
+      y:pad.t+ch*(1-(v-yMin)/(yMax-yMin))
+    }));
+    // Fill
+    ctx.beginPath();ctx.moveTo(pts[0].x,pad.t+ch);
+    pts.forEach(p=>ctx.lineTo(p.x,p.y));
+    ctx.lineTo(pts[pts.length-1].x,pad.t+ch);ctx.closePath();
+    ctx.fillStyle=ds.fill;ctx.fill();
+    // Line
+    ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));
+    ctx.strokeStyle=ds.color;ctx.lineWidth=2;ctx.stroke();
+    // Label
+    ctx.fillStyle=ds.color;ctx.font='bold 11px sans-serif';ctx.textAlign='left';
+    ctx.fillText(ds.label,pad.l+4,pad.t+12+datasets.indexOf(ds)*16);
+  });
+}
+
+drawLine('tempChart',[
+  {data:trackTemps,color:'#ff6b35',fill:'rgba(255,107,53,0.15)',label:'Track Temp'},
+  {data:airTemps,color:'#4ecdc4',fill:'rgba(78,205,196,0.15)',label:'Air Temp'}
+],Math.floor(min(trackTemps))-2,Math.ceil(max(trackTemps))+2,'°');
+
+drawLine('humChart',[
+  {data:humidities,color:'#a855f7',fill:'rgba(168,85,247,0.2)',label:'Humidity'}
+],Math.floor(min(humidities))-2,Math.ceil(max(humidities))+2,'%');
+
+drawLine('pressChart',[
+  {data:pressures,color:'#38bdf8',fill:'rgba(56,189,248,0.15)',label:'Pressure'}
+],Math.floor(min(pressures)*10)/10-0.2,Math.ceil(max(pressures)*10)/10+0.2,' hPa');
+
+window.addEventListener('resize',()=>{
+  drawLine('tempChart',[
+    {data:trackTemps,color:'#ff6b35',fill:'rgba(255,107,53,0.15)',label:'Track Temp'},
+    {data:airTemps,color:'#4ecdc4',fill:'rgba(78,205,196,0.15)',label:'Air Temp'}
+  ],Math.floor(min(trackTemps))-2,Math.ceil(max(trackTemps))+2,'°');
+  drawLine('humChart',[
+    {data:humidities,color:'#a855f7',fill:'rgba(168,85,247,0.2)',label:'Humidity'}
+  ],Math.floor(min(humidities))-2,Math.ceil(max(humidities))+2,'%');
+  drawLine('pressChart',[
+    {data:pressures,color:'#38bdf8',fill:'rgba(56,189,248,0.15)',label:'Pressure'}
+  ],Math.floor(min(pressures)*10)/10-0.2,Math.ceil(max(pressures)*10)/10+0.2,' hPa');
+});
+</script>
+</body>
+</html>

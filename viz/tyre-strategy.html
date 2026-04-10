@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🇯🇵 Japanese GP 2026 — Tyre Strategy</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a1a2e;color:#e0e0e0;font-family:'Segoe UI',system-ui,sans-serif;padding:20px;min-height:100vh}
+h1{text-align:center;font-size:1.6em;margin-bottom:4px;color:#fff}
+.subtitle{text-align:center;color:#888;margin-bottom:20px;font-size:.9em}
+.legend{display:flex;justify-content:center;gap:20px;margin-bottom:16px;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:.85em}
+.legend-swatch{width:28px;height:14px;border-radius:3px;border:1px solid #444}
+.chart-wrap{overflow-x:auto;margin-bottom:30px}
+.chart{min-width:700px}
+.xaxis{display:flex;position:relative;margin-left:90px;height:20px;border-bottom:1px solid #333}
+.xaxis span{flex:1;text-align:center;font-size:.65em;color:#888;position:relative}
+.row{display:flex;align-items:center;margin:2px 0}
+.row-name{width:86px;text-align:right;padding-right:8px;font-weight:700;font-size:.82em;flex-shrink:0}
+.row-bars{display:flex;flex:1;height:28px}
+.bar{display:flex;align-items:center;justify-content:center;font-size:.68em;font-weight:600;border-right:1px solid rgba(0,0,0,.3);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding:0 2px}
+.section{margin-bottom:24px}
+.section h2{font-size:1.1em;color:#fff;margin-bottom:10px;border-bottom:1px solid #333;padding-bottom:6px}
+.cards{display:flex;gap:12px;flex-wrap:wrap}
+.card{background:#16213e;border-radius:8px;padding:12px 16px;flex:1;min-width:200px;border:1px solid #0f3460}
+.card .count{font-size:1.6em;font-weight:700;color:#e94560}
+.card .label{font-size:.82em;color:#aaa;margin-top:4px}
+.card .strategy{font-size:.75em;margin-top:6px;line-height:1.5}
+.facts{display:flex;flex-direction:column;gap:8px}
+.fact{background:#16213e;border-left:3px solid #e94560;padding:10px 14px;border-radius:0 6px 6px 0;font-size:.85em;line-height:1.4}
+.fact strong{color:#fff}
+.compound-dot{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:middle;margin:0 2px;border:1px solid #555}
+</style>
+</head>
+<body>
+<h1>🇯🇵 Japanese Grand Prix 2026 — Tyre Strategy</h1>
+<p class="subtitle">Suzuka Circuit • 53 Laps</p>
+<div class="legend">
+  <div class="legend-item"><div class="legend-swatch" style="background:#FF3333"></div>SOFT</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#FFD700"></div>MEDIUM</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#FFFFFF"></div>HARD</div>
+</div>
+<div class="chart-wrap"><div class="chart" id="chart"></div></div>
+<div class="section"><h2>📊 Strategy Breakdown</h2><div class="cards" id="cards"></div></div>
+<div class="section"><h2>💡 Interesting Facts</h2><div class="facts" id="facts"></div></div>
+<script>
+const TOTAL_LAPS=53;
+const COLORS={SOFT:'#FF3333',MEDIUM:'#FFD700',HARD:'#FFFFFF'};
+const TXT_COLORS={SOFT:'#000',MEDIUM:'#000',HARD:'#000'};
+const drivers=[
+{n:'1',tla:'VER',team:'Red Bull',c:'3671C6',stints:[{c:'MEDIUM',l:16},{c:'HARD',l:37}]},
+{n:'3',tla:'RIC',team:'RB',c:'6692FF',stints:[{c:'MEDIUM',l:22},{c:'HARD',l:31}]},
+{n:'5',tla:'VET',team:'Aston Martin',c:'229971',stints:[{c:'MEDIUM',l:22},{c:'HARD',l:31}]},
+{n:'6',tla:'NOR',team:'McLaren',c:'FF8000',stints:[{c:'MEDIUM',l:19},{c:'HARD',l:34}]},
+{n:'10',tla:'GAS',team:'Alpine',c:'FF87BC',stints:[{c:'MEDIUM',l:22},{c:'HARD',l:31}]},
+{n:'11',tla:'PER',team:'Red Bull',c:'3671C6',stints:[{c:'MEDIUM',l:21},{c:'HARD',l:32}]},
+{n:'12',tla:'ANT',team:'Mercedes',c:'27F4D2',stints:[{c:'MEDIUM',l:22},{c:'HARD',l:31}]},
+{n:'14',tla:'ALO',team:'Aston Martin',c:'229971',stints:[{c:'MEDIUM',l:21},{c:'HARD',l:2},{c:'MEDIUM',l:29}]},
+{n:'16',tla:'LEC',team:'Ferrari',c:'E8002D',stints:[{c:'MEDIUM',l:17},{c:'HARD',l:36}]},
+{n:'18',tla:'STR',team:'Aston Martin',c:'229971',stints:[{c:'MEDIUM',l:21},{c:'HARD',l:3},{c:'MEDIUM',l:6}]},
+{n:'23',tla:'ALO2',team:'Haas',c:'B6BABD',stints:[{c:'MEDIUM',l:22},{c:'HARD',l:23},{c:'SOFT',l:1},{c:'SOFT',l:2},{c:'SOFT',l:3},{c:'SOFT',l:4},{c:'MEDIUM',l:2}]},
+{n:'27',tla:'HUL',team:'Haas',c:'B6BABD',stints:[{c:'MEDIUM',l:23},{c:'HARD',l:30}]},
+{n:'30',tla:'LAW',team:'RB',c:'6692FF',stints:[{c:'MEDIUM',l:22},{c:'HARD',l:31}]},
+{n:'31',tla:'OCO',team:'Alpine',c:'FF87BC',stints:[{c:'MEDIUM',l:19},{c:'HARD',l:34}]},
+{n:'41',tla:'BEA',team:'Haas',c:'B6BABD',stints:[{c:'MEDIUM',l:18},{c:'HARD',l:35}]},
+{n:'43',tla:'COL',team:'Williams',c:'64C4FF',stints:[{c:'MEDIUM',l:17},{c:'HARD',l:36}]},
+{n:'44',tla:'HAM',team:'Ferrari',c:'E8002D',stints:[{c:'MEDIUM',l:22},{c:'HARD',l:31}]},
+{n:'55',tla:'SAI',team:'Williams',c:'64C4FF',stints:[{c:'MEDIUM',l:22},{c:'HARD',l:31}]},
+{n:'63',tla:'RUS',team:'Mercedes',c:'27F4D2',stints:[{c:'MEDIUM',l:21},{c:'HARD',l:32}]},
+{n:'77',tla:'BOT',team:'Cadillac',c:'FFFFFF',stints:[{c:'HARD',l:19},{c:'MEDIUM',l:33}]},
+{n:'81',tla:'PIA',team:'McLaren',c:'FF8000',stints:[{c:'MEDIUM',l:18},{c:'HARD',l:35}]},
+{n:'87',tla:'ALO3',team:'Cadillac',c:'FFFFFF',stints:[{c:'MEDIUM',l:16},{c:'HARD',l:4}]},
+];
+
+const chart=document.getElementById('chart');
+// xaxis
+const xdiv=document.createElement('div');
+xdiv.className='xaxis';
+for(let i=1;i<=TOTAL_LAPS;i++){
+  const s=document.createElement('span');
+  s.textContent=i%5===0||i===1?i:'';
+  xdiv.appendChild(s);
+}
+chart.appendChild(xdiv);
+
+drivers.forEach(d=>{
+  const row=document.createElement('div');row.className='row';
+  const name=document.createElement('div');name.className='row-name';
+  name.style.color='#'+d.c;name.textContent=d.tla;
+  const bars=document.createElement('div');bars.className='row-bars';
+  let lap=1;
+  d.stints.forEach(s=>{
+    const b=document.createElement('div');b.className='bar';
+    const pct=(s.l/TOTAL_LAPS*100);
+    b.style.width=pct+'%';b.style.background=COLORS[s.c];b.style.color=TXT_COLORS[s.c];
+    b.textContent=s.c+' ('+s.l+')';
+    b.title=s.c+' L'+lap+'–'+(lap+s.l-1);
+    lap+=s.l;
+    bars.appendChild(b);
+  });
+  row.appendChild(name);row.appendChild(bars);chart.appendChild(row);
+});
+
+// Strategy breakdown
+const strats={};
+drivers.forEach(d=>{
+  const key=d.stints.map(s=>s.c).join(' → ');
+  const desc=d.stints.map(s=>s.c+'('+s.l+')').join(' → ');
+  if(!strats[key])strats[key]={count:0,desc,example:d.tla};
+  strats[key].count++;
+});
+const sorted=Object.values(strats).sort((a,b)=>b.count-a.count);
+const cardsEl=document.getElementById('cards');
+sorted.slice(0,3).forEach((s,i)=>{
+  const card=document.createElement('div');card.className='card';
+  card.innerHTML='<div class="count">'+s.count+'</div><div class="label">drivers</div><div class="strategy">'+s.desc.replace(/(SOFT|MEDIUM|HARD)/g,m=>'<span class="compound-dot" style="background:'+COLORS[m]+'"></span>'+m)+'</div>';
+  cardsEl.appendChild(card);
+});
+
+// Facts
+const factsEl=document.getElementById('facts');
+const facts=[];
+// 7-stop for #23
+facts.push('<strong>#23 ALO2 went on a 7-stop strategy!</strong> 7 stints including 4 consecutive Soft tyre runs (Laps 46–49). Likely a test or emergency stops. Wild.');
+// BOT started on Hards
+facts.push('<strong>#77 BOT was the only driver to start on Hards</strong> — a reverse strategy (HARD→MEDIUM). Finished 19th + 33rd laps.');
+// 3-stoppers
+const multiStop=drivers.filter(d=>d.stints.length>=3);
+if(multiStop.length)facts.push('<strong>'+multiStop.length+' drivers went 3+ stops:</strong> '+multiStop.map(d=>d.tla).join(', ')+'. Everyone else was a clean 1-stopper.');
+// #87 only 20 laps
+facts.push('<strong>#87 ALO3 only completed 20 laps</strong> (MEDIUM 16 + HARD 4) — likely retired or DNS finish.');
+// Most common
+facts.push('<strong>The standard strategy:</strong> MEDIUM → HARD 1-stop. '+sorted[0].count+' out of 22 drivers used it. Suzuka favors simplicity.');
+// Longest stint
+let maxStint={l:0,who:'',c:''};
+drivers.forEach(d=>d.stints.forEach(s=>{if(s.l>maxStint.l)maxStint={l:s.l,who:d.tla,c:s.c}}));
+facts.push('<strong>Longest single stint:</strong> '+maxStint.l+' laps on '+maxStint.c+' by '+maxStint.who+'. Tyre management masterclass.');
+facts.forEach(f=>{const d=document.createElement('div');d.className='fact';d.innerHTML=f;factsEl.appendChild(d)});
+</script>
+</body>
+</html>
