@@ -1,0 +1,19 @@
+{
+  "name": "box-box",
+  "module": "src/client.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "bun run src/client.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/ws": "^8.18.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "ws": "^8.20.0"
+  }
+}
