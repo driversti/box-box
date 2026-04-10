@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🇯🇵 Japanese GP 2026 — Pit Stop Analysis</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a1a2e;color:#e0e0e0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;padding:20px}
+h1{text-align:center;font-size:1.8em;margin-bottom:8px;background:linear-gradient(90deg,#ff6b6b,#ffd93d,#6bcb77,#4d96ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.subtitle{text-align:center;color:#888;margin-bottom:30px;font-size:0.95em}
+.stats-row{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin-bottom:40px}
+.stat-card{background:linear-gradient(135deg,#16213e,#1a1a2e);border:1px solid #2a2a4a;border-radius:12px;padding:20px 28px;text-align:center;min-width:200px;flex:1;max-width:280px}
+.stat-card.fastest{border-color:#ffd93d;box-shadow:0 0 20px rgba(255,217,61,0.15)}
+.stat-card .label{font-size:0.8em;text-transform:uppercase;letter-spacing:1px;color:#888;margin-bottom:8px}
+.stat-card .value{font-size:1.6em;font-weight:700}
+.stat-card .detail{font-size:0.85em;color:#aaa;margin-top:4px}
+.fastest-card{border-color:#ffd93d;box-shadow:0 0 30px rgba(255,217,61,0.2)}
+.fastest-card .value{color:#ffd93d;font-size:2em}
+.fastest-card .detail{color:#ccc;margin-top:6px}
+.section{margin-bottom:40px}
+.section h2{font-size:1.3em;margin-bottom:16px;padding-left:4px;border-left:3px solid #4d96ff;padding:8px 12px;background:linear-gradient(90deg,rgba(77,150,255,0.1),transparent)}
+.chart{display:flex;flex-direction:column;gap:6px}
+.bar-row{display:flex;align-items:center;gap:8px}
+.bar-label{width:120px;text-align:right;font-size:0.85em;white-space:nowrap;flex-shrink:0}
+.bar-track{flex:1;background:#16213e;border-radius:6px;overflow:hidden;position:relative;min-height:28px}
+.bar-fill{height:100%;border-radius:6px;display:flex;align-items:center;padding-right:8px;justify-content:flex-end;font-size:0.8em;font-weight:600;color:#fff;min-width:40px;transition:width 0.6s ease;text-shadow:0 1px 2px rgba(0,0,0,0.5)}
+.team-section{margin-bottom:40px}
+.team-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.team-name{width:160px;text-align:right;font-size:0.9em;color:#ccc}
+.team-bar-track{flex:1;background:#16213e;border-radius:8px;overflow:hidden;height:32px}
+.team-bar-fill{height:100%;border-radius:8px;display:flex;align-items:center;padding:0 12px;font-size:0.85em;font-weight:600;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,0.5)}
+@media(max-width:768px){
+  .bar-label{width:80px;font-size:0.75em}
+  .stats-row{gap:10px}
+  .stat-card{min-width:140px;padding:14px}
+  h1{font-size:1.3em}
+  .team-name{width:100px;font-size:0.8em}
+}
+</style>
+</head>
+<body>
+
+<h1>🇯🇵 Japanese Grand Prix 2026 — Pit Stop Analysis</h1>
+<p class="subtitle">Suzuka International Racing Course · Race Day</p>
+
+<div class="stats-row" id="stats"></div>
+
+<div class="section">
+  <h2>⚡ Pit Stop Times</h2>
+  <div class="chart" id="pitStopChart"></div>
+</div>
+
+<div class="section">
+  <h2>🛣️ Pit Lane Times</h2>
+  <div class="chart" id="pitLaneChart"></div>
+</div>
+
+<div class="team-section">
+  <h2>🏭 Team Comparison — Avg Pit Stop Time</h2>
+  <div id="teamChart"></div>
+</div>
+
+<script>
+const pitStopData = [
+  {num:"1",stop:"2.5",lane:"23.316",lap:"16"},
+  {num:"16",stop:"2.1",lane:"22.992",lap:"17"},
+  {num:"43",stop:"2.9",lane:"23.649"},
+  {num:"81",stop:"2.4",lane:"23.444",lap:"18"},
+  {num:"31",stop:"3.4",lane:"24.629",lap:"19"},
+  {num:"6",stop:"2.8",lane:"23.698"},
+  {num:"77",stop:"4.0",lane:"25.129"},
+  {num:"63",stop:"3.0",lane:"22.937",lap:"21"},
+  {num:"11",stop:"6.6",lane:"27.307"},
+  {num:"18",stop:"4.2",lane:"25.083"},
+  {num:"14",stop:"4.3",lane:"26.458"},
+  {num:"12",stop:"2.4",lane:"23.288",lap:"22"},
+  {num:"44",stop:"2.0",lane:"22.891"},
+  {num:"10",stop:"3.5",lane:"24.304"},
+  {num:"3",stop:"3.3",lane:"24.490"},
+  {num:"5",stop:"2.6",lane:"24.630"},
+  {num:"55",stop:"3.5",lane:"24.396"},
+  {num:"23",stop:"2.9",lane:"24.600"},
+  {num:"18b",stop:"2.6",lane:"23.501",lap:"24",realNum:"18"},
+  {num:"23b",stop:"2.7",lane:"23.072",lap:"45",realNum:"23"}
+];
+
+const drivers = {
+  "1":{tla:"NOR",name:"Lando Norris",team:"McLaren",color:"F47600"},
+  "16":{tla:"LEC",name:"Charles Leclerc",team:"Ferrari",color:"ED1131"},
+  "43":{tla:"COL",name:"Franco Colapinto",team:"Alpine",color:"00A1E8"},
+  "81":{tla:"PIA",name:"Oscar Piastri",team:"McLaren",color:"F47600"},
+  "31":{tla:"OCO",name:"Esteban Ocon",team:"Haas F1 Team",color:"9C9FA2"},
+  "6":{tla:"HAD",name:"Isack Hadjar",team:"Red Bull Racing",color:"4781D7"},
+  "77":{tla:"BOT",name:"Valtteri Bottas",team:"Cadillac",color:"909090"},
+  "63":{tla:"RUS",name:"George Russell",team:"Mercedes",color:"00D7B6"},
+  "11":{tla:"PER",name:"Sergio Perez",team:"Cadillac",color:"909090"},
+  "18":{tla:"STR",name:"Lance Stroll",team:"Aston Martin",color:"229971"},
+  "14":{tla:"ALO",name:"Fernando Alonso",team:"Aston Martin",color:"229971"},
+  "12":{tla:"ANT",name:"Kimi Antonelli",team:"Mercedes",color:"00D7B6"},
+  "44":{tla:"HAM",name:"Lewis Hamilton",team:"Ferrari",color:"ED1131"},
+  "10":{tla:"GAS",name:"Pierre Gasly",team:"Alpine",color:"00A1E8"},
+  "3":{tla:"VER",name:"Max Verstappen",team:"Red Bull Racing",color:"4781D7"},
+  "5":{tla:"BOR",name:"Gabriel Bortoleto",team:"Audi",color:"F50537"},
+  "55":{tla:"SAI",name:"Carlos Sainz",team:"Williams",color:"1868DB"},
+  "23":{tla:"ALB",name:"Alexander Albon",team:"Williams",color:"1868DB"}
+};
+
+function getInfo(p){
+  const rn = p.realNum || p.num;
+  const d = drivers[rn];
+  const suffix = p.realNum ? " (P2)" : "";
+  return {tla: d ? d.tla+suffix : rn, team: d?d.team:"?", color: d?d.color:"888"};
+}
+
+const enriched = pitStopData.map(p=>{
+  const info = getInfo(p);
+  return {...p, stopSec: parseFloat(p.stop), laneSec: parseFloat(p.lane), ...info};
+});
+
+const fastest = enriched.reduce((a,b)=>a.stopSec<b.stopSec?a:b);
+const slowest = enriched.reduce((a,b)=>a.stopSec>b.stopSec?a:b);
+const avgStop = enriched.reduce((s,p)=>s+p.stopSec,0)/enriched.length;
+const avgLane = enriched.reduce((s,p)=>s+p.laneSec,0)/enriched.length;
+
+// Stats
+const fd = drivers[fastest.realNum||fastest.num];
+document.getElementById('stats').innerHTML = `
+  <div class="stat-card fastest-card">
+    <div class="label">🏆 Fastest Pit Stop</div>
+    <div class="value">${fastest.stop}s</div>
+    <div class="detail">${fd?fd.name:'?'} · ${fd?fd.team:'?'}</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Average Stop</div>
+    <div class="value">${avgStop.toFixed(2)}s</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Slowest Stop</div>
+    <div class="value">${slowest.stop}s</div>
+    <div class="detail">${drivers[slowest.realNum||slowest.num]?.name||'?'}</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Average Lane Time</div>
+    <div class="value">${avgLane.toFixed(2)}s</div>
+  </div>
+`;
+
+function makeChart(containerId, data, key, maxVal){
+  const sorted = [...data].sort((a,b)=>a[key]-b[key]);
+  const container = document.getElementById(containerId);
+  container.innerHTML = sorted.map(d=>{
+    const pct = (d[key]/maxVal*100).toFixed(1);
+    return `<div class="bar-row">
+      <div class="bar-label">${d.tla}</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${pct}%;background:#${d.color}">${d[key].toFixed(1)}s</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+makeChart('pitStopChart', enriched, 'stopSec', slowest.stopSec * 1.1);
+makeChart('pitLaneChart', enriched, 'laneSec', Math.max(...enriched.map(d=>d.laneSec)) * 1.1);
+
+// Team comparison
+const teamMap = {};
+enriched.forEach(d=>{
+  if(!teamMap[d.team]) teamMap[d.team]={sum:0,count:0,color:d.color};
+  teamMap[d.team].sum+=d.stopSec;
+  teamMap[d.team].count++;
+});
+const teams = Object.entries(teamMap).map(([name,v])=>({name,avg:v.sum/v.count,color:v.color}))
+  .sort((a,b)=>a.avg-b.avg);
+const maxTeam = teams[teams.length-1].avg * 1.1;
+
+document.getElementById('teamChart').innerHTML = teams.map(t=>{
+  const pct = (t.avg/maxTeam*100).toFixed(1);
+  return `<div class="team-row">
+    <div class="team-name">${t.name}</div>
+    <div class="team-bar-track">
+      <div class="team-bar-fill" style="width:${pct}%;background:#${t.color}">${t.avg.toFixed(2)}s</div>
+    </div>
+  </div>`;
+}).join('');
+</script>
+</body>
+</html>
