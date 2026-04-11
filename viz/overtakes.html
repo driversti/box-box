@@ -41,6 +41,8 @@ h2{font-size:1.2em;color:#aaa;margin:28px 0 12px;border-bottom:1px solid #333;pa
 <h1>🇯🇵 Japanese GP 2026 — Overtake Analysis</h1>
 <div id="content"></div>
 <script>
+// Wrap to ensure DOM is ready
+(function() {
 const DATA = {"81":[{"Timestamp":"2026-03-29T05:14:09.752Z","count":2}],"63":[{"Timestamp":"2026-03-29T05:14:09.818Z","count":1}],"16":[{"Timestamp":"2026-03-29T05:14:09.834Z","count":1}],"1":[{"Timestamp":"2026-03-29T05:14:09.921Z","count":1}],"44":[{"Timestamp":"2026-03-29T05:14:10.061Z","count":1}],"41":[{"Timestamp":"2026-03-29T05:14:10.873Z","count":1}],"31":[{"Timestamp":"2026-03-29T05:14:10.879Z","count":2}],"3":[{"Timestamp":"2026-03-29T05:14:11.169Z","count":1}],"30":[{"Timestamp":"2026-03-29T05:14:11.234Z","count":2}],"55":[{"Timestamp":"2026-03-29T05:14:11.464Z","count":3}],"23":[{"Timestamp":"2026-03-29T05:14:11.546Z","count":2}],"43":[{"Timestamp":"2026-03-29T05:14:11.78Z","count":1}],"87":[{"Timestamp":"2026-03-29T05:14:11.787Z","count":1}],"77":[{"Timestamp":"2026-03-29T05:14:11.916Z","count":1}],"11":[{"Timestamp":"2026-03-29T05:14:11.964Z","count":1}],"5":[{"Timestamp":"2026-03-29T05:14:15.119Z","count":1}],"6":[{"Timestamp":"2026-03-29T05:14:18.529Z","count":1}],"10":[{"Timestamp":"2026-03-29T05:14:22.263Z","count":1}],"14":[{"Timestamp":"2026-03-29T05:14:24.627Z","count":1}],"18":[{"Timestamp":"2026-03-29T05:14:36.808Z","count":1}],"12":[{"Timestamp":"2026-03-29T05:15:47.432Z","count":1}],"27":[{"Timestamp":"2026-03-29T05:17:32.876Z","count":1}]};
 
 const DRIVERS = {
@@ -188,7 +190,11 @@ html += `<h2>💡 Fun Facts</h2>
 document.getElementById('content').innerHTML = html;
 
 // Fix timeline height
-document.getElementById('timeline').style.minHeight = (yOrder.length * 20 + 40) + 'px';
+setTimeout(() => {
+  const tl = document.getElementById('timeline');
+  if (tl) tl.style.minHeight = (yOrder.length * 20 + 40) + 'px';
+}, 0);
+})();
 </script>
 </body>
 </html>

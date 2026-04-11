@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chinese Grand Prix 2026 — Tyre Timeline</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#1a1a2e;color:#e0e0e0;min-height:100vh;padding:1rem}
+h1{font-size:1.5rem;margin-bottom:1rem;text-align:center}
+h2{font-size:1.1rem;margin:1.5rem 0 .8rem;color:#00d4ff}
+a{color:#00d4ff;text-decoration:none}
+a:hover{text-decoration:underline}
+.back{display:inline-block;margin-bottom:1rem;font-size:.9rem}
+
+.gantt-row{display:flex;align-items:center;margin:.3rem 0;height:24px}
+.gantt-label{width:50px;text-align:right;margin-right:.8rem;font-weight:600;font-size:.75rem}
+.gantt-track{flex:1;background:#2a2a4a;border-radius:4px;height:16px;position:relative;overflow:hidden}
+.gantt-fill{height:100%;position:absolute;border-radius:2px}
+.stats{display:flex;gap:1rem;flex-wrap:wrap;margin:1rem 0}
+.stat{background:#16213e;border-radius:8px;padding:.8rem;text-align:center;flex:1;min-width:120px}
+.stat .val{font-size:1.5rem;font-weight:700;color:#00d4ff}
+.stat .label{font-size:.75rem;color:#888}
+
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← Back</a>
+<h1>🇨🇳 Chinese Grand Prix 2026 — Tyre Timeline</h1>
+<div id="app"></div>
+<script>
+const DRIVERS={"1":{"tla":"NOR","team":"McLaren","color":"#FF8000"},"3":{"tla":"VER","team":"Red Bull","color":"#4781D7"},"5":{"tla":"BOR","team":"Audi","color":"#F50537"},"6":{"tla":"HAD","team":"Red Bull","color":"#4781D7"},"10":{"tla":"GAS","team":"Alpine","color":"#00A1E8"},"11":{"tla":"PER","team":"Cadillac","color":"#909090"},"12":{"tla":"ANT","team":"Mercedes","color":"#27F4D2"},"14":{"tla":"ALO","team":"Aston Martin","color":"#229971"},"16":{"tla":"LEC","team":"Ferrari","color":"#ED1131"},"18":{"tla":"STR","team":"Aston Martin","color":"#229971"},"23":{"tla":"ALB","team":"Williams","color":"#1868DB"},"27":{"tla":"HUL","team":"Audi","color":"#F50537"},"30":{"tla":"LAW","team":"RB","color":"#6C98FF"},"31":{"tla":"OCO","team":"Haas","color":"#9C9FA2"},"41":{"tla":"LIN","team":"RB","color":"#6C98FF"},"43":{"tla":"COL","team":"Alpine","color":"#00A1E8"},"44":{"tla":"HAM","team":"Ferrari","color":"#ED1131"},"55":{"tla":"SAI","team":"Williams","color":"#1868DB"},"63":{"tla":"RUS","team":"Mercedes","color":"#27F4D2"},"77":{"tla":"BOT","team":"Cadillac","color":"#909090"},"81":{"tla":"PIA","team":"McLaren","color":"#FF8000"},"87":{"tla":"BEA","team":"Haas","color":"#9C9FA2"}};
+(function(){
+const DATA={"14":[{"ts":"00:39:49.377","Compound":"HARD","New":true}],"55":[{"ts":"00:39:49.377","Compound":"MEDIUM","New":true},{"ts":"00:39:54.493","Compound":"HARD"}],"1":[{"ts":"00:39:54.493","Compound":"MEDIUM","New":false},{"ts":"01:08:34.684","Compound":"SOFT"}],"3":[{"ts":"00:39:54.493","Compound":"MEDIUM","New":false},{"ts":"01:09:09.686","Compound":"SOFT"}],"5":[{"ts":"00:39:54.493","Compound":"MEDIUM","New":false}],"6":[{"ts":"00:39:54.493","Compound":"SOFT","New":false}],"10":[{"ts":"00:39:54.493","Compound":"MEDIUM","New":false}],"11":[{"ts":"00:39:54.493","Compound":"MEDIUM","New":true},{"ts":"01:09:34.684","Compound":"SOFT","New":false},{"ts":"01:09:49.700","New":true}],"12":[{"ts":"00:39:54.493","Compound":"MEDIUM","New":false},{"ts":"01:08:39.684","Compound":"SOFT"}],"16":[{"ts":"00:39:54.493","Compound":"MEDIUM","New":false},{"ts":"01:08:29.653","Compound":"UNKNOWN"},{"ts":"01:08:34.684","Compound":"SOFT"}],"18":[{"ts":"00:39:54.493","Compound":"MEDIUM","New":true},{"ts":"01:09:24.687","Compound":"UNKNOWN","New":false},{"ts":"01:09:49.700","Compound":"MEDIUM"}],"23":[{"ts":"00:39:54.493","Compound":"MEDIUM","New":true},{"ts":"01:09:14.687","Compound":"UNKNOWN","New":false},{"ts":"01:09:49.700","Compound":"SOFT"}],"27":[{"ts":"00:39:54.493","Compound":"MEDIUM","New":false}],"30":[{"ts":"00:39:54.493","Compound":"HARD","New":true}],"31":[{"ts":"00:39:54.493","Compound":"MEDIUM","New":false}],"41":[{"ts":"00:39:54.493","Compound":"MEDIUM","New":false}],"43":[{"ts":"00:39:54.493","Compound":"MEDIUM","New":false},{"ts":"01:09:09.686","Compound":"UNKNOWN"},{"ts":"01:09:14.687","Compound":"SOFT"}],"44":[{"ts":"00:39:54.493","Compound":"MEDIUM","New":false},{"ts":"01:08:39.684","Compound":"SOFT"}],"63":[{"ts":"00:39:54.493","Compound":"MEDIUM","New":false},{"ts":"01:08:24.655","Compound":"UNKNOWN"},{"ts":"01:09:19.696","Compound":"SOFT","New":true}],"77":[{"ts":"00:39:54.493","Compound":"MEDIUM","New":true}],"81":[{"ts":"00:39:54.493","Compound":"MEDIUM","New":false},{"ts":"01:08:39.684","Compound":"UNKNOWN"},{"ts":"01:08:44.662","Compound":"SOFT"}],"87":[{"ts":"00:39:54.493","Compound":"MEDIUM","New":false}]};
+const COLORS={"SOFT":"#FF3333","MEDIUM":"#FFD700","HARD":"#C0C0C0","INTERMEDIATE":"#00CC00","WET":"#3366FF","UNKNOWN":"#666"};
+const app=document.getElementById('app');
+// Find time range
+let tMin=Infinity,tMax=-Infinity;
+for(const[num,changes]of Object.entries(DATA)){
+  changes.forEach(c=>{
+    const parts=c.ts.split(':');
+    const secs=parseInt(parts[0])*3600+parseInt(parts[1])*60+parseFloat(parts[2]);
+    if(secs<tMin)tMin=secs;if(secs>tMax)tMax=secs;
+  });
+}
+const tRange=tMax-tMin||1;
+let html='<div class="stats">';
+const strategies=new Set();
+for(const[num,changes]of Object.entries(DATA)){
+  const comps=changes.map(c=>c.Compound).filter(c=>c&&c!=='UNKNOWN').join('→');
+  if(comps)strategies.add(comps);
+}
+html+=`<div class="stat"><div class="val">${Object.keys(DATA).length}</div><div class="label">Drivers</div></div>`;
+html+=`<div class="stat"><div class="val">${strategies.size}</div><div class="label">Strategies</div></div>`;
+html+='</div>';
+html+='<h2>Tyre Compounds Timeline</h2>';
+// Sort by finishing position (use first compound as start)
+const sortedDrivers=Object.entries(DATA).sort((a,b)=>{
+  const da=DRIVERS[a[0]],db=DRIVERS[b[0]];
+  return (da?.tla||'').localeCompare(db?.tla||'');
+});
+sortedDrivers.forEach(([num,changes])=>{
+  const d=DRIVERS[num];if(!d)return;
+  html+=`<div class="gantt-row"><span class="gantt-label">${d.tla}</span><div class="gantt-track">`;
+  let prevT=tMin;
+  changes.forEach((c,i)=>{
+    const parts=c.ts.split(':');
+    const secs=parseInt(parts[0])*3600+parseInt(parts[1])*60+parseFloat(parts[2]);
+    const left=((prevT-tMin)/tRange)*100;
+    const width=((secs-prevT)/tRange)*100;
+    const color=COLORS[c.Compound]||'#666';
+    if(width>0)html+=`<div class="gantt-fill" style="left:${left}%;width:${width}%;background:${color}" title="${c.Compound}"></div>`;
+    prevT=secs;
+  });
+  // Last segment to end
+  const left=((prevT-tMin)/tRange)*100;
+  const width=((tMax-prevT)/tRange)*100;
+  const lastComp=changes[changes.length-1]?.Compound||'UNKNOWN';
+  const color=COLORS[lastComp]||'#666';
+  if(width>0)html+=`<div class="gantt-fill" style="left:${left}%;width:${width}%;background:${color}" title="${lastComp}"></div>`;
+  html+='</div></div>';
+});
+// Legend
+html+='<div style="display:flex;gap:1rem;margin-top:1rem">';
+for(const[name,color]of Object.entries(COLORS)){
+  if(name==='UNKNOWN')continue;
+  html+=`<span style="display:flex;align-items:center;gap:.3rem"><span style="width:12px;height:12px;border-radius:3px;background:${color};display:inline-block"></span>${name}</span>`;
+}
+html+='</div>';
+app.innerHTML=html;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏎️ Box-Box — Chinese Grand Prix 2026</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#1a1a2e;color:#e0e0e0;min-height:100vh}
+header{text-align:center;padding:2rem 1rem 1rem}
+header h1{font-size:2rem;background:linear-gradient(135deg,#00d4ff,#7b2ff7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:.3rem 0}
+header p{color:#888;font-size:.9rem}
+.race-info{text-align:center;padding:1rem;margin:1rem auto;max-width:500px;background:#16213e;border-radius:12px;border:1px solid #2a2a4a}
+.race-info h2{color:#00d4ff;font-size:1.2rem;margin-bottom:.3rem}
+.race-info p{color:#aaa;font-size:.85rem}
+.back{display:block;text-align:center;margin:1rem}
+.back a{color:#00d4ff;text-decoration:none}
+.grid{display:grid;grid-template-columns:1fr;gap:1rem;padding:1.5rem;max-width:1100px;margin:0 auto}
+@media(min-width:600px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:960px){.grid{grid-template-columns:repeat(3,1fr)}}
+.card{background:#16213e;border-radius:12px;padding:1.5rem 1rem;text-decoration:none;color:inherit;display:flex;flex-direction:column;align-items:center;text-align:center;border:2px solid transparent;transition:transform .25s,box-shadow .25s,border-color .25s}
+.card:hover{transform:translateY(-4px);box-shadow:0 8px 32px rgba(0,212,255,.15);border-color:#00d4ff}
+.card .icon{font-size:2.2rem;margin-bottom:.5rem}
+.card h3{font-size:1rem;margin-bottom:.3rem;color:#f0f0f0}
+.card .desc{color:#888;font-size:.8rem;margin-bottom:.5rem}
+.card .link{color:#00d4ff;font-size:.85rem;font-weight:600}
+footer{text-align:center;padding:1.5rem;color:#555;font-size:.75rem;border-top:1px solid #2a2a4a;margin-top:2rem}
+</style>
+</head>
+<body>
+<header>
+  <h1>Box-Box</h1>
+  <p><a href="/viz/index.html" style="color:#00d4ff;text-decoration:none">← All Races</a></p>
+</header>
+<div class="race-info">
+  <h2>🇨🇳 Chinese Grand Prix 2026</h2>
+  <p>Shanghai · March 15, 2026 · 19 laps</p>
+</div>
+<div class="grid">
+  <a class="card" href="pitstops.html">
+    <div class="icon">🏎️</div>
+    <h3>Pit Stop Analysis</h3>
+    <p class="desc">Stop times and strategies</p>
+    <span class="link">View →</span>
+  </a>
+  <a class="card" href="tyre-strategy.html">
+    <div class="icon">🛞</div>
+    <h3>Tyre Strategy</h3>
+    <p class="desc">Compound usage and stint breakdown</p>
+    <span class="link">View →</span>
+  </a>
+  <a class="card" href="weather.html">
+    <div class="icon">🌤️</div>
+    <h3>Weather Conditions</h3>
+    <p class="desc">Track temperature, wind, and rain data</p>
+    <span class="link">View →</span>
+  </a>
+  <a class="card" href="positions.html">
+    <div class="icon">🐍</div>
+    <h3>Position Changes</h3>
+    <p class="desc">Position progression chart</p>
+    <span class="link">View →</span>
+  </a>
+  <a class="card" href="laptimes.html">
+    <div class="icon">⏱️</div>
+    <h3>Lap Times</h3>
+    <p class="desc">Lap-by-lap pace comparison</p>
+    <span class="link">View →</span>
+  </a>
+  <a class="card" href="race-control.html">
+    <div class="icon">🏴</div>
+    <h3>Race Control</h3>
+    <p class="desc">Flags, penalties, and race director notes</p>
+    <span class="link">View →</span>
+  </a>
+  <a class="card" href="telemetry.html">
+    <div class="icon">📊</div>
+    <h3>Telemetry Overlay</h3>
+    <p class="desc">Speed, throttle, brake comparison</p>
+    <span class="link">View →</span>
+  </a>
+  <a class="card" href="track-map.html">
+    <div class="icon">🗺️</div>
+    <h3>Track Map</h3>
+    <p class="desc">Circuit layout with driver positions</p>
+    <span class="link">View →</span>
+  </a>
+  <a class="card" href="championship.html">
+    <div class="icon">🏆</div>
+    <h3>Championship</h3>
+    <p class="desc">Standings after this race</p>
+    <span class="link">View →</span>
+  </a>
+  <a class="card" href="sector-analysis.html">
+    <div class="icon">🏎️</div>
+    <h3>Sector & Speed</h3>
+    <p class="desc">Fastest sectors, speed traps, personal bests</p>
+    <span class="link">View →</span>
+  </a>
+  <a class="card" href="driver-progress.html">
+    <div class="icon">📊</div>
+    <h3>Driver Progress</h3>
+    <p class="desc">Individual driver position changes</p>
+    <span class="link">View →</span>
+  </a>
+  <a class="card" href="overtakes.html">
+    <div class="icon">🔄</div>
+    <h3>Overtake Analysis</h3>
+    <p class="desc">Who overtook whom</p>
+    <span class="link">View →</span>
+  </a>
+  <a class="card" href="lap-chart.html">
+    <div class="icon">📈</div>
+    <h3>Lap Chart</h3>
+    <p class="desc">Full position chart across all laps</p>
+    <span class="link">View →</span>
+  </a>
+  <a class="card" href="pit-lane.html">
+    <div class="icon">🏗️</div>
+    <h3>Pit Lane</h3>
+    <p class="desc">Pit stop duration analysis</p>
+    <span class="link">View →</span>
+  </a>
+  <a class="card" href="tyre-timeline.html">
+    <div class="icon">🛞</div>
+    <h3>Tyre Timeline</h3>
+    <p class="desc">Compound Gantt chart and stint lengths</p>
+    <span class="link">View →</span>
+  </a>
+  
+</div>
+<footer>Box-Box · Data from Formula 1 Live Timing API</footer>
+</body>
+</html>

@@ -1,0 +1,49 @@
+00:12:48.194{"Messages":[{"Utc":"2026-03-14T02:30:00","Lap":0,"Category":"Flag","Flag":"GREEN","Scope":"Track","Message":"GREEN LIGHT - PIT EXIT OPEN"}]}
+00:16:43.416{"Messages":{"1":{"Utc":"2026-03-14T02:33:55","Lap":0,"Category":"Other","Message":"INCIDENT INVOLVING CAR 6 (HAD) NOTED - FAILING TO FOLLOW RACE DIRECTORS INSTRUCTIONS – PRACTICE START INFRINGEMENT"}}}
+00:17:48.230{"Messages":{"2":{"Utc":"2026-03-14T02:35:00","Lap":0,"Category":"Other","Message":"PIT EXIT CLOSED"}}}
+00:18:42.511{"Messages":{"3":{"Utc":"2026-03-14T02:35:54","Lap":0,"Category":"Other","Message":"FIA STEWARDS: INCIDENT INVOLVING CAR 6 (HAD) WILL BE INVESTIGATED AFTER THE SPRINT - FAILING TO FOLLOW RACE DIRECTORS INSTRUCTIONS – PRACTICE START INFRINGEMENT"}}}
+00:19:25.594{"Messages":{"4":{"Utc":"2026-03-14T02:36:38","Lap":0,"Category":"Flag","Flag":"YELLOW","Scope":"Sector","Sector":8,"Message":"YELLOW IN TRACK SECTOR 8"}}}
+00:19:33.856{"Messages":{"5":{"Utc":"2026-03-14T02:36:46","Lap":0,"Category":"Flag","Flag":"DOUBLE YELLOW","Scope":"Sector","Sector":8,"Message":"DOUBLE YELLOW IN TRACK SECTOR 8"}}}
+00:19:46.781{"Messages":{"6":{"Utc":"2026-03-14T02:36:59","Lap":0,"Category":"Flag","Flag":"CLEAR","Scope":"Sector","Sector":8,"Message":"CLEAR IN TRACK SECTOR 8"}}}
+00:20:27.930{"Messages":{"7":{"Utc":"2026-03-14T02:37:40","Lap":0,"Category":"Flag","Flag":"DOUBLE YELLOW","Scope":"Sector","Sector":8,"Message":"DOUBLE YELLOW IN TRACK SECTOR 8"}}}
+00:20:29.925{"Messages":{"8":{"Utc":"2026-03-14T02:37:42","Lap":0,"Category":"Flag","Flag":"DOUBLE YELLOW","Scope":"Sector","Sector":6,"Message":"DOUBLE YELLOW IN TRACK SECTOR 6"}}}
+00:20:34.056{"Messages":{"9":{"Utc":"2026-03-14T02:37:46","Lap":0,"Category":"Flag","Flag":"CLEAR","Scope":"Sector","Sector":6,"Message":"CLEAR IN TRACK SECTOR 6"}}}
+00:20:37.295{"Messages":{"10":{"Utc":"2026-03-14T02:37:49","Lap":0,"Category":"Flag","Flag":"CLEAR","Scope":"Sector","Sector":8,"Message":"CLEAR IN TRACK SECTOR 8"}}}
+00:21:05.839{"Messages":{"11":{"Utc":"2026-03-14T02:38:18","Lap":0,"Category":"Other","Message":"INCIDENT INVOLVING CAR 10 (GAS) NOTED - UNSAFE CONDITION"}}}
+00:21:16.831{"Messages":{"12":{"Utc":"2026-03-14T02:38:29","Lap":0,"Category":"Other","Message":"FIA STEWARDS: INCIDENT INVOLVING CAR 10 (GAS) WILL BE INVESTIGATED AFTER THE SPRINT - UNSAFE CONDITION"}}}
+00:28:40.432{"Messages":{"13":{"Utc":"2026-03-14T02:45:52","Lap":0,"Category":"Other","Message":"RISK OF RAIN FOR THE F1 SPRINT IS 0%"}}}
+00:39:51.274{"Messages":{"14":{"Utc":"2026-03-14T02:57:03","Lap":0,"Category":"Other","Message":"OVERTAKE DISABLED"}}}
+00:46:41.990{"Messages":{"15":{"Utc":"2026-03-14T03:03:54","Lap":0,"Category":"Flag","Flag":"GREEN","Scope":"Track","Message":"GREEN LIGHT - PIT EXIT OPEN"}}}
+00:47:54.422{"Messages":{"16":{"Utc":"2026-03-14T03:05:06","Lap":0,"Category":"Flag","Flag":"DOUBLE YELLOW","Scope":"Sector","Sector":13,"Message":"DOUBLE YELLOW IN TRACK SECTOR 13"}}}
+00:48:01.581{"Messages":{"17":{"Utc":"2026-03-14T03:05:14","Lap":0,"Category":"Flag","Flag":"CLEAR","Scope":"Sector","Sector":13,"Message":"CLEAR IN TRACK SECTOR 13"}}}
+00:48:14.311{"Messages":{"18":{"Utc":"2026-03-14T03:05:26","Lap":0,"Category":"Other","Message":"OVERTAKE ENABLED"}}}
+00:48:55.203{"Messages":{"19":{"Utc":"2026-03-14T03:06:07","Lap":2,"Category":"Other","Message":"TURN 6 INCIDENT INVOLVING CARS 6 (HAD) AND 12 (ANT) NOTED - CAUSING A COLLISION"}}}
+00:49:07.198{"Messages":{"20":{"Utc":"2026-03-14T03:06:19","Lap":2,"Category":"Other","Message":"FIA STEWARDS: TURN 6 INCIDENT INVOLVING CARS 6 (HAD) AND 12 (ANT) UNDER INVESTIGATION - CAUSING A COLLISION"}}}
+00:54:24.491{"Messages":{"21":{"Utc":"2026-03-14T03:11:36","Lap":5,"Category":"Other","Message":"TRACK SURFACE SLIPPERY IN TRACK SECTOR 12"}}}
+00:55:10.287{"Messages":{"22":{"Utc":"2026-03-14T03:12:22","Lap":6,"Category":"Flag","Flag":"CLEAR","Scope":"Sector","Sector":12,"Message":"CLEAR IN TRACK SECTOR 12"}}}
+00:57:13.845{"Messages":{"23":{"Utc":"2026-03-14T03:14:26","Lap":7,"Category":"Other","Message":"FIA STEWARDS: 10 SECOND TIME PENALTY FOR CAR 12 (ANT) - CAUSING A COLLISION"}}}
+01:07:07.966{"Messages":{"24":{"Utc":"2026-03-14T03:24:20","Lap":13,"Category":"Flag","Flag":"YELLOW","Scope":"Sector","Sector":1,"Message":"YELLOW IN TRACK SECTOR 1"}}}
+01:07:39.396{"Messages":{"25":{"Utc":"2026-03-14T03:24:51","Lap":13,"Category":"SafetyCar","Status":"DEPLOYED","Mode":"SAFETY CAR","Message":"SAFETY CAR DEPLOYED"}}}
+01:08:58.683{"Messages":{"26":{"Utc":"2026-03-14T03:26:11","Lap":14,"Category":"Other","Message":"RECOVERY VEHICLE ON TRACK AT TURN 1"}}}
+01:09:14.094{"Messages":{"27":{"Utc":"2026-03-14T03:26:26","Lap":14,"Category":"Flag","Flag":"DOUBLE YELLOW","Scope":"Sector","Sector":1,"Message":"DOUBLE YELLOW IN TRACK SECTOR 1"}}}
+01:11:05.091{"Messages":{"28":{"Utc":"2026-03-14T03:28:17","Lap":15,"Category":"Other","Message":"CAR 3 (VER) LAP DELETED - TRACK LIMITS AT TURN 6 LAP 13 11:24:28 (PIT)"}}}
+01:11:25.458{"Messages":{"29":{"Utc":"2026-03-14T03:28:37","Lap":15,"Category":"Other","Message":"FIA STEWARDS: PENALTY SERVED - 10 SECOND TIME PENALTY FOR CAR 12 (ANT) - CAUSING A COLLISION"}}}
+01:13:21.223{"Messages":{"30":{"Utc":"2026-03-14T03:30:33","Lap":16,"Category":"Other","Message":"INCIDENT INVOLVING CAR 11 (PER) NOTED - SAFETY CAR INFRINGEMENT"}}}
+01:13:53.546{"Messages":{"31":{"Utc":"2026-03-14T03:31:05","Lap":16,"Category":"SafetyCar","Status":"IN THIS LAP","Mode":"SAFETY CAR","Message":"SAFETY CAR IN THIS LAP"}}}
+01:14:13.434{"Messages":{"32":{"Utc":"2026-03-14T03:31:25","Lap":16,"Category":"Flag","Flag":"CLEAR","Scope":"Sector","Sector":1,"Message":"CLEAR IN TRACK SECTOR 1"}}}
+01:15:18.375{"Messages":{"33":{"Utc":"2026-03-14T03:32:30","Lap":16,"Category":"Flag","Flag":"CLEAR","Scope":"Track","Message":"TRACK CLEAR"}}}
+01:15:47.214{"Messages":{"34":{"Utc":"2026-03-14T03:32:59","Lap":17,"Category":"Other","Message":"OVERTAKE ENABLED"}}}
+01:17:03.240{"Messages":{"35":{"Utc":"2026-03-14T03:34:15","Lap":17,"Category":"Other","Message":"INCIDENT INVOLVING CARS 81 (PIA) AND 12 (ANT) NOTED - SAFETY CAR INFRINGEMENT"}}}
+01:17:22.629{"Messages":{"36":{"Utc":"2026-03-14T03:34:35","Lap":18,"Category":"Other","Message":"FIA STEWARDS: 5 SECOND TIME PENALTY FOR CAR 11 (PER) - SAFETY CAR INFRINGEMENT"}}}
+01:19:31.810{"Messages":{"37":{"Utc":"2026-03-14T03:36:44","Lap":19,"Category":"Other","Message":"FIA STEWARDS: INCIDENT INVOLVING CARS 81 (PIA) AND 12 (ANT) REVIEWED NO FURTHER INVESTIGATION - SAFETY CAR INFRINGEMENT"}}}
+01:20:20.868{"Messages":{"38":{"Utc":"2026-03-14T03:37:33","Lap":19,"Category":"Flag","Flag":"CHEQUERED","Scope":"Track","Message":"CHEQUERED FLAG"}}}
+01:21:50.471{"Messages":{"39":{"Utc":"2026-03-14T03:39:02","Lap":19,"Category":"Other","Message":"TRACK SURFACE SLIPPERY IN TRACK SECTOR 16"}}}
+01:23:42.679{"Messages":{"40":{"Utc":"2026-03-14T03:40:55","Lap":19,"Category":"Flag","Flag":"CLEAR","Scope":"Sector","Sector":16,"Message":"CLEAR IN TRACK SECTOR 16"}}}
+01:25:31.887{"Messages":{"41":{"Utc":"2026-03-14T03:42:44","Lap":19,"Category":"Flag","Flag":"DOUBLE YELLOW","Scope":"Sector","Sector":16,"Message":"DOUBLE YELLOW IN TRACK SECTOR 16"}}}
+01:25:32.340{"Messages":{"42":{"Utc":"2026-03-14T03:42:44","Lap":19,"Category":"Flag","Flag":"DOUBLE YELLOW","Scope":"Sector","Sector":6,"Message":"DOUBLE YELLOW IN TRACK SECTOR 6"}}}
+01:26:07.356{"Messages":{"43":{"Utc":"2026-03-14T03:43:19","Lap":19,"Category":"Flag","Flag":"CLEAR","Scope":"Sector","Sector":6,"Message":"CLEAR IN TRACK SECTOR 6"}}}
+01:26:18.169{"Messages":{"44":{"Utc":"2026-03-14T03:43:30","Lap":19,"Category":"Flag","Flag":"DOUBLE YELLOW","Scope":"Sector","Sector":19,"Message":"DOUBLE YELLOW IN TRACK SECTOR 19"}}}
+01:27:14.349{"Messages":{"45":{"Utc":"2026-03-14T03:44:26","Lap":19,"Category":"Flag","Flag":"CLEAR","Scope":"Sector","Sector":19,"Message":"CLEAR IN TRACK SECTOR 19"}}}
+01:27:17.474{"Messages":{"46":{"Utc":"2026-03-14T03:44:29","Lap":19,"Category":"Flag","Flag":"CLEAR","Scope":"Sector","Sector":16,"Message":"CLEAR IN TRACK SECTOR 16"}}}
+01:31:55.599{"Messages":{"47":{"Utc":"2026-03-14T03:49:08","Lap":19,"Category":"Flag","Flag":"DOUBLE YELLOW","Scope":"Sector","Sector":14,"Message":"DOUBLE YELLOW IN TRACK SECTOR 14"}}}
+01:32:18.776{"Messages":{"48":{"Utc":"2026-03-14T03:49:31","Lap":19,"Category":"Flag","Flag":"CLEAR","Scope":"Sector","Sector":14,"Message":"CLEAR IN TRACK SECTOR 14"}}}

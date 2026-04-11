@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chinese Grand Prix 2026 — Sector & Speed</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#1a1a2e;color:#e0e0e0;min-height:100vh;padding:1rem}
+h1{font-size:1.5rem;margin-bottom:1rem;text-align:center}
+h2{font-size:1.1rem;margin:1.5rem 0 .8rem;color:#00d4ff}
+a{color:#00d4ff;text-decoration:none}
+a:hover{text-decoration:underline}
+.back{display:inline-block;margin-bottom:1rem;font-size:.9rem}
+
+.fastest{background:#16213e;border-radius:12px;padding:1.5rem;text-align:center;margin:1rem 0}
+.fastest .val{font-size:2rem;font-weight:700;color:#00d4ff}
+.sector-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin:1rem 0}
+.sector-card{background:#16213e;border-radius:8px;padding:1rem}
+.sector-card h3{color:#FFD700;font-size:.9rem;margin-bottom:.5rem}
+.rank{display:flex;justify-content:space-between;padding:.2rem 0;font-size:.85rem;border-bottom:1px solid #2a2a4a}
+.rank .pos{color:#888;width:20px}.rank .time{font-weight:600}
+.medal-1{color:#FFD700}.medal-2{color:#C0C0C0}.medal-3{color:#CD7F32}
+
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← Back</a>
+<h1>🇨🇳 Chinese Grand Prix 2026 — Sector & Speed</h1>
+<div id="app"></div>
+<script>
+const DRIVERS={"1":{"tla":"NOR","team":"McLaren","color":"#FF8000"},"3":{"tla":"VER","team":"Red Bull","color":"#4781D7"},"5":{"tla":"BOR","team":"Audi","color":"#F50537"},"6":{"tla":"HAD","team":"Red Bull","color":"#4781D7"},"10":{"tla":"GAS","team":"Alpine","color":"#00A1E8"},"11":{"tla":"PER","team":"Cadillac","color":"#909090"},"12":{"tla":"ANT","team":"Mercedes","color":"#27F4D2"},"14":{"tla":"ALO","team":"Aston Martin","color":"#229971"},"16":{"tla":"LEC","team":"Ferrari","color":"#ED1131"},"18":{"tla":"STR","team":"Aston Martin","color":"#229971"},"23":{"tla":"ALB","team":"Williams","color":"#1868DB"},"27":{"tla":"HUL","team":"Audi","color":"#F50537"},"30":{"tla":"LAW","team":"RB","color":"#6C98FF"},"31":{"tla":"OCO","team":"Haas","color":"#9C9FA2"},"41":{"tla":"LIN","team":"RB","color":"#6C98FF"},"43":{"tla":"COL","team":"Alpine","color":"#00A1E8"},"44":{"tla":"HAM","team":"Ferrari","color":"#ED1131"},"55":{"tla":"SAI","team":"Williams","color":"#1868DB"},"63":{"tla":"RUS","team":"Mercedes","color":"#27F4D2"},"77":{"tla":"BOT","team":"Cadillac","color":"#909090"},"81":{"tla":"PIA","team":"McLaren","color":"#FF8000"},"87":{"tla":"BEA","team":"Haas","color":"#9C9FA2"}};
+(function(){
+const DATA={"1":{"Line":1,"RacingNumber":"1","PersonalBestLapTime":{"Value":"1:35.708","Lap":19,"Position":6},"BestSectors":{"1":{"Position":5,"Value":"28.880"},"2":{"Position":7,"Value":"41.722"},"0":{"Position":7,"Value":"25.106"}},"BestSpeeds":{"I1":{"Value":"291","Position":14},"I2":{"Value":"280","Position":8},"FL":{"Value":"275","Position":20},"ST":{"Value":"328","Position":16}}},"3":{"Line":2,"RacingNumber":"3","PersonalBestLapTime":{"Value":"1:35.774","Lap":19,"Position":7},"BestSectors":{"1":{"Position":7,"Value":"29.135"},"2":{"Position":5,"Value":"41.507"},"0":{"Position":6,"Value":"25.096"}},"BestSpeeds":{"I1":{"Value":"310","Position":1},"I2":{"Value":"280","Position":10},"FL":{"Value":"285","Position":1},"ST":{"Value":"332","Position":11}}},"5":{"Line":3,"RacingNumber":"5","PersonalBestLapTime":{"Value":"1:37.800","Lap":18,"Position":12},"BestSectors":{"1":{"Position":17,"Value":"29.854"},"2":{"Position":11,"Value":"42.223"},"0":{"Position":17,"Value":"25.721"}},"BestSpeeds":{"I1":{"Value":"294","Position":10},"I2":{"Value":"280","Position":12},"FL":{"Value":"279","Position":10},"ST":{"Value":"343","Position":3}}},"6":{"Line":4,"RacingNumber":"6","PersonalBestLapTime":{"Value":"1:36.912","Lap":18,"Position":8},"BestSectors":{"1":{"Position":10,"Value":"29.573"},"2":{"Position":8,"Value":"42.095"},"0":{"Position":8,"Value":"25.244"}},"BestSpeeds":{"I1":{"Value":"294","Position":9},"I2":{"Value":"283","Position":5},"FL":{"Value":"282","Position":2},"ST":{"Value":"341","Position":4}}},"10":{"Line":5,"RacingNumber":"10","PersonalBestLapTime":{"Value":"1:38.349","Lap":17,"Position":17},"BestSectors":{"1":{"Position":8,"Value":"29.541"},"2":{"Position":10,"Value":"42.212"},"0":{"Position":18,"Value":"25.722"}},"BestSpeeds":{"I1":{"Value":"292","Position":12},"I2":{"Value":"281","Position":7},"FL":{"Value":"279","Position":9},"ST":{"Value":"334","Position":9}}},"11":{"Line":6,"RacingNumber":"11","PersonalBestLapTime":{"Value":"1:38.862","Lap":18,"Position":21},"BestSectors":{"1":{"Position":20,"Value":"30.275"},"2":{"Position":22,"Value":"42.820"},"0":{"Position":19,"Value":"25.757"}},"BestSpeeds":{"I1":{"Value":"291","Position":15},"I2":{"Value":"273","Position":20},"FL":{"Value":"278","Position":14},"ST":{"Value":"325","Position":19}}},"12":{"Line":7,"RacingNumber":"12","PersonalBestLapTime":{"Value":"1:34.760","Lap":18,"Position":2},"BestSectors":{"1":{"Position":4,"Value":"28.746"},"2":{"Position":1,"Value":"40.925"},"0":{"Position":5,"Value":"25.024"}},"BestSpeeds":{"I1":{"Value":"295","Position":7},"I2":{"Value":"285","Position":2},"FL":{"Value":"277","Position":16},"ST":{"Value":"341","Position":5}}},"14":{"Line":8,"RacingNumber":"14","PersonalBestLapTime":{"Value":"1:38.487","Lap":19,"Position":19},"BestSectors":{"1":{"Position":21,"Value":"30.327"},"2":{"Position":18,"Value":"42.445"},"0":{"Position":14,"Value":"25.589"}},"BestSpeeds":{"I1":{"Value":"289","Position":18},"I2":{"Value":"275","Position":16},"FL":{"Value":"275","Position":21},"ST":{"Value":"320","Position":20}}},"16":{"Line":9,"RacingNumber":"16","PersonalBestLapTime":{"Value":"1:34.753","Lap":18,"Position":1},"BestSectors":{"1":{"Position":2,"Value":"28.523"},"2":{"Position":2,"Value":"41.154"},"0":{"Position":1,"Value":"24.811"}},"BestSpeeds":{"I1":{"Value":"289","Position":17},"I2":{"Value":"272","Position":21},"FL":{"Value":"279","Position":7},"ST":{"Value":"326","Position":18}}},"18":{"Line":10,"RacingNumber":"18","PersonalBestLapTime":{"Value":"1:38.532","Lap":18,"Position":20},"BestSectors":{"1":{"Position":18,"Value":"29.875"},"2":{"Position":17,"Value":"42.440"},"0":{"Position":15,"Value":"25.709"}},"BestSpeeds":{"I1":{"Value":"285","Position":21},"I2":{"Value":"275","Position":18},"FL":{"Value":"274","Position":22},"ST":{"Value":"332","Position":12}}},"23":{"Line":11,"RacingNumber":"23","PersonalBestLapTime":{"Value":"1:38.158","Lap":19,"Position":16},"BestSectors":{"1":{"Position":11,"Value":"29.597"},"2":{"Position":21,"Value":"42.707"},"0":{"Position":11,"Value":"25.475"}},"BestSpeeds":{"I1":{"Value":"293","Position":11},"I2":{"Value":"285","Position":3},"FL":{"Value":"276","Position":19},"ST":{"Value":"339","Position":6}}},"27":{"Line":12,"RacingNumber":"27","PersonalBestLapTime":{"Value":"1:38.027","Lap":5,"Position":15},"BestSectors":{"1":{"Position":16,"Value":"29.744"},"2":{"Position":16,"Value":"42.376"},"0":{"Position":16,"Value":"25.715"}},"BestSpeeds":{"I1":{"Value":"289","Position":16},"I2":{"Value":"277","Position":14},"FL":{"Value":"278","Position":12},"ST":{"Value":"330","Position":14}}},"30":{"Line":13,"RacingNumber":"30","PersonalBestLapTime":{"Value":"1:37.882","Lap":19,"Position":13},"BestSectors":{"1":{"Position":15,"Value":"29.719"},"2":{"Position":14,"Value":"42.307"},"0":{"Position":13,"Value":"25.559"}},"BestSpeeds":{"I1":{"Value":"302","Position":4},"I2":{"Value":"280","Position":9},"FL":{"Value":"281","Position":3},"ST":{"Value":"332","Position":13}}},"31":{"Line":14,"RacingNumber":"31","PersonalBestLapTime":{"Value":"1:37.363","Lap":18,"Position":10},"BestSectors":{"1":{"Position":12,"Value":"29.618"},"2":{"Position":12,"Value":"42.282"},"0":{"Position":10,"Value":"25.463"}},"BestSpeeds":{"I1":{"Value":"297","Position":6},"I2":{"Value":"276","Position":15},"FL":{"Value":"278","Position":13},"ST":{"Value":"337","Position":8}}},"41":{"Line":15,"RacingNumber":"41","PersonalBestLapTime":{"Value":"1:38.475","Lap":6,"Position":18},"BestSectors":{"1":{"Position":19,"Value":"30.031"},"2":{"Position":20,"Value":"42.640"},"0":{"Position":20,"Value":"25.804"}},"BestSpeeds":{"I1":{"Value":"294","Position":8},"I2":{"Value":"280","Position":11},"FL":{"Value":"278","Position":15},"ST":{"Value":"310","Position":22}}},"43":{"Line":16,"RacingNumber":"43","PersonalBestLapTime":{"Value":"1:37.278","Lap":18,"Position":9},"BestSectors":{"1":{"Position":13,"Value":"29.625"},"2":{"Position":9,"Value":"42.156"},"0":{"Position":12,"Value":"25.497"}},"BestSpeeds":{"I1":{"Value":"303","Position":3},"I2":{"Value":"285","Position":4},"FL":{"Value":"281","Position":4},"ST":{"Value":"344","Position":2}}},"44":{"Line":17,"RacingNumber":"44","PersonalBestLapTime":{"Value":"1:34.926","Lap":18,"Position":3},"BestSectors":{"1":{"Position":1,"Value":"28.488"},"2":{"Position":4,"Value":"41.426"},"0":{"Position":2,"Value":"24.816"}},"BestSpeeds":{"I1":{"Value":"287","Position":19},"I2":{"Value":"275","Position":17},"FL":{"Value":"281","Position":5},"ST":{"Value":"334","Position":10}}},"55":{"Line":18,"RacingNumber":"55","PersonalBestLapTime":{"Value":"1:37.913","Lap":18,"Position":14},"BestSectors":{"1":{"Position":14,"Value":"29.662"},"2":{"Position":13,"Value":"42.289"},"0":{"Position":21,"Value":"25.818"}},"BestSpeeds":{"I1":{"Value":"306","Position":2},"I2":{"Value":"279","Position":13},"FL":{"Value":"276","Position":17},"ST":{"Value":"351","Position":1}}},"63":{"Line":19,"RacingNumber":"63","PersonalBestLapTime":{"Value":"1:35.101","Lap":18,"Position":4},"BestSectors":{"1":{"Position":3,"Value":"28.661"},"2":{"Position":3,"Value":"41.398"},"0":{"Position":4,"Value":"25.019"}},"BestSpeeds":{"I1":{"Value":"286","Position":20},"I2":{"Value":"273","Position":19},"FL":{"Value":"278","Position":11},"ST":{"Value":"319","Position":21}}},"77":{"Line":20,"RacingNumber":"77","PersonalBestLapTime":{"Value":"1:39.262","Lap":9,"Position":22},"BestSectors":{"1":{"Position":22,"Value":"30.338"},"2":{"Position":19,"Value":"42.551"},"0":{"Position":22,"Value":"26.159"}},"BestSpeeds":{"I1":{"Value":"283","Position":22},"I2":{"Value":"282","Position":6},"FL":{"Value":"276","Position":18},"ST":{"Value":"338","Position":7}}},"81":{"Line":21,"RacingNumber":"81","PersonalBestLapTime":{"Value":"1:35.635","Lap":19,"Position":5},"BestSectors":{"1":{"Position":6,"Value":"28.949"},"2":{"Position":6,"Value":"41.645"},"0":{"Position":3,"Value":"24.983"}},"BestSpeeds":{"I1":{"Value":"298","Position":5},"I2":{"Value":"286","Position":1},"FL":{"Value":"279","Position":8},"ST":{"Value":"326","Position":17}}},"87":{"Line":22,"RacingNumber":"87","PersonalBestLapTime":{"Value":"1:37.374","Lap":18,"Position":11},"BestSectors":{"1":{"Position":9,"Value":"29.567"},"2":{"Position":15,"Value":"42.350"},"0":{"Position":9,"Value":"25.378"}},"BestSpeeds":{"I1":{"Value":"291","Position":13},"I2":{"Value":"269","Position":22},"FL":{"Value":"280","Position":6},"ST":{"Value":"329","Position":15}}}};
+const app=document.getElementById('app');
+// Find fastest lap
+let fastest=null;
+for(const[num,info]of Object.entries(DATA)){
+  const bl=info.PersonalBestLapTime;
+  if(bl&&bl.Value&&(!fastest||bl.Position<fastest.Position))fastest={num,...bl,driver:DRIVERS[num]};
+}
+let html='';
+if(fastest&&fastest.driver)html+=`<div class="fastest"><div>Fastest Lap</div><div class="val">${fastest.Value}</div><div style="color:${fastest.driver.color}">${fastest.driver.tla} (${fastest.driver.team}) · Lap ${fastest.Lap||'?'}</div></div>`;
+// Sectors
+html+='<div class="sector-grid">';
+for(let s=0;s<3;s++){
+  html+=`<div class="sector-card"><h3>Sector ${s+1}</h3>`;
+  const entries=[];
+  for(const[num,info]of Object.entries(DATA)){
+    const bs=info.BestSectors?.[s];
+    if(bs&&bs.Value)entries.push({num,pos:bs.Position||99,value:bs.Value,driver:DRIVERS[num]});
+  }
+  entries.sort((a,b)=>a.pos-b.pos);
+  entries.slice(0,5).forEach((e,i)=>{
+    const mc=i<3?['medal-1','medal-2','medal-3'][i]:'';
+    html+=`<div class="rank"><span class="pos ${mc}">P${i+1}</span><span style="color:${e.driver?.color||'#fff'}">${e.driver?.tla||'?'}</span><span class="time">${e.value}</span></div>`;
+  });
+  html+='</div>';
+}
+html+='</div>';
+app.innerHTML=html;
+})();
+</script>
+</body>
+</html>

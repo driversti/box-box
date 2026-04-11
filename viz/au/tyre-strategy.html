@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Australian Grand Prix 2026 — Tyre Strategy</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#1a1a2e;color:#e0e0e0;min-height:100vh;padding:1rem}
+h1{font-size:1.5rem;margin-bottom:1rem;text-align:center}
+h2{font-size:1.1rem;margin:1.5rem 0 .8rem;color:#00d4ff}
+a{color:#00d4ff;text-decoration:none}
+a:hover{text-decoration:underline}
+.back{display:inline-block;margin-bottom:1rem;font-size:.9rem}
+
+.row{display:flex;align-items:center;margin:.3rem 0}
+.label{width:50px;text-align:right;margin-right:.8rem;font-weight:600;font-size:.85rem}
+.track{flex:1;display:flex;height:28px;border-radius:4px;overflow:hidden}
+.compound{display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:600;color:#000;min-width:20px}
+.legend{display:flex;gap:1rem;margin-top:1rem}
+.leg{display:flex;align-items:center;gap:.3rem;font-size:.8rem}
+.dot{width:12px;height:12px;border-radius:3px;display:inline-block}
+
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← Back</a>
+<h1>🇦🇺 Australian Grand Prix 2026 — Tyre Strategy</h1>
+<div id="app"></div>
+<script>
+const DRIVERS={"1":{"tla":"NOR","team":"McLaren","color":"#FF8000"},"3":{"tla":"VER","team":"Red Bull","color":"#4781D7"},"5":{"tla":"BOR","team":"Audi","color":"#F50537"},"6":{"tla":"HAD","team":"Red Bull","color":"#4781D7"},"10":{"tla":"GAS","team":"Alpine","color":"#00A1E8"},"11":{"tla":"PER","team":"Cadillac","color":"#909090"},"12":{"tla":"ANT","team":"Mercedes","color":"#27F4D2"},"14":{"tla":"ALO","team":"Aston Martin","color":"#229971"},"16":{"tla":"LEC","team":"Ferrari","color":"#ED1131"},"18":{"tla":"STR","team":"Aston Martin","color":"#229971"},"23":{"tla":"ALB","team":"Williams","color":"#1868DB"},"27":{"tla":"HUL","team":"Audi","color":"#F50537"},"30":{"tla":"LAW","team":"RB","color":"#6C98FF"},"31":{"tla":"OCO","team":"Haas","color":"#9C9FA2"},"41":{"tla":"LIN","team":"RB","color":"#6C98FF"},"43":{"tla":"COL","team":"Alpine","color":"#00A1E8"},"44":{"tla":"HAM","team":"Ferrari","color":"#ED1131"},"55":{"tla":"SAI","team":"Williams","color":"#1868DB"},"63":{"tla":"RUS","team":"Mercedes","color":"#27F4D2"},"77":{"tla":"BOT","team":"Cadillac","color":"#909090"},"81":{"tla":"PIA","team":"McLaren","color":"#FF8000"},"87":{"tla":"BEA","team":"Haas","color":"#9C9FA2"}};
+(function(){
+const DATA={"Stints":{"1":{"0":{"Compound":"MEDIUM","New":"true","TyresNotChanged":"0","TotalLaps":11,"StartLaps":0},"1":{"Compound":"HARD","New":"true","TyresNotChanged":"0","TotalLaps":23,"StartLaps":0},"2":{"Compound":"MEDIUM","New":"true","TyresNotChanged":"0","TotalLaps":24,"StartLaps":0}},"3":{"0":{"Compound":"HARD","New":"true","TyresNotChanged":"0","TotalLaps":18,"StartLaps":0},"1":{"Compound":"MEDIUM","New":"true","TyresNotChanged":"0","TotalLaps":23,"StartLaps":0},"2":{"Compound":"HARD","New":"true","TyresNotChanged":"0","TotalLaps":17,"StartLaps":0}},"5":{"0":{"Compound":"MEDIUM","New":"true","TyresNotChanged":"0","TotalLaps":18,"StartLaps":0},"1":{"Compound":"HARD","New":"true","TyresNotChanged":"0","TotalLaps":15,"StartLaps":0},"2":{"Compound":"HARD","New":"true","TyresNotChanged":"0","TotalLaps":24,"StartLaps":0}},"6":{"0":{"Compound":"MEDIUM","New":"true","TyresNotChanged":"0","TotalLaps":10,"StartLaps":0}},"10":{"0":{"Compound":"MEDIUM","New":"true","TyresNotChanged":"0","TotalLaps":11,"StartLaps":0},"1":{"Compound":"HARD","New":"true","TyresNotChanged":"0","TotalLaps":46,"StartLaps":0}},"11":{"0":{"Compound":"MEDIUM","New":"true","TyresNotChanged":"0","TotalLaps":18,"StartLaps":0},"1":{"Compound":"HARD","New":"true","TyresNotChanged":"0","TotalLaps":25,"StartLaps":0},"2":{"Compound":"SOFT","New":"true","TyresNotChanged":"0","TotalLaps":12,"StartLaps":0}},"12":{"0":{"Compound":"MEDIUM","New":"true","TyresNotChanged":"0","TotalLaps":12,"StartLaps":0},"1":{"Compound":"HARD","New":"true","TyresNotChanged":"0","TotalLaps":46,"StartLaps":0}},"14":{"0":{"Compound":"SOFT","New":"true","TyresNotChanged":"0","TotalLaps":11,"StartLaps":0},"1":{"Compound":"SOFT","New":"true","TyresNotChanged":"0","TotalLaps":2,"StartLaps":0},"2":{"Compound":"SOFT","New":"false","TyresNotChanged":"1","TotalLaps":10,"StartLaps":2}},"16":{"0":{"Compound":"MEDIUM","New":"true","TyresNotChanged":"0","TotalLaps":25,"StartLaps":0},"1":{"Compound":"HARD","New":"true","TyresNotChanged":"0","TotalLaps":33,"StartLaps":0}},"18":{"0":{"Compound":"MEDIUM","New":"true","TyresNotChanged":"0","TotalLaps":11,"StartLaps":0},"1":{"Compound":"HARD","New":"true","TyresNotChanged":"0","TotalLaps":15,"StartLaps":0},"2":{"Compound":"SOFT","New":"true","TyresNotChanged":"0","TotalLaps":8,"StartLaps":0},"3":{"Compound":"SOFT","New":"true","TyresNotChanged":"0","TotalLaps":5,"StartLaps":0},"4":{"Compound":"SOFT","New":"true","TyresNotChanged":"0","TotalLaps":4,"StartLaps":0}},"23":{"0":{"Compound":"MEDIUM","New":"true","TyresNotChanged":"0","TotalLaps":12,"StartLaps":0},"1":{"Compound":"HARD","New":"true","TyresNotChanged":"0","TotalLaps":21,"StartLaps":0},"2":{"Compound":"SOFT","New":"true","TyresNotChanged":"0","TotalLaps":24,"StartLaps":0}},"27":{"0":{"Compound":"HARD","New":"true","TyresNotChanged":"0","TotalLaps":0,"StartLaps":0}},"30":{"0":{"Compound":"MEDIUM","New":"true","TyresNotChanged":"0","TotalLaps":11,"StartLaps":0},"1":{"Compound":"HARD","New":"true","TyresNotChanged":"0","TotalLaps":22,"StartLaps":0},"2":{"Compound":"SOFT","New":"true","TyresNotChanged":"0","TotalLaps":24,"StartLaps":0}},"31":{"0":{"Compound":"MEDIUM","New":"true","TyresNotChanged":"0","TotalLaps":11,"StartLaps":0},"1":{"Compound":"HARD","New":"true","TyresNotChanged":"0","TotalLaps":46,"StartLaps":0}},"41":{"0":{"Compound":"MEDIUM","New":"true","TyresNotChanged":"0","TotalLaps":18,"StartLaps":0},"1":{"Compound":"HARD","New":"true","TyresNotChanged":"0","TotalLaps":39,"StartLaps":0}},"43":{"0":{"Compound":"HARD","New":"true","TyresNotChanged":"0","TotalLaps":9,"StartLaps":0},"1":{"Compound":"HARD","New":"false","TyresNotChanged":"1","TotalLaps":46,"StartLaps":9},"2":{"Compound":"SOFT","New":"true","TyresNotChanged":"0","TotalLaps":10,"StartLaps":0}},"44":{"0":{"Compound":"MEDIUM","New":"true","TyresNotChanged":"0","TotalLaps":28,"StartLaps":0},"1":{"Compound":"HARD","New":"true","TyresNotChanged":"0","TotalLaps":30,"StartLaps":0}},"55":{"0":{"Compound":"SOFT","New":"true","TyresNotChanged":"0","TotalLaps":11,"StartLaps":0},"1":{"Compound":"HARD","New":"true","TyresNotChanged":"0","TotalLaps":22,"StartLaps":0},"2":{"Compound":"MEDIUM","New":"true","TyresNotChanged":"0","TotalLaps":12,"StartLaps":0},"3":{"Compound":"SOFT","New":"true","TyresNotChanged":"0","TotalLaps":11,"StartLaps":0}},"63":{"0":{"Compound":"MEDIUM","New":"true","TyresNotChanged":"0","TotalLaps":12,"StartLaps":0},"1":{"Compound":"HARD","New":"true","TyresNotChanged":"0","TotalLaps":46,"StartLaps":0}},"77":{"0":{"Compound":"HARD","New":"true","TyresNotChanged":"0","TotalLaps":12,"StartLaps":0},"1":{"Compound":"HARD","New":"false","TyresNotChanged":"1","TotalLaps":15,"StartLaps":12}},"81":[],"87":{"0":{"Compound":"MEDIUM","New":"true","TyresNotChanged":"0","TotalLaps":18,"StartLaps":0},"1":{"Compound":"HARD","New":"true","TyresNotChanged":"0","TotalLaps":39,"StartLaps":0}}}};
+const COLORS={"SOFT":"#FF3333","MEDIUM":"#FFD700","HARD":"#C0C0C0","INTERMEDIATE":"#00CC00","WET":"#3366FF","UNKNOWN":"#666"};
+const app=document.getElementById('app');
+let html='';
+for(const[num,stints]of Object.entries(DATA)){
+  const d=DRIVERS[num];if(!d)continue;
+  const stintArr=Object.values(stints).sort((a,b)=>(a.Stint||0)-(b.Stint||0));
+  const totalLaps=stintArr.reduce((s,st)=>s+(st.TotalLaps||0),0)||1;
+  html+=`<div class="row"><span class="label">${d.tla}</span><div class="track">`;
+  stintArr.forEach(st=>{
+    const pct=(st.TotalLaps||0)/totalLaps*100;
+    const color=COLORS[st.Compound]||'#666';
+    html+=`<div class="compound" style="width:${pct}%;background:${color}" title="${st.Compound} ${st.TotalLaps}L">${st.Compound?.[0]||'?'}</div>`;
+  });
+  html+='</div></div>';
+}
+html+='<div class="legend">';
+Object.entries(COLORS).forEach(([name,color])=>{
+  if(name==='UNKNOWN')return;
+  html+=`<span class="leg"><span class="dot" style="background:${color}"></span>${name}</span>`;
+});
+html+='</div>';
+app.innerHTML=html;
+})();
+</script>
+</body>
+</html>

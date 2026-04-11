@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chinese Grand Prix 2026 — Weather Conditions</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#1a1a2e;color:#e0e0e0;min-height:100vh;padding:1rem}
+h1{font-size:1.5rem;margin-bottom:1rem;text-align:center}
+h2{font-size:1.1rem;margin:1.5rem 0 .8rem;color:#00d4ff}
+a{color:#00d4ff;text-decoration:none}
+a:hover{text-decoration:underline}
+.back{display:inline-block;margin-bottom:1rem;font-size:.9rem}
+
+canvas{width:100%;height:300px;display:block;margin:1rem 0}
+.stat{display:inline-block;background:#16213e;border-radius:8px;padding:.5rem 1rem;margin:.3rem}
+.stat .val{font-size:1.2rem;font-weight:700;color:#00d4ff}
+
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← Back</a>
+<h1>🇨🇳 Chinese Grand Prix 2026 — Weather Conditions</h1>
+<div id="app"></div>
+<script>
+const DRIVERS={"1":{"tla":"NOR","team":"McLaren","color":"#FF8000"},"3":{"tla":"VER","team":"Red Bull","color":"#4781D7"},"5":{"tla":"BOR","team":"Audi","color":"#F50537"},"6":{"tla":"HAD","team":"Red Bull","color":"#4781D7"},"10":{"tla":"GAS","team":"Alpine","color":"#00A1E8"},"11":{"tla":"PER","team":"Cadillac","color":"#909090"},"12":{"tla":"ANT","team":"Mercedes","color":"#27F4D2"},"14":{"tla":"ALO","team":"Aston Martin","color":"#229971"},"16":{"tla":"LEC","team":"Ferrari","color":"#ED1131"},"18":{"tla":"STR","team":"Aston Martin","color":"#229971"},"23":{"tla":"ALB","team":"Williams","color":"#1868DB"},"27":{"tla":"HUL","team":"Audi","color":"#F50537"},"30":{"tla":"LAW","team":"RB","color":"#6C98FF"},"31":{"tla":"OCO","team":"Haas","color":"#9C9FA2"},"41":{"tla":"LIN","team":"RB","color":"#6C98FF"},"43":{"tla":"COL","team":"Alpine","color":"#00A1E8"},"44":{"tla":"HAM","team":"Ferrari","color":"#ED1131"},"55":{"tla":"SAI","team":"Williams","color":"#1868DB"},"63":{"tla":"RUS","team":"Mercedes","color":"#27F4D2"},"77":{"tla":"BOT","team":"Cadillac","color":"#909090"},"81":{"tla":"PIA","team":"McLaren","color":"#FF8000"},"87":{"tla":"BEA","team":"Haas","color":"#9C9FA2"}};
+(function(){
+const DATA=[{"AirTemp":"13.9","Humidity":"54.3","Pressure":"1027.0","Rainfall":"0","TrackTemp":"12.2","WindDirection":"44","WindSpeed":"5.1"},{"AirTemp":"13.9","Humidity":"54.2","Pressure":"1027.0","Rainfall":"0","TrackTemp":"12.4","WindDirection":"47","WindSpeed":"3.6"},{"AirTemp":"13.9","Humidity":"54.2","Pressure":"1027.0","Rainfall":"0","TrackTemp":"13.7","WindDirection":"68","WindSpeed":"3.2"},{"AirTemp":"14.0","Humidity":"54.0","Pressure":"1027.1","Rainfall":"0","TrackTemp":"14.7","WindDirection":"68","WindSpeed":"3.0"},{"AirTemp":"14.2","Humidity":"53.1","Pressure":"1027.0","Rainfall":"0","TrackTemp":"13.3","WindDirection":"92","WindSpeed":"1.0"},{"AirTemp":"14.2","Humidity":"52.6","Pressure":"1027.1","Rainfall":"0","TrackTemp":"13.2","WindDirection":"149","WindSpeed":"0.5"},{"AirTemp":"14.3","Humidity":"52.4","Pressure":"1027.1","Rainfall":"0","TrackTemp":"14.1","WindDirection":"49","WindSpeed":"2.5"},{"AirTemp":"14.3","Humidity":"52.4","Pressure":"1027.1","Rainfall":"0","TrackTemp":"14.1","WindDirection":"49","WindSpeed":"2.5"},{"AirTemp":"14.2","Humidity":"52.1","Pressure":"1026.9","Rainfall":"0","TrackTemp":"13.1","WindDirection":"73","WindSpeed":"3.1"},{"AirTemp":"14.1","Humidity":"52.6","Pressure":"1027.1","Rainfall":"0","TrackTemp":"12.7","WindDirection":"66","WindSpeed":"2.7"},{"AirTemp":"14.1","Humidity":"52.9","Pressure":"1027.1","Rainfall":"0","TrackTemp":"14.0","WindDirection":"68","WindSpeed":"2.7"},{"AirTemp":"14.1","Humidity":"53.0","Pressure":"1027.1","Rainfall":"0","TrackTemp":"13.0","WindDirection":"55","WindSpeed":"1.7"},{"AirTemp":"14.1","Humidity":"52.5","Pressure":"1026.9","Rainfall":"0","TrackTemp":"13.1","WindDirection":"55","WindSpeed":"2.9"},{"AirTemp":"14.3","Humidity":"51.8","Pressure":"1027.0","Rainfall":"0","TrackTemp":"13.0","WindDirection":"63","WindSpeed":"4.1"},{"AirTemp":"14.3","Humidity":"51.4","Pressure":"1026.9","Rainfall":"0","TrackTemp":"12.7","WindDirection":"46","WindSpeed":"3.5"},{"AirTemp":"14.3","Humidity":"51.6","Pressure":"1027.0","Rainfall":"0","TrackTemp":"13.2","WindDirection":"51","WindSpeed":"2.4"},{"AirTemp":"14.5","Humidity":"52.0","Pressure":"1027.0","Rainfall":"0","TrackTemp":"12.9","WindDirection":"59","WindSpeed":"4.5"},{"AirTemp":"14.5","Humidity":"51.2","Pressure":"1026.9","Rainfall":"0","TrackTemp":"13.0","WindDirection":"68","WindSpeed":"3.2"},{"AirTemp":"14.4","Humidity":"50.8","Pressure":"1027.0","Rainfall":"0","TrackTemp":"13.1","WindDirection":"73","WindSpeed":"2.8"},{"AirTemp":"14.6","Humidity":"51.0","Pressure":"1026.9","Rainfall":"0","TrackTemp":"12.9","WindDirection":"68","WindSpeed":"4.2"},{"AirTemp":"14.5","Humidity":"50.2","Pressure":"1027.0","Rainfall":"0","TrackTemp":"13.1","WindDirection":"43","WindSpeed":"2.3"},{"AirTemp":"14.6","Humidity":"50.6","Pressure":"1026.8","Rainfall":"0","TrackTemp":"13.2","WindDirection":"49","WindSpeed":"4.5"},{"AirTemp":"14.7","Humidity":"50.4","Pressure":"1026.9","Rainfall":"0","TrackTemp":"15.0","WindDirection":"49","WindSpeed":"4.5"},{"AirTemp":"14.6","Humidity":"50.4","Pressure":"1026.9","Rainfall":"0","TrackTemp":"13.6","WindDirection":"64","WindSpeed":"3.5"},{"AirTemp":"14.6","Humidity":"50.2","Pressure":"1026.9","Rainfall":"0","TrackTemp":"13.1","WindDirection":"61","WindSpeed":"3.3"},{"AirTemp":"14.6","Humidity":"50.8","Pressure":"1026.9","Rainfall":"0","TrackTemp":"13.7","WindDirection":"81","WindSpeed":"2.8"},{"AirTemp":"14.6","Humidity":"50.9","Pressure":"1026.9","Rainfall":"0","TrackTemp":"13.6","WindDirection":"48","WindSpeed":"3.6"},{"AirTemp":"14.6","Humidity":"51.0","Pressure":"1026.9","Rainfall":"0","TrackTemp":"14.0","WindDirection":"55","WindSpeed":"4.6"},{"AirTemp":"14.3","Humidity":"51.0","Pressure":"1026.8","Rainfall":"0","TrackTemp":"13.8","WindDirection":"60","WindSpeed":"2.9"},{"AirTemp":"14.3","Humidity":"51.0","Pressure":"1026.8","Rainfall":"0","TrackTemp":"13.8","WindDirection":"60","WindSpeed":"2.9"},{"AirTemp":"14.7","Humidity":"50.8","Pressure":"1026.9","Rainfall":"0","TrackTemp":"13.8","WindDirection":"61","WindSpeed":"2.2"},{"AirTemp":"14.9","Humidity":"49.8","Pressure":"1026.8","Rainfall":"0","TrackTemp":"13.8","WindDirection":"71","WindSpeed":"2.8"},{"AirTemp":"14.9","Humidity":"48.9","Pressure":"1026.8","Rainfall":"0","TrackTemp":"14.3","WindDirection":"62","WindSpeed":"3.8"},{"AirTemp":"14.8","Humidity":"49.4","Pressure":"1026.8","Rainfall":"0","TrackTemp":"14.0","WindDirection":"35","WindSpeed":"3.8"},{"AirTemp":"14.6","Humidity":"50.4","Pressure":"1026.7","Rainfall":"0","TrackTemp":"15.6","WindDirection":"63","WindSpeed":"3.1"},{"AirTemp":"14.7","Humidity":"50.6","Pressure":"1026.9","Rainfall":"0","TrackTemp":"14.2","WindDirection":"73","WindSpeed":"3.1"},{"AirTemp":"14.7","Humidity":"50.4","Pressure":"1026.7","Rainfall":"0","TrackTemp":"16.2","WindDirection":"65","WindSpeed":"3.3"},{"AirTemp":"14.6","Humidity":"49.3","Pressure":"1026.8","Rainfall":"0","TrackTemp":"18.3","WindDirection":"51","WindSpeed":"6.1"},{"AirTemp":"14.7","Humidity":"49.3","Pressure":"1026.6","Rainfall":"0","TrackTemp":"13.8","WindDirection":"63","WindSpeed":"3.8"},{"AirTemp":"14.8","Humidity":"50.3","Pressure":"1026.7","Rainfall":"0","TrackTemp":"13.4","WindDirection":"57","WindSpeed":"3.5"},{"AirTemp":"14.8","Humidity":"50.3","Pressure":"1026.7","Rainfall":"0","TrackTemp":"13.4","WindDirection":"57","WindSpeed":"3.5"},{"AirTemp":"14.9","Humidity":"49.0","Pressure":"1026.7","Rainfall":"0","TrackTemp":"13.2","WindDirection":"35","WindSpeed":"2.7"},{"AirTemp":"14.8","Humidity":"48.9","Pressure":"1026.7","Rainfall":"0","TrackTemp":"14.2","WindDirection":"56","WindSpeed":"4.0"},{"AirTemp":"14.9","Humidity":"49.4","Pressure":"1026.7","Rainfall":"0","TrackTemp":"14.6","WindDirection":"65","WindSpeed":"4.6"},{"AirTemp":"14.9","Humidity":"50.0","Pressure":"1026.7","Rainfall":"0","TrackTemp":"13.0","WindDirection":"52","WindSpeed":"3.4"},{"AirTemp":"14.8","Humidity":"50.4","Pressure":"1026.7","Rainfall":"0","TrackTemp":"13.2","WindDirection":"58","WindSpeed":"3.6"},{"AirTemp":"14.9","Humidity":"50.7","Pressure":"1026.7","Rainfall":"0","TrackTemp":"13.4","WindDirection":"65","WindSpeed":"4.3"},{"AirTemp":"14.9","Humidity":"50.6","Pressure":"1026.8","Rainfall":"0","TrackTemp":"13.6","WindDirection":"50","WindSpeed":"3.7"},{"AirTemp":"15.1","Humidity":"50.1","Pressure":"1026.6","Rainfall":"0","TrackTemp":"13.4","WindDirection":"64","WindSpeed":"5.3"},{"AirTemp":"15.0","Humidity":"49.5","Pressure":"1026.7","Rainfall":"0","TrackTemp":"13.3","WindDirection":"51","WindSpeed":"6.1"}];
+const app=document.getElementById('app');
+if(!DATA.length){app.innerHTML='<p>No weather data</p>';return;}
+const temps=DATA.map(d=>parseFloat(d.AirTemp||0)).filter(v=>!isNaN(v));
+const tracks=DATA.map(d=>parseFloat(d.TrackTemp||0)).filter(v=>!isNaN(v));
+const humid=DATA.map(d=>parseFloat(d.Humidity||0)).filter(v=>!isNaN(v));
+html='<div>';
+if(temps.length)html+=`<span class="stat">Air: <span class="val">${Math.min(...temps).toFixed(1)}–${Math.max(...temps).toFixed(1)}°C</span></span>`;
+if(tracks.length)html+=`<span class="stat">Track: <span class="val">${Math.min(...tracks).toFixed(1)}–${Math.max(...tracks).toFixed(1)}°C</span></span>`;
+if(humid.length)html+=`<span class="stat">Humidity: <span class="val">${Math.min(...humid).toFixed(0)}–${Math.max(...humid).toFixed(0)}%</span></span>`;
+html+='</div>';
+// Simple canvas chart
+html+='<h2>Temperature</h2><canvas id="chart"></canvas>';
+app.innerHTML=html;
+const c=document.getElementById('chart');
+const ctx=c.getContext('2d');
+const dpr=window.devicePixelRatio||1;
+c.width=c.parentElement.clientWidth*dpr;c.height=300*dpr;c.style.height='300px';
+const W=c.width/dpr,H=c.height/dpr;ctx.scale(dpr,dpr);
+ctx.clearRect(0,0,W,H);
+const all=[...temps,...tracks];
+const mn=Math.min(...all)-2,mx=Math.max(...all)+2;
+function drawLine(data,color){
+  ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=2;
+  data.forEach((v,i)=>{const x=i/(data.length-1)*W;const y=H-(v-mn)/(mx-mn)*H;if(!i)ctx.moveTo(x,y);else ctx.lineTo(x,y)});
+  ctx.stroke();
+}
+if(temps.length)drawLine(temps,'#FF6B6B');
+if(tracks.length)drawLine(tracks,'#4ECDC4');
+})();
+</script>
+</body>
+</html>

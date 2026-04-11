@@ -1,0 +1,11 @@
+01:08:19.948{"PitTimes":{"63":[{"Timestamp":"2026-03-14T03:25:32.321Z","PitStop":{"RacingNumber":"63","PitStopTime":"3.5","PitLaneTime":"23.373","Lap":"13"}}]}}
+01:08:29.169{"PitTimes":{"16":[{"Timestamp":"2026-03-14T03:25:41.542Z","PitStop":{"RacingNumber":"16","PitStopTime":"2.8","PitLaneTime":"23.200","Lap":"13"}}]}}
+01:08:31.325{"PitTimes":{"1":[{"Timestamp":"2026-03-14T03:25:43.698Z","PitStop":{"RacingNumber":"1","PitStopTime":"2.4","PitLaneTime":"22.529","Lap":"13"}}]}}
+01:08:34.715{"PitTimes":{"44":[{"Timestamp":"2026-03-14T03:25:47.088Z","PitStop":{"RacingNumber":"44","PitStopTime":"2.7","PitLaneTime":"27.854","Lap":"13"}}]}}
+01:08:38.809{"PitTimes":{"12":[{"Timestamp":"2026-03-14T03:25:51.182Z","PitStop":{"RacingNumber":"12","PitStopTime":"13.7","PitLaneTime":"33.682","Lap":"13"}}]}}
+01:08:39.122{"PitTimes":{"81":[{"Timestamp":"2026-03-14T03:25:51.495Z","PitStop":{"RacingNumber":"81","PitStopTime":"2.7","PitLaneTime":"23.514","Lap":"13"}}]}}
+01:09:09.440{"PitTimes":{"43":[{"Timestamp":"2026-03-14T03:26:21.813Z","PitStop":{"RacingNumber":"43","PitStopTime":"2.8","PitLaneTime":"23.554","Lap":"13"}}]}}
+01:09:10.845{"PitTimes":{"23":[{"Timestamp":"2026-03-14T03:26:23.218Z","PitStop":{"RacingNumber":"23","PitStopTime":"4.3","PitLaneTime":"24.340","Lap":"13"}}]}}
+01:09:14.840{"PitTimes":{"6":[{"Timestamp":"2026-03-14T03:26:27.213Z","PitStop":{"RacingNumber":"6","PitStopTime":"5.5","PitLaneTime":"31.170","Lap":"13"}}]}}
+01:09:21.482{"PitTimes":{"18":[{"Timestamp":"2026-03-14T03:26:33.855Z","PitStop":{"RacingNumber":"18","PitStopTime":"2.7","PitLaneTime":"23.059","Lap":"13"}}]}}
+01:09:30.437{"PitTimes":{"11":[{"Timestamp":"2026-03-14T03:26:42.81Z","PitStop":{"RacingNumber":"11","PitStopTime":"5.0","PitLaneTime":"25.793","Lap":"13"}}]}}

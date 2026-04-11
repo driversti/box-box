@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chinese Grand Prix 2026 — Lap Times</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#1a1a2e;color:#e0e0e0;min-height:100vh;padding:1rem}
+h1{font-size:1.5rem;margin-bottom:1rem;text-align:center}
+h2{font-size:1.1rem;margin:1.5rem 0 .8rem;color:#00d4ff}
+a{color:#00d4ff;text-decoration:none}
+a:hover{text-decoration:underline}
+.back{display:inline-block;margin-bottom:1rem;font-size:.9rem}
+
+canvas{width:100%;height:350px;display:block;margin:1rem 0}
+.filters{display:flex;flex-wrap:wrap;gap:.3rem;margin:1rem 0}
+.fbtn{background:#2a2a4a;border:1px solid #3a3a5a;color:#aaa;padding:.3rem .6rem;border-radius:6px;cursor:pointer;font-size:.7rem}
+.fbtn.active{background:#00d4ff;color:#000;border-color:#00d4ff}
+
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← Back</a>
+<h1>🇨🇳 Chinese Grand Prix 2026 — Lap Times</h1>
+<div id="app"></div>
+<script>
+const DRIVERS={"1":{"tla":"NOR","team":"McLaren","color":"#FF8000"},"3":{"tla":"VER","team":"Red Bull","color":"#4781D7"},"5":{"tla":"BOR","team":"Audi","color":"#F50537"},"6":{"tla":"HAD","team":"Red Bull","color":"#4781D7"},"10":{"tla":"GAS","team":"Alpine","color":"#00A1E8"},"11":{"tla":"PER","team":"Cadillac","color":"#909090"},"12":{"tla":"ANT","team":"Mercedes","color":"#27F4D2"},"14":{"tla":"ALO","team":"Aston Martin","color":"#229971"},"16":{"tla":"LEC","team":"Ferrari","color":"#ED1131"},"18":{"tla":"STR","team":"Aston Martin","color":"#229971"},"23":{"tla":"ALB","team":"Williams","color":"#1868DB"},"27":{"tla":"HUL","team":"Audi","color":"#F50537"},"30":{"tla":"LAW","team":"RB","color":"#6C98FF"},"31":{"tla":"OCO","team":"Haas","color":"#9C9FA2"},"41":{"tla":"LIN","team":"RB","color":"#6C98FF"},"43":{"tla":"COL","team":"Alpine","color":"#00A1E8"},"44":{"tla":"HAM","team":"Ferrari","color":"#ED1131"},"55":{"tla":"SAI","team":"Williams","color":"#1868DB"},"63":{"tla":"RUS","team":"Mercedes","color":"#27F4D2"},"77":{"tla":"BOT","team":"Cadillac","color":"#909090"},"81":{"tla":"PIA","team":"McLaren","color":"#FF8000"},"87":{"tla":"BEA","team":"Haas","color":"#9C9FA2"}};
+(function(){
+const DATA={};
+const app=document.getElementById('app');
+const drivers=[];
+for(const[num,laps]of Object.entries(DATA)){
+  const d=DRIVERS[num];if(!d)continue;
+  const entries=Object.entries(laps).map(([l,t])=>({lap:+l,time:t})).sort((a,b)=>a.lap-b.lap);
+  drivers.push({num,...d,entries});
+}
+let html='<div class="filters">';
+drivers.forEach(d=>{
+  html+=`<button class="fbtn active" onclick="tog('${d.num}')" id="f-${d.num}" style="border-color:${d.color}">${d.tla}</button>`;
+});
+html+='</div><canvas id="c"></canvas>';
+app.innerHTML=html;
+const active=new Set(drivers.map(d=>d.num));
+window.tog=function(n){if(active.has(n))active.delete(n);else active.add(n);document.getElementById('f-'+n).classList.toggle('active');draw()};
+function parseTime(s){
+  if(!s||typeof s!=='string')return null;
+  const m=s.match(/(?:(\d+):)?(\d+)\.(\d+)/);if(!m)return null;
+  return(parseInt(m[1]||0)*60+parseInt(m[2]))*1000+parseInt(m[3].padEnd(3,'0'));
+}
+const maxLap=Math.max(...drivers.flatMap(d=>d.entries.map(e=>e.lap)));
+draw();
+function draw(){
+  const c=document.getElementById('c');const ctx=c.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  c.width=c.parentElement.clientWidth*dpr;c.height=350*dpr;c.style.height='350px';
+  const W=c.width/dpr,H=c.height/dpr;ctx.scale(dpr,dpr);ctx.clearRect(0,0,W,H);
+  const pad={t:10,b:30,l:50,r:10};const cW=W-pad.l-pad.r,cH=H-pad.t-pad.b;
+  let allMs=[];
+  drivers.forEach(d=>{if(!active.has(d.num))return;d.entries.forEach(e=>{const ms=parseTime(e.time);if(ms)allMs.push(ms)})});
+  if(!allMs.length)return;
+  const mn=Math.min(...allMs),mx=Math.max(...allMs);
+  drivers.forEach(d=>{
+    if(!active.has(d.num))return;
+    ctx.beginPath();ctx.strokeStyle=d.color;ctx.lineWidth=1.5;
+    d.entries.forEach((e,i)=>{
+      const ms=parseTime(e.time);if(!ms)return;
+      const x=pad.l+(e.lap/maxLap)*cW;
+      const y=pad.t+((ms-mn)/(mx-mn))*cH;
+      if(!i)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+    });
+    ctx.stroke();
+  });
+}
+})();
+</script>
+</body>
+</html>
