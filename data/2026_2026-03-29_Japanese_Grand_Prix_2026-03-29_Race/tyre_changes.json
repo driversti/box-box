@@ -1,0 +1,319 @@
+{
+  "1": [
+    {
+      "ts": "00:55:03.189",
+      "Compound": "MEDIUM",
+      "New": true
+    },
+    {
+      "ts": "01:29:38.380",
+      "Compound": "UNKNOWN",
+      "New": false
+    },
+    {
+      "ts": "01:29:43.371",
+      "Compound": "HARD",
+      "New": true
+    }
+  ],
+  "3": [
+    {
+      "ts": "00:55:03.189",
+      "Compound": "MEDIUM",
+      "New": true
+    },
+    {
+      "ts": "01:39:53.494",
+      "Compound": "HARD"
+    }
+  ],
+  "5": [
+    {
+      "ts": "00:55:03.189",
+      "Compound": "MEDIUM",
+      "New": true
+    },
+    {
+      "ts": "01:40:13.504",
+      "Compound": "UNKNOWN",
+      "New": false
+    },
+    {
+      "ts": "01:40:48.515",
+      "Compound": "HARD",
+      "New": true
+    }
+  ],
+  "6": [
+    {
+      "ts": "00:55:03.189",
+      "Compound": "MEDIUM",
+      "New": true
+    },
+    {
+      "ts": "01:34:53.428",
+      "Compound": "HARD"
+    }
+  ],
+  "10": [
+    {
+      "ts": "00:55:03.189",
+      "Compound": "MEDIUM",
+      "New": true
+    },
+    {
+      "ts": "01:39:48.493",
+      "Compound": "UNKNOWN",
+      "New": false
+    },
+    {
+      "ts": "01:40:03.495",
+      "Compound": "HARD",
+      "New": true
+    }
+  ],
+  "11": [
+    {
+      "ts": "00:55:03.189",
+      "Compound": "MEDIUM",
+      "New": true
+    },
+    {
+      "ts": "01:38:53.457",
+      "Compound": "HARD"
+    }
+  ],
+  "12": [
+    {
+      "ts": "00:55:03.189",
+      "Compound": "MEDIUM",
+      "New": true
+    },
+    {
+      "ts": "01:39:23.475",
+      "Compound": "HARD"
+    }
+  ],
+  "14": [
+    {
+      "ts": "00:55:03.189",
+      "Compound": "MEDIUM",
+      "New": true
+    },
+    {
+      "ts": "01:39:08.473",
+      "Compound": "HARD"
+    },
+    {
+      "ts": "01:43:23.542",
+      "Compound": "UNKNOWN",
+      "New": false
+    },
+    {
+      "ts": "01:43:28.542",
+      "Compound": "MEDIUM",
+      "New": true
+    }
+  ],
+  "16": [
+    {
+      "ts": "00:55:03.189",
+      "Compound": "MEDIUM",
+      "New": true
+    },
+    {
+      "ts": "01:31:13.384",
+      "Compound": "HARD"
+    }
+  ],
+  "18": [
+    {
+      "ts": "00:55:03.189",
+      "Compound": "MEDIUM",
+      "New": true
+    },
+    {
+      "ts": "01:38:58.466",
+      "Compound": "HARD"
+    },
+    {
+      "ts": "01:44:58.545",
+      "Compound": "MEDIUM"
+    }
+  ],
+  "23": [
+    {
+      "ts": "00:55:03.189",
+      "Compound": "MEDIUM",
+      "New": true
+    },
+    {
+      "ts": "01:40:28.517",
+      "Compound": "HARD"
+    },
+    {
+      "ts": "02:20:43.779",
+      "Compound": "SOFT"
+    },
+    {
+      "ts": "02:22:43.794",
+      "New": false
+    },
+    {
+      "ts": "02:28:48.844",
+      "Compound": "MEDIUM",
+      "New": true
+    }
+  ],
+  "27": [
+    {
+      "ts": "00:55:03.189",
+      "Compound": "MEDIUM",
+      "New": true
+    },
+    {
+      "ts": "01:42:23.535",
+      "Compound": "UNKNOWN",
+      "New": false
+    },
+    {
+      "ts": "01:43:18.538",
+      "Compound": "HARD",
+      "New": true
+    }
+  ],
+  "30": [
+    {
+      "ts": "00:55:03.189",
+      "Compound": "MEDIUM",
+      "New": true
+    },
+    {
+      "ts": "01:40:13.504",
+      "Compound": "UNKNOWN",
+      "New": false
+    },
+    {
+      "ts": "01:40:43.553",
+      "Compound": "HARD",
+      "New": true
+    }
+  ],
+  "31": [
+    {
+      "ts": "00:55:03.189",
+      "Compound": "MEDIUM",
+      "New": true
+    },
+    {
+      "ts": "01:34:53.428",
+      "Compound": "HARD"
+    }
+  ],
+  "41": [
+    {
+      "ts": "00:55:03.189",
+      "Compound": "MEDIUM",
+      "New": true
+    },
+    {
+      "ts": "01:33:18.415",
+      "Compound": "UNKNOWN",
+      "New": false
+    },
+    {
+      "ts": "01:33:23.414",
+      "Compound": "HARD",
+      "New": true
+    }
+  ],
+  "43": [
+    {
+      "ts": "00:55:03.189",
+      "Compound": "MEDIUM",
+      "New": true
+    },
+    {
+      "ts": "01:31:43.393",
+      "Compound": "HARD"
+    }
+  ],
+  "44": [
+    {
+      "ts": "00:55:03.189",
+      "Compound": "MEDIUM",
+      "New": true
+    },
+    {
+      "ts": "01:39:28.482",
+      "Compound": "HARD"
+    }
+  ],
+  "55": [
+    {
+      "ts": "00:55:03.189",
+      "Compound": "MEDIUM",
+      "New": true
+    },
+    {
+      "ts": "01:40:23.510",
+      "Compound": "UNKNOWN",
+      "New": false
+    },
+    {
+      "ts": "01:41:33.515",
+      "Compound": "HARD",
+      "New": true
+    }
+  ],
+  "63": [
+    {
+      "ts": "00:55:03.189",
+      "Compound": "MEDIUM",
+      "New": true
+    },
+    {
+      "ts": "01:37:28.448",
+      "Compound": "HARD"
+    }
+  ],
+  "77": [
+    {
+      "ts": "00:55:03.189",
+      "Compound": "HARD",
+      "New": true
+    },
+    {
+      "ts": "01:35:43.482",
+      "Compound": "MEDIUM"
+    }
+  ],
+  "81": [
+    {
+      "ts": "00:55:03.189",
+      "Compound": "MEDIUM",
+      "New": true
+    },
+    {
+      "ts": "01:32:43.402",
+      "Compound": "HARD"
+    }
+  ],
+  "87": [
+    {
+      "ts": "00:55:03.189",
+      "Compound": "MEDIUM",
+      "New": true
+    },
+    {
+      "ts": "01:30:08.387",
+      "Compound": "UNKNOWN",
+      "New": false
+    },
+    {
+      "ts": "01:30:13.378",
+      "Compound": "HARD",
+      "New": true
+    }
+  ]
+}

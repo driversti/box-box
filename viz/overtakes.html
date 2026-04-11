@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🇯🇵 Japanese GP 2026 — Overtake Analysis</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a1a2e;color:#e0e0e0;font-family:'Segoe UI',system-ui,sans-serif;padding:20px;max-width:1000px;margin:0 auto}
+h1{text-align:center;font-size:1.8em;margin-bottom:24px;color:#fff}
+h2{font-size:1.2em;color:#aaa;margin:28px 0 12px;border-bottom:1px solid #333;padding-bottom:6px}
+.card{background:#16213e;border-radius:12px;padding:20px;margin-bottom:16px;text-align:center}
+.king-card{background:linear-gradient(135deg,#16213e,#1a1a2e);border:2px solid #1868DB}
+.king-card .name{font-size:2em;font-weight:bold;color:#1868DB;margin:8px 0}
+.king-card .count{font-size:1.2em;color:#ccc}
+.king-card .crown{font-size:3em}
+.bar-row{display:flex;align-items:center;margin:4px 0;font-size:.9em}
+.bar-label{width:50px;text-align:right;padding-right:8px;font-weight:bold;color:#fff;flex-shrink:0}
+.bar-track{flex:1;background:#0f0f23;border-radius:4px;height:24px;position:relative;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;min-width:30px;transition:width .5s}
+.bar-count{color:#fff;font-weight:bold;font-size:.85em;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.timeline-container{overflow-x:auto}
+.timeline{position:relative;min-height:440px;margin-top:8px}
+.tl-y-label{position:absolute;left:0;width:40px;text-align:right;font-size:.75em;color:#ccc;font-weight:bold;transform:translateY(-50%)}
+.tl-bubble{position:absolute;border-radius:50%;opacity:.85;display:flex;align-items:center;justify-content:center;font-size:.7em;font-weight:bold;color:#fff;cursor:default;transition:opacity .2s}
+.tl-bubble:hover{opacity:1}
+.tl-time-axis{position:absolute;bottom:0;left:50px;right:10px;height:1px;background:#444}
+.tl-tick{position:absolute;font-size:.65em;color:#888;transform:translateX(-50%);bottom:-16px}
+.team-row{display:flex;align-items:center;margin:4px 0}
+.team-name{width:120px;text-align:right;padding-right:10px;font-weight:bold;color:#ccc;font-size:.9em}
+.team-bar-track{flex:1;background:#0f0f23;border-radius:4px;height:28px;overflow:hidden}
+.team-bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:10px}
+.team-bar-count{color:#fff;font-weight:bold;font-size:.85em}
+.fun-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.fun-item{background:#0f0f23;border-radius:8px;padding:14px;text-align:center}
+.fun-item .val{font-size:1.8em;font-weight:bold;color:#FF8000}
+.fun-item .label{font-size:.8em;color:#888;margin-top:4px}
+</style>
+</head>
+<body>
+<h1>🇯🇵 Japanese GP 2026 — Overtake Analysis</h1>
+<div id="content"></div>
+<script>
+const DATA = {"81":[{"Timestamp":"2026-03-29T05:14:09.752Z","count":2}],"63":[{"Timestamp":"2026-03-29T05:14:09.818Z","count":1}],"16":[{"Timestamp":"2026-03-29T05:14:09.834Z","count":1}],"1":[{"Timestamp":"2026-03-29T05:14:09.921Z","count":1}],"44":[{"Timestamp":"2026-03-29T05:14:10.061Z","count":1}],"41":[{"Timestamp":"2026-03-29T05:14:10.873Z","count":1}],"31":[{"Timestamp":"2026-03-29T05:14:10.879Z","count":2}],"3":[{"Timestamp":"2026-03-29T05:14:11.169Z","count":1}],"30":[{"Timestamp":"2026-03-29T05:14:11.234Z","count":2}],"55":[{"Timestamp":"2026-03-29T05:14:11.464Z","count":3}],"23":[{"Timestamp":"2026-03-29T05:14:11.546Z","count":2}],"43":[{"Timestamp":"2026-03-29T05:14:11.78Z","count":1}],"87":[{"Timestamp":"2026-03-29T05:14:11.787Z","count":1}],"77":[{"Timestamp":"2026-03-29T05:14:11.916Z","count":1}],"11":[{"Timestamp":"2026-03-29T05:14:11.964Z","count":1}],"5":[{"Timestamp":"2026-03-29T05:14:15.119Z","count":1}],"6":[{"Timestamp":"2026-03-29T05:14:18.529Z","count":1}],"10":[{"Timestamp":"2026-03-29T05:14:22.263Z","count":1}],"14":[{"Timestamp":"2026-03-29T05:14:24.627Z","count":1}],"18":[{"Timestamp":"2026-03-29T05:14:36.808Z","count":1}],"12":[{"Timestamp":"2026-03-29T05:15:47.432Z","count":1}],"27":[{"Timestamp":"2026-03-29T05:17:32.876Z","count":1}]};
+
+const DRIVERS = {
+  "12":{tla:"ANT",team:"Mercedes",color:"#27F4D2"},"63":{tla:"RUS",team:"Mercedes",color:"#27F4D2"},
+  "16":{tla:"LEC",team:"Ferrari",color:"#ED1131"},"44":{tla:"HAM",team:"Ferrari",color:"#ED1131"},
+  "1":{tla:"NOR",team:"McLaren",color:"#FF8000"},"81":{tla:"PIA",team:"McLaren",color:"#FF8000"},
+  "3":{tla:"VER",team:"Red Bull",color:"#4781D7"},"6":{tla:"HAD",team:"Red Bull",color:"#4781D7"},
+  "87":{tla:"BEA",team:"Haas",color:"#9C9FA2"},
+  "41":{tla:"LIN",team:"RB",color:"#6C98FF"},"30":{tla:"LAW",team:"RB",color:"#6C98FF"},
+  "5":{tla:"BOR",team:"Audi",color:"#F50537"},"27":{tla:"HUL",team:"Audi",color:"#F50537"},
+  "10":{tla:"GAS",team:"Alpine",color:"#00A1E8"},"43":{tla:"COL",team:"Alpine",color:"#00A1E8"},
+  "55":{tla:"SAI",team:"Williams",color:"#1868DB"},"23":{tla:"ALB",team:"Williams",color:"#1868DB"},
+  "14":{tla:"ALO",team:"Aston Martin",color:"#229971"},"18":{tla:"STR",team:"Aston Martin",color:"#229971"},
+  "11":{tla:"PER",team:"Cadillac",color:"#909090"},"77":{tla:"BOT",team:"Cadillac",color:"#909090"}
+};
+
+// Build driver stats
+const drivers = [];
+for (const [num, entries] of Object.entries(DATA)) {
+  const d = DRIVERS[num];
+  const total = entries.reduce((s,e) => s + e.count, 0);
+  drivers.push({num, tla:d.tla, team:d.team, color:d.color, total, entries});
+}
+drivers.sort((a,b) => b.total - a.total || a.tla.localeCompare(b.tla));
+
+const maxTotal = Math.max(...drivers.map(d => d.total));
+const king = drivers[0];
+
+// Team totals
+const teams = {};
+drivers.forEach(d => {
+  if (!teams[d.team]) teams[d.team] = {name:d.team, color:d.color, total:0};
+  teams[d.team].total += d.total;
+});
+const teamList = Object.values(teams).sort((a,b) => b.total - a.total);
+const maxTeam = Math.max(...teamList.map(t => t.total));
+
+// Timeline data
+const allEvents = [];
+drivers.forEach(d => d.entries.forEach(e => allEvents.push({...e, tla:d.tla, color:d.color})));
+allEvents.sort((a,b) => new Date(a.Timestamp) - new Date(b.Timestamp));
+const tMin = new Date(allEvents[0].Timestamp).getTime();
+const tMax = new Date(allEvents[allEvents.length-1].Timestamp).getTime();
+const tRange = tMax - tMin || 1;
+
+// Unique Y labels sorted by first appearance
+const yOrder = [...new Set(allEvents.map(e => e.tla))];
+const yMap = {};
+yOrder.forEach((t,i) => yMap[t] = i);
+
+// Fun facts
+const totalOvertakes = drivers.reduce((s,d) => s + d.total, 0);
+const avgPerDriver = (totalOvertakes / drivers.length).toFixed(1);
+
+// Find most active minute
+const minuteBuckets = {};
+allEvents.forEach(e => {
+  const m = new Date(e.Timestamp);
+  m.setSeconds(0,0);
+  const k = m.toISOString();
+  minuteBuckets[k] = (minuteBuckets[k]||0) + e.count;
+});
+const busiestMinute = Object.entries(minuteBuckets).sort((a,b)=>b[1]-a[1])[0];
+const busiestTime = new Date(busiestMinute[0]).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+// RENDER
+let html = '';
+
+// Overtake King
+html += `<div class="card king-card">
+  <div class="crown">👑</div>
+  <div class="name" style="color:${king.color}">${king.tla}</div>
+  <div class="count">${king.total} overtakes · ${king.team}</div>
+</div>`;
+
+// Driver bars
+html += '<h2>📊 Overtakes by Driver</h2>';
+drivers.forEach(d => {
+  const pct = (d.total / maxTotal * 100);
+  html += `<div class="bar-row">
+    <span class="bar-label">${d.tla}</span>
+    <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${d.color}"><span class="bar-count">${d.total}</span></div></div>
+  </div>`;
+});
+
+// Timeline
+html += '<h2>⏱️ Overtake Timeline</h2>';
+html += '<div class="timeline-container"><div class="timeline" id="timeline">';
+const tlLeft = 50, tlRight = 10, tlHeight = yOrder.length * 20 + 30;
+html += `<div class="tl-time-axis" style="left:${tlLeft}px;right:${tlRight}px;top:${tlHeight-10}px"></div>`;
+
+// Time ticks
+const tStart = new Date(tMin);
+const tEnd = new Date(tMax);
+const tickCount = 5;
+for (let i = 0; i <= tickCount; i++) {
+  const t = new Date(tMin + (tRange * i / tickCount));
+  const xPct = tlLeft + (i / tickCount) * (100 - (tlLeft + tlRight)/10*1);
+  const left = tlLeft + (i / tickCount) * (100 - tlLeft - tlRight) * (document?.body?.clientWidth || 960) / 100;
+  const label = t.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+}
+
+yOrder.forEach((tla, i) => {
+  const y = i * 20 + 10;
+  html += `<div class="tl-y-label" style="top:${y}px">${tla}</div>`;
+});
+
+allEvents.forEach(e => {
+  const xPct = (new Date(e.Timestamp).getTime() - tMin) / tRange;
+  const x = tlLeft + 2 + xPct * 80; // percentage of container
+  const y = yMap[e.tla] * 20 + 10;
+  const size = 12 + e.count * 8;
+  html += `<div class="tl-bubble" style="left:${x}%;top:${y - size/2}px;width:${size}px;height:${size}px;background:${e.color}" title="${e.tla}: ${e.count} @ ${new Date(e.Timestamp).toLocaleTimeString()}">${e.count}</div>`;
+});
+
+// Time labels
+for (let i = 0; i <= 4; i++) {
+  const t = new Date(tMin + tRange * i / 4);
+  const xPct = tlLeft + 2 + (i / 4) * 80;
+  const label = t.toLocaleTimeString('en-GB',{minute:'2-digit',second:'2-digit'});
+  html += `<div class="tl-tick" style="left:${xPct}%;top:${tlHeight-6}px">${label}</div>`;
+}
+
+html += '</div></div>';
+
+// Team totals
+html += '<h2>🏁 Overtakes by Team</h2>';
+teamList.forEach(t => {
+  const pct = t.total / maxTeam * 100;
+  html += `<div class="team-row">
+    <span class="team-name">${t.name}</span>
+    <div class="team-bar-track"><div class="team-bar-fill" style="width:${pct}%;background:${t.color}"><span class="team-bar-count">${t.total}</span></div></div>
+  </div>`;
+});
+
+// Fun facts
+html += `<h2>💡 Fun Facts</h2>
+<div class="fun-grid">
+  <div class="fun-item"><div class="val">${totalOvertakes}</div><div class="label">Total Overtakes</div></div>
+  <div class="fun-item"><div class="val">${avgPerDriver}</div><div class="label">Avg per Driver</div></div>
+  <div class="fun-item"><div class="val">${busiestTime}</div><div class="label">Most Active Minute (${busiestMinute[1]} OTs)</div></div>
+  <div class="fun-item"><div class="val">${drivers.length}</div><div class="label">Drivers with Overtakes</div></div>
+</div>`;
+
+document.getElementById('content').innerHTML = html;
+
+// Fix timeline height
+document.getElementById('timeline').style.minHeight = (yOrder.length * 20 + 40) + 'px';
+</script>
+</body>
+</html>

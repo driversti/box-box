@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🇯🇵 Japanese GP 2026 — Pit Lane Analysis</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a1a2e;color:#e0e0e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;padding:20px;max-width:1100px;margin:0 auto}
+h1{text-align:center;font-size:1.8em;padding:20px 0;color:#fff}
+h2{font-size:1.3em;margin:30px 0 15px;color:#fff;border-bottom:1px solid #333;padding-bottom:8px}
+
+.fastest-card{background:linear-gradient(135deg,#ED1131 0%,#8b0a1e 100%);border-radius:12px;padding:24px;text-align:center;margin:20px 0;box-shadow:0 4px 20px rgba(237,17,49,.3)}
+.fastest-card .emoji{font-size:2.5em}
+.fastest-card .time{font-size:3em;font-weight:700;color:#fff;margin:8px 0}
+.fastest-card .driver{font-size:1.2em;color:rgba(255,255,255,.8)}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:20px 0}
+.stat{background:#16213e;border-radius:10px;padding:16px;text-align:center}
+.stat .val{font-size:1.8em;font-weight:700;color:#fff}
+.stat .label{font-size:.85em;color:#888;margin-top:4px}
+
+.chart-container{overflow-x:auto;margin:10px 0}
+.bar-row{display:flex;align-items:center;margin:4px 0;font-size:.9em}
+.bar-label{width:80px;text-align:right;padding-right:10px;flex-shrink:0;font-weight:600}
+.bar-wrap{flex:1;position:relative;height:22px;background:#16213e;border-radius:4px;overflow:hidden}
+.bar{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:.8em;color:#fff;min-width:30px;transition:width .5s}
+.bar-val{position:absolute;right:8px;top:50%;transform:translateY(-50%);color:#aaa;font-size:.8em}
+
+.scatter-wrap{position:relative;width:100%;overflow-x:auto}
+canvas{display:block;margin:0 auto}
+
+.multi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.multi-card{background:#16213e;border-radius:10px;padding:16px;border-left:4px solid}
+.multi-card h3{margin-bottom:10px;font-size:1.1em}
+.stop-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #1a1a2e;font-size:.9em}
+.stop-row:last-child{border:none}
+
+.tooltip{position:absolute;background:#0f0f23;border:1px solid #333;border-radius:6px;padding:8px 12px;font-size:.85em;pointer-events:none;z-index:10;display:none;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,.5)}
+</style>
+</head>
+<body>
+<h1>🇯🇵 Japanese GP 2026 — Pit Lane Analysis</h1>
+
+<div class="fastest-card">
+  <div class="emoji">🏆</div>
+  <div class="driver">HAM (44) · Ferrari</div>
+  <div class="time">22.8s</div>
+  <div style="color:rgba(255,255,255,.6)">Lap 22 — Fastest Pit Stop</div>
+</div>
+
+<div class="stats" id="stats"></div>
+
+<h2>📊 Fastest Stop Per Driver</h2>
+<div class="chart-container" id="barChart"></div>
+
+<h2>🕐 Pit Stop Timeline</h2>
+<div class="scatter-wrap">
+  <canvas id="scatter"></canvas>
+  <div class="tooltip" id="tooltip"></div>
+</div>
+
+<h2>🔄 Multi-Stop Drivers</h2>
+<div class="multi-grid" id="multiGrid"></div>
+
+<script>
+const teams={12:{name:'ANT',team:'Mercedes',color:'#27F4D2'},63:{name:'RUS',team:'Mercedes',color:'#27F4D2'},16:{name:'LEC',team:'Ferrari',color:'#ED1131'},44:{name:'HAM',team:'Ferrari',color:'#ED1131'},1:{name:'NOR',team:'McLaren',color:'#FF8000'},81:{name:'PIA',team:'McLaren',color:'#FF8000'},3:{name:'VER',team:'Red Bull',color:'#4781D7'},6:{name:'HAD',team:'Red Bull',color:'#4781D7'},87:{name:'BEA',team:'Haas',color:'#9C9FA2'},41:{name:'LIN',team:'RB',color:'#6C98FF'},30:{name:'LAW',team:'RB',color:'#6C98FF'},5:{name:'BOR',team:'Audi',color:'#F50537'},27:{name:'HUL',team:'Audi',color:'#F50537'},10:{name:'GAS',team:'Alpine',color:'#00A1E8'},43:{name:'COL',team:'Alpine',color:'#00A1E8'},55:{name:'SAI',team:'Williams',color:'#1868DB'},23:{name:'ALB',team:'Williams',color:'#1868DB'},14:{name:'ALO',team:'Aston Martin',color:'#229971'},18:{name:'STR',team:'Aston Martin',color:'#229971'},11:{name:'PER',team:'Cadillac',color:'#909090'},77:{name:'BOT',team:'Cadillac',color:'#909090'},31:{name:'???',team:'Unknown',color:'#666'}};
+
+const data={"1":[{"duration":"23.3","lap":"16"}],"87":[{"duration":"25.0","lap":"16"}],"16":[{"duration":"22.9","lap":"17"}],"43":[{"duration":"23.6","lap":"17"}],"81":[{"duration":"23.4","lap":"18"}],"41":[{"duration":"26.3","lap":"18"}],"31":[{"duration":"24.6","lap":"19"}],"6":[{"duration":"23.6","lap":"19"}],"77":[{"duration":"25.1","lap":"19"}],"63":[{"duration":"22.9","lap":"21"}],"11":[{"duration":"27.3","lap":"21"}],"18":[{"duration":"25.0","lap":"21"},{"duration":"23.5","lap":"24"}],"14":[{"duration":"26.4","lap":"21"},{"duration":"24.0","lap":"23"}],"12":[{"duration":"23.2","lap":"22"}],"44":[{"duration":"22.8","lap":"22"}],"10":[{"duration":"24.3","lap":"22"}],"3":[{"duration":"24.4","lap":"22"}],"30":[{"duration":"24.1","lap":"22"}],"5":[{"duration":"24.6","lap":"22"}],"55":[{"duration":"24.3","lap":"22"}],"23":[{"duration":"24.6","lap":"22"},{"duration":"23.0","lap":"45"},{"duration":"24.1","lap":"46"},{"duration":"26.0","lap":"47"},{"duration":"32.7","lap":"48"},{"duration":"24.3","lap":"49"}],"27":[{"duration":"23.9","lap":"23"}]};
+
+// Prepare data
+const drivers=[];
+const allStops=[];
+for(const[num,stops]of Object.entries(data)){
+  const t=teams[num]||{name:'#'+num,team:'?',color:'#666'};
+  const fastest=Math.min(...stops.map(s=>+s.duration));
+  drivers.push({num,name:t.name,team:t.team,color:t.color,fastest,stops});
+  stops.forEach(s=>allStops.push({num,name:t.name,color:t.color,duration:+s.duration,lap:+s.lap}));
+}
+drivers.sort((a,b)=>a.fastest-b.fastest);
+
+// Stats
+const totalStops=allStops.length;
+const avgTime=(allStops.reduce((s,d)=>s+d.duration,0)/totalStops).toFixed(1);
+const longest=allStops.reduce((m,d)=>d.duration>m.duration?d:m,allStops[0]);
+document.getElementById('stats').innerHTML=`
+  <div class="stat"><div class="val">${totalStops}</div><div class="label">Total Pit Stops</div></div>
+  <div class="stat"><div class="val">${avgTime}s</div><div class="label">Average Duration</div></div>
+  <div class="stat"><div class="val">${longest.duration}s</div><div class="label">Longest Stop (${longest.name})</div></div>
+  <div class="stat"><div class="val">${drivers.length}</div><div class="label">Drivers</div></div>`;
+
+// Bar chart
+const maxDur=drivers[drivers.length-1].fastest;
+const barHTML=drivers.map(d=>{
+  const pct=((d.fastest/drivers[0].fastest)*100).toFixed(1);
+  return`<div class="bar-row"><div class="bar-label" style="color:${d.color}">${d.name} (${d.num})</div><div class="bar-wrap"><div class="bar" style="width:${pct}%;background:${d.color}"></div><div class="bar-val">${d.fastest}s</div></div></div>`;
+}).join('');
+document.getElementById('barChart').innerHTML=barHTML;
+
+// Scatter plot
+const canvas=document.getElementById('scatter');
+const wrap=document.querySelector('.scatter-wrap');
+const W=Math.min(wrap.clientWidth,900);
+canvas.width=W;canvas.height=400;
+const ctx=canvas.getContext('2d');
+const pad={t:20,r:30,b:40,l:50};
+const cw=W-pad.l-pad.r,ch=400-pad.t-pad.b;
+const maxLap=Math.max(...allStops.map(s=>s.lap))+2;
+const maxDurSc=Math.max(...allStops.map(s=>s.duration))+1;
+const minDurSc=Math.min(...allStops.map(s=>s.duration))-0.5;
+
+function sx(lap){return pad.l+(lap/maxLap)*cw}
+function sy(dur){return pad.t+((maxDurSc-dur)/(maxDurSc-minDurSc))*ch}
+
+// Grid
+ctx.strokeStyle='#222';ctx.lineWidth=1;
+for(let d=Math.ceil(minDurSc);d<=maxDurSc;d++){
+  const y=sy(d);ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();
+  ctx.fillStyle='#555';ctx.font='11px sans-serif';ctx.textAlign='right';ctx.fillText(d+'s',pad.l-6,y+4);
+}
+for(let l=0;l<=maxLap;l+=5){
+  const x=sx(l);ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,400-pad.b);ctx.stroke();
+  ctx.fillStyle='#555';ctx.textAlign='center';ctx.fillText('L'+l,x,400-pad.b+16);
+}
+
+// Dots
+allStops.forEach(s=>{
+  const x=sx(s.lap),y=sy(s.duration);
+  ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fillStyle=s.color;ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,.2)';ctx.lineWidth=1;ctx.stroke();
+});
+
+// Tooltip
+const tip=document.getElementById('tooltip');
+canvas.addEventListener('mousemove',e=>{
+  const r=canvas.getBoundingClientRect();
+  const mx=e.clientX-r.left,my=e.clientY-r.top;
+  let found=null;
+  for(const s of allStops){
+    const x=sx(s.lap),y=sy(s.duration);
+    if(Math.hypot(mx-x,my-y)<10){found=s;break;}
+  }
+  if(found){
+    tip.style.display='block';
+    tip.style.left=(e.clientX-wrap.getBoundingClientRect().left+12)+'px';
+    tip.style.top=(e.clientY-wrap.getBoundingClientRect().top-30)+'px';
+    tip.innerHTML=`<span style="color:${found.color};font-weight:700">${found.name}</span> · ${found.duration}s · Lap ${found.lap}`;
+  }else tip.style.display='none';
+});
+canvas.addEventListener('mouseleave',()=>tip.style.display='none');
+
+// Multi-stop section
+const multiDrivers=drivers.filter(d=>d.stops.length>1).sort((a,b)=>b.stops.length-a.stops.length);
+const multiGrid=document.getElementById('multiGrid');
+multiDrivers.forEach(d=>{
+  const stopsHTML=d.stops.map(s=>`<div class="stop-row"><span>Lap ${s.lap}</span><span>${s.duration}s</span></div>`).join('');
+  multiGrid.innerHTML+=`<div class="multi-card" style="border-color:${d.color}">
+    <h3 style="color:${d.color}">${d.name} (${d.num}) · ${d.team} <span style="font-size:.8em;color:#888">${d.stops.length} stops</span></h3>
+    ${stopsHTML}
+  </div>`;
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🇯🇵 Japanese GP 2026 — Tyre Timeline</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a1a2e;color:#e0e0e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;padding:20px;min-height:100vh}
+h1{text-align:center;font-size:1.8em;margin-bottom:8px;color:#fff}
+.subtitle{text-align:center;color:#888;margin-bottom:24px;font-size:0.9em}
+.section{background:#16213e;border-radius:12px;padding:20px;margin-bottom:24px;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
+.section h2{font-size:1.2em;margin-bottom:16px;color:#fff;border-bottom:1px solid #2a2a4a;padding-bottom:8px}
+.cards{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.card{background:#0f3460;border-radius:8px;padding:16px 24px;text-align:center;flex:1;min-width:140px}
+.card .num{font-size:2em;font-weight:bold;color:#fff}
+.card .label{font-size:0.8em;color:#aaa;margin-top:4px}
+/* Timeline chart */
+.timeline-wrap{overflow-x:auto;padding-bottom:8px}
+.timeline{position:relative;min-width:900px}
+.timeline .y-label{position:absolute;left:0;width:60px;text-align:right;font-size:0.75em;color:#ccc;padding-right:8px;line-height:30px;white-space:nowrap}
+.timeline .row{position:absolute;left:70px;right:10px;height:28px}
+.timeline .bar{position:absolute;height:100%;border-radius:4px;opacity:0.85;transition:opacity .2s}
+.timeline .bar:hover{opacity:1}
+.timeline .diamond{position:absolute;width:10px;height:10px;background:#fff;transform:translate(-5px,9px) rotate(45deg);border:1px solid #333;z-index:2}
+.timeline .axis{position:absolute;left:70px;right:10px;height:24px;border-top:1px solid #444}
+.timeline .tick{position:absolute;top:0;font-size:0.65em;color:#888;transform:translateX(-50%);padding-top:4px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;justify-content:center}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:0.8em}
+.legend-dot{width:14px;height:14px;border-radius:3px}
+/* Strategy summary */
+.summary{text-align:center;font-size:1.1em;color:#FFD700;padding:8px}
+/* Stint bars */
+.stint-chart{display:flex;flex-direction:column;gap:4px}
+.stint-row{display:flex;align-items:center;gap:8px}
+.stint-label{width:60px;text-align:right;font-size:0.75em;color:#ccc;flex-shrink:0}
+.stint-bars{display:flex;gap:2px;flex:1;min-width:0}
+.stint-bar{height:22px;border-radius:3px;position:relative;opacity:0.85;display:flex;align-items:center;justify-content:center;font-size:0.6em;color:#333;font-weight:bold;min-width:0}
+.stint-bar span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 4px}
+.stint-axis{display:flex;align-items:center;gap:8px;margin-top:8px;padding-left:68px}
+.stint-axis-bar{flex:1;display:flex;justify-content:space-between;font-size:0.65em;color:#888}
+</style>
+</head>
+<body>
+<h1>🇯🇵 Japanese GP 2026 — Tyre Timeline</h1>
+<div class="subtitle">Suzuka International Racing Course • Race • March 29, 2026</div>
+<div id="cards" class="section"></div>
+<div id="timeline-section" class="section"><h2>📊 Tyre Compound Timeline</h2><div id="timeline" class="timeline-wrap"></div></div>
+<div id="summary" class="section"></div>
+<div id="stint-section" class="section"><h2>📏 Stint Length Comparison</h2><div id="stints"></div></div>
+<script>
+const DATA = {"1":[{"ts":"00:55:03.189","Compound":"MEDIUM","New":true},{"ts":"01:29:38.380","Compound":"UNKNOWN","New":false},{"ts":"01:29:43.371","Compound":"HARD","New":true}],"3":[{"ts":"00:55:03.189","Compound":"MEDIUM","New":true},{"ts":"01:39:53.494","Compound":"HARD"}],"5":[{"ts":"00:55:03.189","Compound":"MEDIUM","New":true},{"ts":"01:40:13.504","Compound":"UNKNOWN","New":false},{"ts":"01:40:48.515","Compound":"HARD","New":true}],"6":[{"ts":"00:55:03.189","Compound":"MEDIUM","New":true},{"ts":"01:34:53.428","Compound":"HARD"}],"10":[{"ts":"00:55:03.189","Compound":"MEDIUM","New":true},{"ts":"01:39:48.493","Compound":"UNKNOWN","New":false},{"ts":"01:40:03.495","Compound":"HARD","New":true}],"11":[{"ts":"00:55:03.189","Compound":"MEDIUM","New":true},{"ts":"01:38:53.457","Compound":"HARD"}],"12":[{"ts":"00:55:03.189","Compound":"MEDIUM","New":true},{"ts":"01:39:23.475","Compound":"HARD"}],"14":[{"ts":"00:55:03.189","Compound":"MEDIUM","New":true},{"ts":"01:39:08.473","Compound":"HARD"},{"ts":"01:43:23.542","Compound":"UNKNOWN","New":false},{"ts":"01:43:28.542","Compound":"MEDIUM","New":true}],"16":[{"ts":"00:55:03.189","Compound":"MEDIUM","New":true},{"ts":"01:31:13.384","Compound":"HARD"}],"18":[{"ts":"00:55:03.189","Compound":"MEDIUM","New":true},{"ts":"01:38:58.466","Compound":"HARD"},{"ts":"01:44:58.545","Compound":"MEDIUM"}],"23":[{"ts":"00:55:03.189","Compound":"MEDIUM","New":true},{"ts":"01:40:28.517","Compound":"HARD"},{"ts":"02:20:43.779","Compound":"SOFT"},{"ts":"02:22:43.794","New":false},{"ts":"02:28:48.844","Compound":"MEDIUM","New":true}],"27":[{"ts":"00:55:03.189","Compound":"MEDIUM","New":true},{"ts":"01:42:23.535","Compound":"UNKNOWN","New":false},{"ts":"01:43:18.538","Compound":"HARD","New":true}],"30":[{"ts":"00:55:03.189","Compound":"MEDIUM","New":true},{"ts":"01:40:13.504","Compound":"UNKNOWN","New":false},{"ts":"01:40:43.553","Compound":"HARD","New":true}],"31":[{"ts":"00:55:03.189","Compound":"MEDIUM","New":true},{"ts":"01:34:53.428","Compound":"HARD"}],"41":[{"ts":"00:55:03.189","Compound":"MEDIUM","New":true},{"ts":"01:33:18.415","Compound":"UNKNOWN","New":false},{"ts":"01:33:23.414","Compound":"HARD","New":true}],"43":[{"ts":"00:55:03.189","Compound":"MEDIUM","New":true},{"ts":"01:31:43.393","Compound":"HARD"}],"44":[{"ts":"00:55:03.189","Compound":"MEDIUM","New":true},{"ts":"01:39:28.482","Compound":"HARD"}],"55":[{"ts":"00:55:03.189","Compound":"MEDIUM","New":true},{"ts":"01:40:23.510","Compound":"UNKNOWN","New":false},{"ts":"01:41:33.515","Compound":"HARD","New":true}],"63":[{"ts":"00:55:03.189","Compound":"MEDIUM","New":true},{"ts":"01:37:28.448","Compound":"HARD"}],"77":[{"ts":"00:55:03.189","Compound":"HARD","New":true},{"ts":"01:35:43.482","Compound":"MEDIUM"}],"81":[{"ts":"00:55:03.189","Compound":"MEDIUM","New":true},{"ts":"01:32:43.402","Compound":"HARD"}],"87":[{"ts":"00:55:03.189","Compound":"MEDIUM","New":true},{"ts":"01:30:08.387","Compound":"UNKNOWN","New":false},{"ts":"01:30:13.378","Compound":"HARD","New":true}]};
+
+const DRIVERS = {
+  "12":{name:"ANT",team:"Mercedes",color:"#27F4D2"},"63":{name:"RUS",team:"Mercedes",color:"#27F4D2"},
+  "16":{name:"LEC",team:"Ferrari",color:"#ED1131"},"44":{name:"HAM",team:"Ferrari",color:"#ED1131"},
+  "1":{name:"NOR",team:"McLaren",color:"#FF8000"},"81":{name:"PIA",team:"McLaren",color:"#FF8000"},
+  "3":{name:"VER",team:"Red Bull",color:"#4781D7"},"6":{name:"HAD",team:"Red Bull",color:"#4781D7"},
+  "87":{name:"BEA",team:"Haas",color:"#9C9FA2"},
+  "41":{name:"LIN",team:"RB",color:"#6C98FF"},"30":{name:"LAW",team:"RB",color:"#6C98FF"},
+  "5":{name:"BOR",team:"Audi",color:"#F50537"},"27":{name:"HUL",team:"Audi",color:"#F50537"},
+  "10":{name:"GAS",team:"Alpine",color:"#00A1E8"},"43":{name:"COL",team:"Alpine",color:"#00A1E8"},
+  "55":{name:"SAI",team:"Williams",color:"#1868DB"},"23":{name:"ALB",team:"Williams",color:"#1868DB"},
+  "14":{name:"ALO",team:"Aston Martin",color:"#229971"},"18":{name:"STR",team:"Aston Martin",color:"#229971"},
+  "11":{name:"PER",team:"Cadillac",color:"#909090"},"77":{name:"BOT",team:"Cadillac",color:"#909090"},
+  "31":{name:"OCO",team:"???",color:"#888"}
+};
+
+const COMPOUND_COLORS = {MEDIUM:"#FFD700",HARD:"#C0C0C0",SOFT:"#FF3333",INTERMEDIATE:"#00CC00",WET:"#3366FF",UNKNOWN:"#666666"};
+
+// Finishing order (best guess from race results)
+const FINISH_ORDER = ["16","81","63","1","3","12","44","6","55","43","31","87","30","41","27","5","10","23","14","18","11","77"];
+
+function tsToSec(ts){const p=ts.split(':');return (+p[0])*3600+(+p[1])*60+(+p[2].split('.')[0])+(+('0.'+ts.split('.')[1]||0))}
+function fmtTime(s){const h=Math.floor(s/3600);const m=Math.floor((s%3600)/60);return `${h}:${String(m).padStart(2,'0')}`}
+
+// Build stints per driver
+function getStints(num){
+  const changes = DATA[num]; if(!changes)return [];
+  const stints = [];
+  for(let i=0;i<changes.length;i++){
+    const c = changes[i];
+    if(!c.Compound && !c.New) continue; // end-of-stint marker without compound
+    if(c.Compound && (c.New || i===0 || !stints.length)){
+      stints.push({compound:c.Compound,start:tsToSec(c.ts),end:null});
+    }
+  }
+  // fill ends
+  for(let i=0;i<stints.length;i++){
+    if(i<stints.length-1) stints[i].end = stints[i+1].start;
+    else stints[i].end = null; // race end
+  }
+  // Handle non-New compound entries (pure compound changes without New flag)
+  // These indicate the actual compound of the next stint
+  for(let i=1;i<changes.length;i++){
+    if(changes[i].Compound && !changes[i].New && !changes[i-1].New){
+      // This is a compound info for current stint - find matching stint
+      const t = tsToSec(changes[i].ts);
+      const s = stints.find(s=>s.start === t);
+      if(s) s.compound = changes[i].Compound;
+    }
+  }
+  return stints;
+}
+
+// For 23 (ALB): entries 3 (SOFT at 02:20), 4 (no compound, New=false at 02:22), 5 (MEDIUM at 02:28)
+// Entry 4 is end of SOFT stint, entry 5 starts new MEDIUM stint
+
+const RACE_END = 9600; // ~2:40 max
+const RACE_START = tsToSec("00:55:03.189");
+
+// Cards
+function renderCards(){
+  const el = document.getElementById('cards');
+  const drivers = Object.keys(DATA);
+  let startsMedium=0,startsHard=0,oneStop=0,twoStop=0,threeStop=0;
+  const strategies = {};
+  drivers.forEach(num=>{
+    const stints = getStints(num);
+    const first = stints[0];
+    if(first){
+      if(first.compound==='MEDIUM')startsMedium++;
+      else if(first.compound==='HARD')startsHard++;
+    }
+    const realStops = stints.length - 1;
+    if(realStops<=1)oneStop++;
+    else if(realStops===2)twoStop++;
+    else threeStop++;
+    const strat = stints.map(s=>s.compound).join(' → ');
+    strategies[strat] = (strategies[strat]||0)+1;
+  });
+  const topStrat = Object.entries(strategies).sort((a,b)=>b[1]-a[1])[0];
+  el.innerHTML = `<h2>📈 Strategy Overview</h2><div class="cards">
+    <div class="card"><div class="num" style="color:#FFD700">${startsMedium}</div><div class="label">Started on MEDIUM</div></div>
+    <div class="card"><div class="num" style="color:#C0C0C0">${startsHard}</div><div class="label">Started on HARD</div></div>
+    <div class="card"><div class="num" style="color:#4CAF50">${oneStop}</div><div class="label">One-Stop</div></div>
+    <div class="card"><div class="num" style="color:#FF9800">${twoStop}</div><div class="label">Two-Stop</div></div>
+    <div class="card"><div class="num" style="color:#f44">${threeStop}</div><div class="label">Three-Stop</div></div>
+  </div>
+  <div class="summary">🏆 Most popular strategy: <strong>${topStrat[0]}</strong> (${topStrat[1]} drivers)</div>`;
+}
+
+// Timeline
+function renderTimeline(){
+  const wrap = document.getElementById('timeline');
+  const rowH = 30, padTop = 10, axisH = 24, leftW = 70;
+  const drivers = FINISH_ORDER.filter(n=>DATA[n]);
+  const totalH = drivers.length * rowH + axisH + padTop;
+  const startTime = 0, endTime = 9600;
+  const maxEnd = Math.max(...Object.keys(DATA).flatMap(n=>{const s=getStints(n);return s.length?s[s.length-1].start+600:0}));
+  const effectiveEnd = Math.min(maxEnd, RACE_END);
+  
+  let html = `<div class="timeline" style="height:${totalH}px">`;
+  
+  // Axis
+  const axisY = totalH - axisH;
+  html += `<div class="axis" style="top:${axisY}px">`;
+  for(let t=0;t<=effectiveEnd;t+=600){
+    const pct = ((t-startTime)/(effectiveEnd-startTime))*100;
+    html += `<div class="tick" style="left:${pct}%">${fmtTime(t)}</div>`;
+  }
+  html += `</div>`;
+  
+  // Rows
+  drivers.forEach((num,i)=>{
+    const y = padTop + i * rowH;
+    const d = DRIVERS[num] || {name:num,team:'?',color:'#888'};
+    const stints = getStints(num);
+    
+    html += `<div class="y-label" style="top:${y}px;line-height:${rowH}px;color:${d.color}">${d.name} ${num}</div>`;
+    
+    stints.forEach((s,si)=>{
+      const startPct = ((s.start-startTime)/(effectiveEnd-startTime))*100;
+      const end = s.end || effectiveEnd;
+      const endPct = ((end-startTime)/(effectiveEnd-startTime))*100;
+      const w = endPct - startPct;
+      const col = COMPOUND_COLORS[s.compound] || '#666';
+      const txtCol = s.compound==='UNKNOWN'?'#aaa':'#222';
+      html += `<div class="bar" style="left:${startPct}%;width:${w}%;top:${y}px;background:${col};color:${txtCol}" title="${d.name}: ${s.compound} (${fmtTime(s.start)} → ${s.end?fmtTime(s.end):'END'})">${w>5?s.compound:''}</div>`;
+    });
+    
+    // Diamond markers for actual pit stops (where New===true or first entry)
+    const changes = DATA[num];
+    for(let ci=1;ci<changes.length;ci++){
+      const c = changes[ci];
+      if(c.New || (!c.New && c.Compound && ci>0)){
+        // Only mark actual compound transitions that are real pit stops
+        // Skip UNKNOWN intermediate entries that are just detection artifacts
+        if(c.Compound && c.Compound !== 'UNKNOWN'){
+          const pct = ((tsToSec(c.ts)-startTime)/(effectiveEnd-startTime))*100;
+          html += `<div class="diamond" style="left:${leftW + pct}%;top:${y}px" title="${d.name} pit: ${c.Compound} at ${c.ts}"></div>`;
+        }
+      }
+    }
+  });
+  
+  html += `</div>`;
+  
+  // Legend
+  html += `<div class="legend">`;
+  Object.entries(COMPOUND_COLORS).forEach(([k,v])=>{
+    html += `<div class="legend-item"><div class="legend-dot" style="background:${v}"></div>${k}</div>`;
+  });
+  html += `<div class="legend-item"><div class="legend-dot" style="background:#fff;transform:rotate(45deg);width:10px;height:10px"></div>Pit Stop</div>`;
+  html += `</div>`;
+  
+  wrap.innerHTML = html;
+}
+
+// Stint length comparison
+function renderStints(){
+  const el = document.getElementById('stints');
+  const drivers = FINISH_ORDER.filter(n=>DATA[n]);
+  const effectiveEnd = 9600;
+  
+  // Find max stint length for scaling
+  let maxLen = 0;
+  drivers.forEach(num=>{
+    const stints = getStints(num);
+    stints.forEach(s=>{
+      const len = (s.end||effectiveEnd) - s.start;
+      if(len>maxLen)maxLen=len;
+    });
+  });
+  
+  let html = '<div class="stint-chart">';
+  drivers.forEach(num=>{
+    const d = DRIVERS[num]||{name:num,color:'#888'};
+    const stints = getStints(num);
+    html += `<div class="stint-row"><div class="stint-label" style="color:${d.color}">${d.name}</div><div class="stint-bars">`;
+    stints.forEach(s=>{
+      const len = (s.end||effectiveEnd) - s.start;
+      const pct = (len/maxLen)*100;
+      const col = COMPOUND_COLORS[s.compound]||'#666';
+      const laps = Math.round(len/87.5); // approx lap time
+      html += `<div class="stint-bar" style="width:${pct}%;background:${col};color:#222" title="${s.compound}: ${Math.round(len/60)}min">${pct>8?`<span>${s.compound} ~${Math.round(len/60)}m</span>`:''}</div>`;
+    });
+    html += `</div></div>`;
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+renderCards();
+renderTimeline();
+renderStints();
+</script>
+</body>
+</html>
