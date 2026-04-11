@@ -3,52 +3,55 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chinese Grand Prix 2026 — Pit Stop Analysis</title>
+<title>Chinese GP 2026 — Pit Stop Analysis</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#1a1a2e;color:#e0e0e0;min-height:100vh;padding:1rem}
 h1{font-size:1.5rem;margin-bottom:1rem;text-align:center}
 h2{font-size:1.1rem;margin:1.5rem 0 .8rem;color:#00d4ff}
 a{color:#00d4ff;text-decoration:none}
-a:hover{text-decoration:underline}
 .back{display:inline-block;margin-bottom:1rem;font-size:.9rem}
 
+.fastest{background:#16213e;border-radius:12px;padding:1.5rem;text-align:center;margin:1rem 0}
+.fastest .val{font-size:2rem;font-weight:700;color:#FFD700}
 .bar-row{display:flex;align-items:center;margin:.3rem 0}
 .bar-label{width:50px;text-align:right;margin-right:.8rem;font-weight:600;font-size:.85rem}
-.bar-track{flex:1;background:#2a2a4a;border-radius:4px;height:24px;position:relative}
-.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:.75rem;font-weight:600;min-width:30px}
-.stats{display:flex;gap:1rem;flex-wrap:wrap;margin:1rem 0}
-.stat{background:#16213e;border-radius:8px;padding:1rem;text-align:center;flex:1;min-width:120px}
-.stat .val{font-size:1.8rem;font-weight:700;color:#00d4ff}
-.stat .label{font-size:.75rem;color:#888;margin-top:.3rem}
+.bar-track{flex:1;background:#2a2a4a;border-radius:4px;height:24px;position:relative;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:.8rem;font-weight:600;color:#000}
 
 </style>
 </head>
 <body>
 <a class="back" href="index.html">← Back</a>
-<h1>🇨🇳 Chinese Grand Prix 2026 — Pit Stop Analysis</h1>
+<h1>🇨🇳 Chinese GP 2026 — Pit Stop Analysis</h1>
 <div id="app"></div>
 <script>
 const DRIVERS={"1":{"tla":"NOR","team":"McLaren","color":"#FF8000"},"3":{"tla":"VER","team":"Red Bull","color":"#4781D7"},"5":{"tla":"BOR","team":"Audi","color":"#F50537"},"6":{"tla":"HAD","team":"Red Bull","color":"#4781D7"},"10":{"tla":"GAS","team":"Alpine","color":"#00A1E8"},"11":{"tla":"PER","team":"Cadillac","color":"#909090"},"12":{"tla":"ANT","team":"Mercedes","color":"#27F4D2"},"14":{"tla":"ALO","team":"Aston Martin","color":"#229971"},"16":{"tla":"LEC","team":"Ferrari","color":"#ED1131"},"18":{"tla":"STR","team":"Aston Martin","color":"#229971"},"23":{"tla":"ALB","team":"Williams","color":"#1868DB"},"27":{"tla":"HUL","team":"Audi","color":"#F50537"},"30":{"tla":"LAW","team":"RB","color":"#6C98FF"},"31":{"tla":"OCO","team":"Haas","color":"#9C9FA2"},"41":{"tla":"LIN","team":"RB","color":"#6C98FF"},"43":{"tla":"COL","team":"Alpine","color":"#00A1E8"},"44":{"tla":"HAM","team":"Ferrari","color":"#ED1131"},"55":{"tla":"SAI","team":"Williams","color":"#1868DB"},"63":{"tla":"RUS","team":"Mercedes","color":"#27F4D2"},"77":{"tla":"BOT","team":"Cadillac","color":"#909090"},"81":{"tla":"PIA","team":"McLaren","color":"#FF8000"},"87":{"tla":"BEA","team":"Haas","color":"#9C9FA2"}};
-(function(){
-const DATA={};
-const drivers=[];
-for(const[num,entries]of Object.entries(DATA)){
-  const d=DRIVERS[num];if(!d)continue;
-  entries.forEach(e=>drivers.push({num,tla:d.tla,team:d.team,color:d.color,lap:e.lap,time:e.time,duration:e.duration}));
-}
-drivers.sort((a,b)=>a.lap-b.lap);
+(function(){const DATA=[{"RacingNumber":"63","PitStopTime":"3.5","PitLaneTime":"23.373","Lap":"13"},{"RacingNumber":"16","PitStopTime":"2.8","PitLaneTime":"23.200"},{"RacingNumber":"1","PitStopTime":"2.4","PitLaneTime":"22.529"},{"RacingNumber":"44","PitStopTime":"2.7","PitLaneTime":"27.854"},{"RacingNumber":"12","PitStopTime":"13.7","PitLaneTime":"33.682"},{"RacingNumber":"81","PitStopTime":"2.7","PitLaneTime":"23.514"},{"RacingNumber":"43","PitStopTime":"2.8","PitLaneTime":"23.554"},{"RacingNumber":"23","PitStopTime":"4.3","PitLaneTime":"24.340"},{"RacingNumber":"6","PitStopTime":"5.5","PitLaneTime":"31.170"},{"RacingNumber":"18","PitStopTime":"2.7","PitLaneTime":"23.059"},{"RacingNumber":"11","PitStopTime":"5.0","PitLaneTime":"25.793"}];
+
 const app=document.getElementById('app');
-let html='<div class="stats">';
-html+=`<div class="stat"><div class="val">${drivers.length}</div><div class="label">Total Pit Stops</div></div>`;
-const teams={};
-drivers.forEach(d=>{if(!teams[d.team])teams[d.team]={name:d.team,color:d.color,count:0};teams[d.team].count++});
-html+=`<div class="stat"><div class="val">${Object.keys(teams).length}</div><div class="label">Teams Pitting</div></div>`;
-html+='</div>';
-html+='<h2>Pit Stop Timeline</h2>';
+const drivers=[];
+DATA.forEach(s=>{
+  const d=DRIVERS[s.RacingNumber];if(!d)return;
+  const ps=parseFloat(s.PitStopTime||0),pl=parseFloat(s.PitLaneTime||0);
+  if(ps>0)drivers.push({num:s.RacingNumber,tla:d.tla,team:d.team,color:d.color,pitStop:ps,pitLane:pl,lap:s.Lap||''});
+});
+drivers.sort((a,b)=>a.pitStop-b.pitStop);
+const fastest=drivers[0];
+let html='';
+if(fastest)html+=`<div class="fastest">🏆 Fastest Pit Stop<div class="val" style="color:${fastest.color}">${fastest.pitStop}s</div><div>${fastest.tla} (${fastest.team})</div></div>`;
+html+='<h2>All Pit Stops by Duration</h2>';
+const maxDur=drivers[drivers.length-1]?.pitStop||1;
 drivers.forEach(d=>{
-  const pct=((d.lap)/(58))*100;
-  html+=`<div class="bar-row"><span class="bar-label">${d.tla}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(pct,2)}%;background:${d.color}">Lap ${d.lap}</div></div></div>`;
+  const pct=d.pitStop/maxDur*100;
+  html+=`<div class="bar-row"><span class="bar-label">${d.tla}</span><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${d.color}">${d.pitStop}s</div></div></div>`;
+});
+html+=`<h2>Pit Lane Times</h2>`;
+const sorted=[...drivers].sort((a,b)=>a.pitLane-b.pitLane);
+const maxLane=sorted[sorted.length-1]?.pitLane||1;
+sorted.forEach(d=>{
+  const pct=d.pitLane/maxLane*100;
+  html+=`<div class="bar-row"><span class="bar-label">${d.tla}</span><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${d.color}">${d.pitLane}s</div></div></div>`;
 });
 app.innerHTML=html;
 })();
