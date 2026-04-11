@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🇯🇵 Japanese GP 2026 — Sector & Speed Analysis</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a1a2e;color:#e0e0e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;padding:20px;min-height:100vh}
+h1{text-align:center;font-size:1.8em;padding:20px 0 10px;color:#fff}
+h2{font-size:1.2em;margin:30px 0 15px;color:#ccc;border-bottom:2px solid #333;padding-bottom:8px}
+h3{font-size:1em;margin:20px 0 10px;color:#aaa}
+
+.fastest-card{background:linear-gradient(135deg,#2a1a3e,#1a2a3e);border:2px solid #ffd700;border-radius:16px;padding:30px;text-align:center;max-width:500px;margin:20px auto;box-shadow:0 0 30px rgba(255,215,0,0.15)}
+.fastest-card .label{font-size:0.9em;color:#888;text-transform:uppercase;letter-spacing:2px}
+.fastest-card .time{font-size:3em;font-weight:700;color:#ffd700;margin:10px 0}
+.fastest-card .driver{font-size:1.4em;color:#fff}
+.fastest-card .team{font-size:1em;color:#aaa;margin-top:4px}
+
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+
+@media(max-width:900px){.grid-4{grid-template-columns:1fr 1fr}.grid-2{grid-template-columns:1fr}}
+@media(max-width:500px){.grid-4{grid-template-columns:1fr}}
+
+.bar-row{display:flex;align-items:center;margin:4px 0;gap:8px}
+.bar-row .pos{width:28px;text-align:right;font-size:0.8em;color:#888;flex-shrink:0}
+.bar-row .name{width:90px;font-size:0.85em;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-row .bar-bg{flex:1;height:22px;background:#2a2a3e;border-radius:4px;overflow:hidden;position:relative}
+.bar-row .bar{height:100%;border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:0.75em;color:#fff;white-space:nowrap;min-width:40px}
+.bar-row .detail{font-size:0.75em;color:#888;width:80px;flex-shrink:0;text-align:right}
+
+.speed-col{background:#22223a;border-radius:10px;padding:15px}
+.speed-col h4{text-align:center;margin-bottom:10px;color:#ccc;font-size:0.9em}
+.speed-row{display:flex;align-items:center;gap:6px;padding:3px 0}
+.speed-row .pos{width:20px;text-align:right;font-size:0.75em;color:#666}
+.speed-row .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.speed-row .name{font-size:0.8em;flex:1}
+.speed-row .val{font-size:0.85em;font-weight:600;color:#fff}
+.speed-row.gold .val{color:#ffd700}
+.speed-row.gold .name{color:#ffd700}
+
+.sector-section{background:#22223a;border-radius:10px;padding:15px}
+.sector-row{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid #2a2a3e}
+.sector-row:last-child{border-bottom:none}
+.sector-row .rank{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75em;font-weight:700;flex-shrink:0}
+.sector-row .rank.r1{background:#ffd700;color:#000}
+.sector-row .rank.r2{background:#c0c0c0;color:#000}
+.sector-row .rank.r3{background:#cd7f32;color:#000}
+.sector-row .rank.rOther{background:#444;color:#aaa}
+.sector-row .sname{font-size:0.85em;flex:1}
+.sector-row .steam{font-size:0.7em;color:#888}
+.sector-row .sval{font-size:0.9em;font-weight:600;color:#fff}
+
+.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.team-card{background:#22223a;border-radius:10px;padding:12px;border-top:3px solid #444}
+.team-card .tname{font-size:0.9em;font-weight:600;margin-bottom:8px}
+.team-card .tstat{font-size:0.8em;color:#aaa;display:flex;justify-content:space-between;padding:2px 0}
+.team-card .tstat span:last-child{color:#fff;font-weight:600}
+</style>
+</head>
+<body>
+<h1>🇯🇵 Japanese GP 2026 — Sector & Speed Analysis</h1>
+<div id="app"></div>
+
+<script>
+const DRIVERS = {
+"1":{tla:"NOR",team:"McLaren",color:"#FF8000"},
+"3":{tla:"VER",team:"Red Bull",color:"#4781D7"},
+"5":{tla:"BOR",team:"Audi",color:"#F50537"},
+"6":{tla:"HAD",team:"Red Bull",color:"#4781D7"},
+"10":{tla:"GAS",team:"Alpine",color:"#00A1E8"},
+"11":{tla:"PER",team:"Cadillac",color:"#909090"},
+"12":{tla:"ANT",team:"Mercedes",color:"#27F4D2"},
+"14":{tla:"ALO",team:"Aston Martin",color:"#229971"},
+"16":{tla:"LEC",team:"Ferrari",color:"#ED1131"},
+"18":{tla:"STR",team:"Aston Martin",color:"#229971"},
+"23":{tla:"ALB",team:"Williams",color:"#1868DB"},
+"27":{tla:"HUL",team:"Audi",color:"#F50537"},
+"30":{tla:"LAW",team:"RB",color:"#6C98FF"},
+"31":{tla:"OCO",team:"Haas",color:"#9C9FA2"},
+"41":{tla:"LIN",team:"RB",color:"#6C98FF"},
+"43":{tla:"COL",team:"Alpine",color:"#00A1E8"},
+"44":{tla:"HAM",team:"Ferrari",color:"#ED1131"},
+"55":{tla:"SAI",team:"Williams",color:"#1868DB"},
+"63":{tla:"RUS",team:"Mercedes",color:"#27F4D2"},
+"77":{tla:"BOT",team:"Cadillac",color:"#909090"},
+"81":{tla:"PIA",team:"McLaren",color:"#FF8000"},
+"87":{tla:"BEA",team:"Haas",color:"#9C9FA2"}
+};
+
+const DATA = {
+"1":{pbl:{lap:52,val:"1:33.208",pos:1},sectors:[{v:"33.929",p:6},{v:"41.281",p:7},{v:"17.739",p:7}],speeds:{I1:{v:"289",p:2},I2:{v:"346",p:2},FL:{v:"287",p:5},ST:{v:"304",p:4}}},
+"3":{pbl:{lap:null,val:null,pos:8},sectors:[{v:"34.037",p:8},{v:"41.453",p:10},{v:"17.817",p:12}],speeds:{I1:{v:"273",p:15},I2:{v:"346",p:1},FL:{v:"286",p:8},ST:{v:"305",p:2}}},
+"5":{pbl:{lap:null,val:null,pos:12},sectors:[{v:"34.497",p:12},{v:"41.724",p:16},{v:"17.778",p:8}],speeds:{I1:{v:"272",p:16},I2:{v:"338",p:10},FL:{v:"283",p:17},ST:{v:"303",p:7}}},
+"6":{pbl:{lap:53,val:"1:33.837",pos:6},sectors:[{v:"34.064",p:9},{v:"41.713",p:15},{v:"17.617",p:2}],speeds:{I1:{v:"280",p:7},I2:{v:"342",p:5},FL:{v:"285",p:13},ST:{v:"304",p:5}}},
+"10":{pbl:{lap:null,val:null,pos:9},sectors:[{v:"34.194",p:10},{v:"41.432",p:8},{v:"17.868",p:16}],speeds:{I1:{v:"276",p:10},I2:{v:"331",p:19},FL:{v:"286",p:7},ST:{v:"294",p:18}}},
+"11":{pbl:{lap:53,val:"1:35.637",pos:14},sectors:[{v:"35.067",p:19},{v:"42.095",p:19},{v:"18.217",p:20}],speeds:{I1:{v:"273",p:13},I2:{v:"338",p:12},FL:{v:"281",p:18},ST:{v:"296",p:15}}},
+"12":{pbl:{lap:49,val:"1:32.432",pos:1},sectors:[{v:"33.662",p:1},{v:"40.986",p:2},{v:"17.695",p:4}],speeds:{I1:{v:"285",p:4},I2:{v:"336",p:16},FL:{v:"283",p:16},ST:{v:"297",p:14}}},
+"14":{pbl:{lap:47,val:"1:36.221",pos:20},sectors:[{v:"35.249",p:20},{v:"42.453",p:21},{v:"18.273",p:21}],speeds:{I1:{v:"263",p:20},I2:{v:"329",p:21},FL:{v:"276",p:22},ST:{v:"283",p:21}}},
+"16":{pbl:{lap:null,val:null,pos:3},sectors:[{v:"33.676",p:2},{v:"40.919",p:1},{v:"17.800",p:10}],speeds:{I1:{v:"270",p:17},I2:{v:"337",p:13},FL:{v:"286",p:6},ST:{v:"298",p:12}}},
+"18":{pbl:{lap:null,val:null,pos:22},sectors:[{v:"35.578",p:22},{v:"42.879",p:22},{v:"18.357",p:22}],speeds:{I1:{v:"256",p:22},I2:{v:"329",p:22},FL:{v:"276",p:21},ST:{v:"282",p:22}}},
+"23":{pbl:{lap:51,val:"1:33.427",pos:7},sectors:[{v:"34.368",p:11},{v:"41.228",p:6},{v:"17.831",p:13}],speeds:{I1:{v:"281",p:6},I2:{v:"335",p:17},FL:{v:"285",p:12},ST:{v:"304",p:3}}},
+"27":{pbl:{lap:null,val:null,pos:10},sectors:[{v:"33.840",p:4},{v:"41.508",p:11},{v:"17.678",p:3}],speeds:{I1:{v:"297",p:1},I2:{v:"338",p:11},FL:{v:"286",p:11},ST:{v:"308",p:1}}},
+"30":{pbl:{lap:53,val:"1:34.230",pos:13},sectors:[{v:"34.592",p:13},{v:"41.545",p:12},{v:"17.838",p:14}],speeds:{I1:{v:"273",p:14},I2:{v:"334",p:18},FL:{v:"291",p:1},ST:{v:"294",p:19}}},
+"31":{pbl:{lap:53,val:"1:34.256",pos:11},sectors:[{v:"34.724",p:14},{v:"41.452",p:9},{v:"17.809",p:11}],speeds:{I1:{v:"266",p:18},I2:{v:"339",p:7},FL:{v:"284",p:14},ST:{v:"299",p:9}}},
+"41":{pbl:{lap:53,val:"1:34.314",pos:15},sectors:[{v:"34.810",p:16},{v:"41.569",p:13},{v:"17.799",p:9}],speeds:{I1:{v:"275",p:11},I2:{v:"339",p:9},FL:{v:"288",p:3},ST:{v:"298",p:13}}},
+"43":{pbl:{lap:null,val:null,pos:16},sectors:[{v:"34.735",p:15},{v:"41.851",p:18},{v:"17.738",p:6}],speeds:{I1:{v:"273",p:12},I2:{v:"346",p:3},FL:{v:"287",p:4},ST:{v:"303",p:6}}},
+"44":{pbl:{lap:null,val:null,pos:4},sectors:[{v:"33.962",p:7},{v:"41.108",p:4},{v:"17.707",p:5}],speeds:{I1:{v:"266",p:19},I2:{v:"339",p:8},FL:{v:"286",p:9},ST:{v:"296",p:17}}},
+"55":{pbl:{lap:null,val:null,pos:17},sectors:[{v:"34.850",p:17},{v:"41.652",p:14},{v:"17.904",p:17}],speeds:{I1:{v:"278",p:9},I2:{v:"336",p:15},FL:{v:"284",p:15},ST:{v:"298",p:10}}},
+"63":{pbl:{lap:53,val:"1:32.549",pos:2},sectors:[{v:"33.743",p:3},{v:"41.039",p:3},{v:"17.578",p:1}],speeds:{I1:{v:"287",p:3},I2:{v:"345",p:4},FL:{v:"289",p:2},ST:{v:"302",p:8}}},
+"77":{pbl:{lap:52,val:"1:36.269",pos:19},sectors:[{v:"35.553",p:21},{v:"42.270",p:20},{v:"18.175",p:19}],speeds:{I1:{v:"262",p:21},I2:{v:"336",p:14},FL:{v:"281",p:19},ST:{v:"298",p:11}}},
+"81":{pbl:{lap:null,val:null,pos:5},sectors:[{v:"33.887",p:5},{v:"41.214",p:5},{v:"17.843",p:15}],speeds:{I1:{v:"280",p:8},I2:{v:"329",p:20},FL:{v:"286",p:10},ST:{v:"289",p:20}}},
+"87":{pbl:{lap:null,val:null,pos:18},sectors:[{v:"35.006",p:18},{v:"41.840",p:17},{v:"18.041",p:18}],speeds:{I1:{v:"284",p:5},I2:{v:"341",p:6},FL:{v:"279",p:20},ST:{v:"296",p:16}}}
+};
+
+function parseTime(t){if(!t)return 999;const m=t.match(/(\d+):(\d+)\.(\d+)/);return m?+m[1]*60+ +m[2]+ +m[3]/1000:999}
+function parseSec(t){return t?parseFloat(t):999}
+function fmtDelta(best,val){const d=val-best;return d<0.001?"":""+d.toFixed(3);}
+
+// Find fastest lap
+const allLaps=Object.entries(DATA).filter(([n,d])=>d.pbl.val).sort((a,b)=>parseTime(a[1].pbl.val)-parseTime(b[1].pbl.val));
+const fastest=allLaps[0];
+const fNum=fastest[0], fData=fastest[1], fInfo=DRIVERS[fNum];
+
+const app=document.getElementById('app');
+let html='';
+
+// Fastest Lap Card
+html+=`<div class="fastest-card">
+<div class="label">🏆 Fastest Lap of the Race</div>
+<div class="time">${fData.pbl.val}</div>
+<div class="driver" style="color:${fInfo.color}">${fInfo.tla}</div>
+<div class="team">${fInfo.team} · Lap ${fData.pbl.lap}</div>
+</div>`;
+
+// Personal Best Lap Times
+html+='<h2>⏱️ Personal Best Lap Times</h2>';
+const maxTime=allLaps.length?parseTime(allLaps[allLaps.length-1][1].pbl.val):100;
+const minTime=allLaps.length?parseTime(allLaps[0][1].pbl.val):90;
+const range=maxTime-minTime||1;
+allLaps.forEach(([num,d],i)=>{
+  const info=DRIVERS[num];
+  const t=parseTime(d.pbl.val);
+  const pct=Math.max(10,((t-minTime)/range)*100);
+  const lapInfo=d.pbl.lap?`L${d.pbl.lap}`:'';
+  html+=`<div class="bar-row"><div class="pos">${i+1}</div><div class="name" style="color:${info.color}">${info.tla}</div><div class="bar-bg"><div class="bar" style="width:${pct}%;background:${info.color}">${d.pbl.val}</div></div><div class="detail">${lapInfo}</div></div>`;
+});
+
+// Sector Rankings
+html+='<h2>🏁 Sector Rankings</h2><div class="grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px">';
+for(let s=0;s<3;s++){
+  const sorted=Object.entries(DATA).map(([n,d])=>({num:n,val:parseSec(d.sectors[s].v),raw:d.sectors[s].v,pos:d.sectors[s].p})).sort((a,b)=>a.val-b.val);
+  const best=sorted[0].val;
+  html+=`<div class="sector-section"><h4>Sector ${s+1}</h4>`;
+  sorted.forEach((d,i)=>{
+    const info=DRIVERS[d.num];
+    const rc=i===0?'r1':i===1?'r2':i===2?'r3':'rOther';
+    const delta=i>0?` +${(d.val-best).toFixed(3)}`:'';
+    html+=`<div class="sector-row"><div class="rank ${rc}">${i+1}</div><div class="sname" style="color:${info.color}">${info.tla}</div><div class="steam">${info.team}</div><div class="sval">${d.raw}${delta}</div></div>`;
+  });
+  html+='</div>';
+}
+html+='</div>';
+
+// Speed Trap Rankings
+html+='<h2>💨 Speed Trap Rankings (km/h)</h2><div class="grid-4">';
+const trapNames={I1:"Intermediate 1",I2:"Intermediate 2",FL:"Fly Line",ST:"Speed Trap"};
+for(const [key,label] of Object.entries(trapNames)){
+  const sorted=Object.entries(DATA).map(([n,d])=>({num:n,val:+d.speeds[key].v})).sort((a,b)=>b.val-a.val);
+  const best=sorted[0].val;
+  html+=`<div class="speed-col"><h4>${label}</h4>`;
+  sorted.forEach((d,i)=>{
+    const info=DRIVERS[d.num];
+    const isGold=i===0;
+    html+=`<div class="speed-row${isGold?' gold':''}"><div class="pos">${i+1}</div><div class="dot" style="background:${info.color}"></div><div class="name">${info.tla}</div><div class="val">${d.val}</div></div>`;
+  });
+  html+='</div>';
+}
+html+='</div>';
+
+// Team Sector Performance
+html+='<h2>🏭 Team Sector Performance (Avg Position)</h2>';
+const teams={};
+for(const [num,info] of Object.entries(DRIVERS)){
+  if(!teams[info.team])teams[info.team]={color:info.color,drivers:[]};
+  teams[info.team].drivers.push(num);
+}
+html+='<div class="team-grid">';
+for(const [team,t] of Object.entries(teams)){
+  const avgS=t.drivers.map(n=>DATA[n].sectors.reduce((s,sec)=>s+sec.p,0)/3);
+  const teamAvg=avgS.reduce((a,b)=>a+b,0)/avgS.length;
+  const avgSp=t.drivers.map(n=>{const sp=DATA[n].speeds;return(sp.I1.p+sp.I2.p+sp.FL.p+sp.ST.p)/4});
+  const teamSpeedAvg=avgSp.reduce((a,b)=>a+b,0)/avgSp.length;
+  html+=`<div class="team-card" style="border-top-color:${t.color}">
+<div class="tname" style="color:${t.color}">${team}</div>
+<div class="tstat"><span>Avg Sector Pos</span><span>${teamAvg.toFixed(1)}</span></div>
+<div class="tstat"><span>Avg Speed Pos</span><span>${teamSpeedAvg.toFixed(1)}</span></div>
+<div class="tstat"><span>Drivers</span><span>${t.drivers.map(n=>DRIVERS[n].tla).join(', ')}</span></div>
+</div>`;
+}
+html+='</div>';
+
+app.innerHTML=html;
+</script>
+</body>
+</html>
